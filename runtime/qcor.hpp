@@ -9,6 +9,7 @@
 #include "CompositeInstruction.hpp"
 #include "Observable.hpp"
 #include "Optimizer.hpp"
+#include "Algorithm.hpp"
 
 #include "qalloc"
 #include "xacc_internal_compiler.hpp"
@@ -21,6 +22,7 @@ using OptFunction = xacc::OptFunction;
 using HeterogeneousMap = xacc::HeterogeneousMap;
 using Observable = xacc::Observable;
 using Optimizer = xacc::Optimizer;
+using Algorithm = xacc::Algorithm;
 
 class ResultsBuffer {
 public:
@@ -233,6 +235,10 @@ createOptimizer(const char *type, HeterogeneousMap &&options = {});
 // Create an observable from a string representation
 std::shared_ptr<Observable> createObservable(const char *repr);
 
+// Create the desired Algorithm
+std::shared_ptr<Algorithm>
+createAlgorithm(const char *type, HeterogeneousMap &&options = {});
+
 std::shared_ptr<ObjectiveFunction> createObjectiveFunction(
     const char *obj_name, std::shared_ptr<xacc::CompositeInstruction> kernel,
     std::shared_ptr<Observable> observable, HeterogeneousMap &&options = {}) {
@@ -286,6 +292,11 @@ Handle taskInitiate(std::shared_ptr<ObjectiveFunction> objective,
       },
       nParameters);
 }
+
+// Execute an algorithm on the qubit register.
+Handle taskInitiate(const std::shared_ptr<Algorithm>& algorithm,
+                    xacc::internal_compiler::qreg& qubitReg);
+
 } // namespace qcor
 
 #endif

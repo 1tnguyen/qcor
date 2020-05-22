@@ -55,6 +55,20 @@ std::shared_ptr<xacc::Observable> createObservable(const char *repr) {
   return xacc::quantum::getObservable("pauli", std::string(repr));
 }
 
+std::shared_ptr<xacc::Algorithm> createAlgorithm(const char *type, HeterogeneousMap &&options) {
+  if (!xacc::isInitialized())
+    xacc::internal_compiler::compiler_InitializeXACC();
+  
+  auto algorithm = xacc::getAlgorithm(type);
+  const bool initOk = algorithm->initialize(options);
+
+  if (!initOk) {
+    std::cout << "Algorithm '" << type << "' initialization failed!\n";
+  }
+
+  return algorithm;
+}
+
 std::shared_ptr<xacc::CompositeInstruction> compile(const std::string &src) {
   return xacc::getCompiler("xasm")->compile(src)->getComposites()[0];
 }
@@ -97,6 +111,19 @@ Handle taskInitiate(std::shared_ptr<ObjectiveFunction> objective,
     rb.q_buffer = objective->get_qreg();
     rb.opt_params = results.second;
     rb.opt_val = results.first;
+    return rb;
+  });
+}
+
+Handle taskInitiate(const std::shared_ptr<Algorithm>& algorithm,
+                    xacc::internal_compiler::qreg& qubitReg) {
+  return std::async(std::launch::async, [&]() -> ResultsBuffer {
+    auto buffer = xacc::as_shared_ptr(qubitReg.results());
+    algorithm->execute(buffer);
+    ResultsBuffer rb;
+    rb.q_buffer = qubitReg;
+    rb.opt_params = (*buffer)["opt-params"].as<std::vector<double>>();
+    rb.opt_val = (*buffer)["opt-val"].as<double>();
     return rb;
   });
 }
