@@ -1,4 +1,5 @@
 import os, glob, time, csv
+from datetime import datetime
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
 os.chdir(dirPath)
@@ -16,9 +17,9 @@ for file in listOfSrcFiles:
   print(file)
   rowData = [os.path.splitext(os.path.basename(file))[0]]
   start_time = time.time()
-  os.system("qcor -DTEST_SOURCE_FILE=\\\"" + file + "\\\" qcor_csp.cpp")
+  os.system("qcor -c -DTEST_SOURCE_FILE=\\\"" + file + "\\\" qcor_csp.cpp")
   rowData.append(time.time() - start_time)
-  with open('result_csp.csv', 'a', newline='') as csvfile:
+  with open('result_csp' + datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p") + '.csv', 'a', newline='') as csvfile:
     resultWriter = csv.writer(csvfile)
     if firstWrite is True:
       resultWriter.writerow(headers)
