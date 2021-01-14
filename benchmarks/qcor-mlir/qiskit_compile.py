@@ -10,7 +10,7 @@ headers = ["Test Case", "Transpile Time"]
 firstWrite = True
 from qiskit import QuantumCircuit
 from qiskit.compiler import transpile
-
+result_file_name = 'result_qiskit' + datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p") + '.csv'
 for file in listOfSrcFiles:
   try: 
     rowData = [os.path.splitext(os.path.basename(file))[0]]
@@ -20,7 +20,7 @@ for file in listOfSrcFiles:
     result = transpile(qc, basis_gates=['u1', 'u2', 'u3', 'cx'])
     rowData.append(time.time() - start_time)
     
-    with open('result_qiskit' + datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p") + '.csv', 'a', newline='') as csvfile:
+    with open(result_file_name, 'a', newline='') as csvfile:
       resultWriter = csv.writer(csvfile)
       if firstWrite is True:
         resultWriter.writerow(headers)

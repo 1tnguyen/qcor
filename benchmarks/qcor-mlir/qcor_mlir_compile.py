@@ -12,7 +12,7 @@ firstWrite = True
 
 # LL compiler
 llc_exe = "~/.mlir/bin/llc"
-
+result_file_name = 'result_mlir' + datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p") + '.csv'
 # Compile with MLIR
 for file in listOfSrcFiles:
   rowData = [os.path.splitext(os.path.basename(file))[0]]
@@ -30,7 +30,7 @@ for file in listOfSrcFiles:
   start_time = time.time()
   os.system("qcor " + file)
   rowData.append(time.time() - start_time)
-  with open('result_mlir' + datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p") + '.csv', 'a', newline='') as csvfile:
+  with open(result_file_name, 'a', newline='') as csvfile:
     resultWriter = csv.writer(csvfile)
     if firstWrite is True:
       resultWriter.writerow(headers)
