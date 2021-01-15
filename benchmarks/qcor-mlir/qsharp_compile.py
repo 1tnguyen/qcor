@@ -33,7 +33,7 @@ for file in listOfSrcFiles:
   start_time = time.time()
   os.system("dotnet \"" + qsc_exe + "\" build --response-files qsc_run.rsp")
   rowData.append(time.time() - start_time)
-  with open(, 'a', newline='') as csvfile:
+  with open(result_file_name, 'a', newline='') as csvfile:
     resultWriter = csv.writer(csvfile)
     if firstWrite is True:
       resultWriter.writerow(headers)
