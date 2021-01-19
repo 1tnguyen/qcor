@@ -7,6 +7,7 @@ int_result = 0
 
 class TestKernelFTQC(unittest.TestCase):
     def test_pass_by_ref(self):
+        global testX0
         @qjit
         def testX0(q : qreg, out_meas_z: FLOAT_REF):
             X(q[0])
@@ -15,6 +16,7 @@ class TestKernelFTQC(unittest.TestCase):
             else:
                 out_meas_z = 1.0 + out_meas_z
 
+        global testX1
         @qjit
         def testX1(q : qreg, out_meas_z: FLOAT_REF):
             X(q[1])
@@ -23,6 +25,7 @@ class TestKernelFTQC(unittest.TestCase):
             else:
                 out_meas_z = 1.0 + out_meas_z
 
+        global test_ref
         @qjit
         def test_ref(q : qreg, out_meas_z: FLOAT_REF):
             testX0(q, out_meas_z)
@@ -39,6 +42,7 @@ class TestKernelFTQC(unittest.TestCase):
         self.assertAlmostEqual(float_result, -2.0)
 
     def test_pass_by_value(self):
+        global testX0_byVal
         @qjit
         def testX0_byVal(q : qreg, out_meas_z: float):
             X(q[0])
@@ -47,6 +51,7 @@ class TestKernelFTQC(unittest.TestCase):
             else:
                 out_meas_z = 1.0 + out_meas_z
 
+        global testX1_byVal
         @qjit
         def testX1_byVal(q : qreg, out_meas_z: float):
             X(q[1])
@@ -55,6 +60,7 @@ class TestKernelFTQC(unittest.TestCase):
             else:
                 out_meas_z = 1.0 + out_meas_z
 
+        global test_byVal
         @qjit
         def test_byVal(q : qreg, out_meas_z: float):
             testX0_byVal(q, out_meas_z)
@@ -68,11 +74,13 @@ class TestKernelFTQC(unittest.TestCase):
         self.assertAlmostEqual(float_result, 0.0)
 
     def test_bit_flip_code(self):
+        global encodeLogicalQubit
         @qjit
         def encodeLogicalQubit(q : qreg):
             CX(q[0], q[1])
             CX(q[0], q[2])
 
+        global measureSyndrome
         @qjit
         def measureSyndrome(q : qreg, syndrome: INT_REF):
             # Make sure to clear syndrome
@@ -94,12 +102,14 @@ class TestKernelFTQC(unittest.TestCase):
                 X(q[ancIdx])
                 syndrome = syndrome + 2
 
+        global reset_all_qubits
         @qjit
         def reset_all_qubits(q : qreg):
             for i in range(q.size()):
                 if Measure(q[i]):
                     X(q[i])
         
+        global testBitflipCode
         @qjit
         def testBitflipCode(q : qreg, qIdx: int, syndrome: INT_REF):
             H(q[0])
@@ -129,6 +139,7 @@ class TestKernelFTQC(unittest.TestCase):
         self.assertEqual(int_result, 2)
 
     def test_deuteron_measurement(self):
+        global measure_basis
         @qjit
         def measure_basis(q: qreg, bases: List[int], out_parity: INT_REF):
             oneCount = 0
@@ -143,12 +154,14 @@ class TestKernelFTQC(unittest.TestCase):
                         oneCount = 1 + oneCount
             out_parity = oneCount - 2 * (oneCount / 2)
 
+        global h2_ansatz
         @qjit 
         def h2_ansatz(q: qreg, theta: float):
             X(q[0])
             Ry(q[1], theta)
             CX(q[1], q[0])
 
+        global estimate_term_expectation
         @qjit 
         def estimate_term_expectation(q: qreg, theta: float, bases: List[int], nSamples: int, out_energy: FLOAT_REF):
             exp_sum = 0.0

@@ -11,6 +11,7 @@ try:
             H = FOp('', 0.0002899) + FOp('0^ 0', -.43658) + \
                 FOp('1 0^', 4.2866) + FOp('1^ 0', -4.2866) + FOp('1^ 1', 12.25) 
               
+            global ansatz
             @qjit
             def ansatz(q: qreg, theta: float):
                 X(q[0])
@@ -28,6 +29,7 @@ try:
             H = QOp('', 5.907) + QOp('Y0 Y1', -2.1433) + \
                 QOp('X0 X1', -2.1433) + QOp('Z0', .21829) + QOp('Z1', -6.125) 
               
+            global ansatz
             @qjit
             def ansatz(q: qreg, theta: float):
                 X(q[0])
