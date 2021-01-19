@@ -12,7 +12,7 @@ class TestKernelJIT(unittest.TestCase):
         except:
             print('No numpy, cant run test_as_unitary')
             return
-        
+        global dansatz
         @qjit
         def dansatz(q : qreg, x : float):
             X(q[0])
@@ -35,6 +35,7 @@ class TestKernelJIT(unittest.TestCase):
 
     def test_rewrite_decompose(self):
         set_qpu('qpp', {'shots':1024})
+        global foo
         @qjit
         def foo(q : qreg):
             for i in range(q.size()):
@@ -56,7 +57,7 @@ class TestKernelJIT(unittest.TestCase):
         counts = q.counts()
         self.assertTrue('110' in counts)
         self.assertTrue(counts['110'] == 1024)
-
+        global all_x
         @qjit
         def all_x(q : qreg):
             with decompose(q) as x_kron:
@@ -73,7 +74,7 @@ class TestKernelJIT(unittest.TestCase):
         print(counts)
         self.assertTrue('111' in counts)
         self.assertTrue(counts['111'] == 1024)
-
+        global try_two_decompose
         @qjit
         def try_two_decompose(q : qreg):
             for i in range(q.size()):
@@ -105,7 +106,7 @@ class TestKernelJIT(unittest.TestCase):
     
     def test_more_decompose(self):
         set_qpu('qpp', {'shots':1024})
-       
+        global random_2qbit
         @qjit
         def random_2qbit(q : qreg):
             with decompose(q, kak) as random_unitary:
@@ -119,7 +120,7 @@ class TestKernelJIT(unittest.TestCase):
         print(random_2qbit.src)
         q = qalloc(2)
         print(random_2qbit.extract_composite(q).toString())
-        
+        global random_1qbit
         @qjit
         def random_1qbit(q : qreg):
             with decompose(q, z_y_z) as random_unitary:
@@ -157,7 +158,7 @@ class TestKernelJIT(unittest.TestCase):
     def test_simple_bell(self):
 
         set_qpu('qpp', {'shots':1024})
-
+        global bell
         @qjit
         def bell(q : qreg):
             H(q[0])
@@ -182,7 +183,7 @@ class TestKernelJIT(unittest.TestCase):
     def test_assignment(self):
 
         set_qpu('qpp', {'shots':1024})
-
+        global varAssignKernel
         @qjit
         def varAssignKernel(q : qreg):
             # Simple value assignment
@@ -210,7 +211,7 @@ class TestKernelJIT(unittest.TestCase):
     def test_globalVar(self):
 
         set_qpu('qpp', {'shots':1024})
-
+        global kernelUseGlobals
         @qjit
         def kernelUseGlobals(q : qreg):
             Rx(q[0], MY_PI)
@@ -233,7 +234,7 @@ class TestKernelJIT(unittest.TestCase):
     def test_ModuleConstants(self):
 
         set_qpu('qpp', {'shots':1024})
-
+        global kernelUseConstants
         @qjit
         def kernelUseConstants(q : qreg):
             # Use math.pi constant
@@ -256,6 +257,7 @@ class TestKernelJIT(unittest.TestCase):
         self.assertTrue('11' in counts)
     
     def test_exp_i_theta(self):
+        global kernelExpVar
         @qjit
         def kernelExpVar(q : qreg, theta: float):
             exponent_op = X(0) * Y(1) - Y(0) * X(1)
@@ -270,6 +272,7 @@ class TestKernelJIT(unittest.TestCase):
 
     # Test of edge case where the first statement is a for loop
     def test_for_loop(self):
+        global testFor
         @qjit
         def testFor(q : qreg):
             for i in range(q.size()):
@@ -281,6 +284,7 @@ class TestKernelJIT(unittest.TestCase):
 
     def test_for_loop_enumerate(self):
         set_qpu('qpp')
+        global ansatz
         @qjit
         def ansatz(q: qreg, x: List[float], exp_args: List[FermionOperator]):
             X(q[0])
@@ -293,21 +297,25 @@ class TestKernelJIT(unittest.TestCase):
         self.assertAlmostEqual(energy, -2.044, places=1)
 
     def test_multiple_kernels(self):
+        global apply_H
         @qjit
         def apply_H(q : qreg):
             for i in range(q.size()):
                 H(q[i])
         
+        global apply_Rx
         @qjit
         def apply_Rx(q : qreg, theta: float):
             for i in range(q.size()):
                 Rx(q[i], theta)
 
+        global measure_all
         @qjit
         def measure_all(q : qreg):
             for i in range(q.size()):
                 Measure(q[i])
 
+        global entry_kernel
         @qjit
         def entry_kernel(q : qreg, theta: float):
            apply_H(q)
@@ -328,21 +336,25 @@ class TestKernelJIT(unittest.TestCase):
 
     # Make sure that multi-level dependency can be resolved.
     def test_nested_kernels(self):
+        global apply_cnot_fwd
         @qjit
         def apply_cnot_fwd(q : qreg):
             for i in range(q.size() - 1):
                 CX(q[i], q[i + 1])
         
+        global make_bell
         @qjit
         def make_bell(q : qreg):
             H(q[0])
             apply_cnot_fwd(q)
 
+        global measure_all_bits
         @qjit
         def measure_all_bits(q : qreg):
             for i in range(q.size()):
                 Measure(q[i])
 
+        global bell_expr
         @qjit
         def bell_expr(q : qreg):
            # dep: apply_cnot_fwd -> make_bell -> bell_expr
@@ -360,6 +372,7 @@ class TestKernelJIT(unittest.TestCase):
             self.assertEqual(comp.getInstruction(i).name(), "Measure") 
 
     def test_for_loop(self):
+        global kernels_w_loops
         @qjit
         def kernels_w_loops(q : qreg, thetas : List[float], betas : List[float]):
             for i in range(len(q)):
@@ -381,6 +394,7 @@ class TestKernelJIT(unittest.TestCase):
             self.assertEqual(comp.getInstruction(i).name(), "Measure") 
 
     def test_iqft_kernel(self):
+        global inverse_qft
         @qjit
         def inverse_qft(q : qreg, startIdx : int, nbQubits : int):
             for i in range(nbQubits/2):
@@ -418,6 +432,7 @@ class TestKernelJIT(unittest.TestCase):
         
         set_qpu('qpp', {'shots':1024})
 
+        global iqft
         @qjit
         def iqft(q : qreg, startIdx : int, nbQubits : int):
             for i in range(nbQubits/2):
@@ -432,11 +447,13 @@ class TestKernelJIT(unittest.TestCase):
             
             H(q[startIdx+nbQubits-1])
 
+        global oracle
         @qjit
         def oracle(q : qreg):
             bit = q.size()-1
             T(q[bit])
 
+        global qpe
         @qjit
         def qpe(q : qreg):
             nq = q.size()
@@ -463,6 +480,7 @@ class TestKernelJIT(unittest.TestCase):
         self.assertEqual(q.counts()['100'], 1024)
 
     def test_adjoint_kernel(self):
+        global test_kernel
         @qjit
         def test_kernel(q : qreg):
             CX(q[0], q[1])
@@ -470,6 +488,7 @@ class TestKernelJIT(unittest.TestCase):
             T(q[0])
             X(q[0])
 
+        global check_adjoint
         @qjit
         def check_adjoint(q : qreg):
             test_kernel.adjoint(q)
@@ -489,6 +508,7 @@ class TestKernelJIT(unittest.TestCase):
 
     # Test conditional if..elif..else rewrite
     def test_if_clause(self):
+        global test_if_stmt
         @qjit
         def test_if_stmt(q : qreg, flag: int):
             H(q[0])
