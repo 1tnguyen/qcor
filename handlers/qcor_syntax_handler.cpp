@@ -81,7 +81,8 @@ void QCORSyntaxHandler::GetReplacement(
   // Get Tokens as a string, rewrite code
   // with XACC api calls
   qcor::append_kernel(kernel_name, program_arg_types, program_parameters);
-
+  // Add a time-stamped log message in verbose mode.
+  qcor::info("[qcor syntax-handler] Start token collector.");
   auto new_src = qcor::run_token_collector(PP, Toks, bufferNames);
 
   //   auto random_string = [](size_t length) {

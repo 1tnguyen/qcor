@@ -55,7 +55,7 @@ std::string run_token_collector(clang::Preprocessor &PP,
       xacc::Initialize();
     }
   }
-
+  qcor::info("[qcor syntax-handler] XACC initialized.");
   // Loop through and partition Toks into language sets
   // for each language set, run the appropriate TokenCollector
   std::stringstream code_ss;
