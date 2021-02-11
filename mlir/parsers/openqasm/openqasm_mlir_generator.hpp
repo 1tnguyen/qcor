@@ -12,8 +12,6 @@
 #include "optimization/simplify.hpp"
 #include "parser/parser.hpp"
 #include "Quantum/QuantumOps.h"
-#include "transformations/desugar.hpp"
-#include "transformations/inline.hpp"
 
 using namespace staq::ast;
 

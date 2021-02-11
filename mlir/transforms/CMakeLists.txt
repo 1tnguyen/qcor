@@ -14,7 +14,7 @@ set(LIBS
         MLIRExecutionEngine
         )
 
-add_mlir_library(${LIBRARY_NAME} SHARED ${SRC} LINK_LIBS PUBLIC ${LIBS})
+add_mlir_library(${LIBRARY_NAME} STATIC ${SRC} LINK_LIBS PUBLIC ${LIBS})
 target_compile_features(${LIBRARY_NAME} 
                         PUBLIC
                         cxx_std_17)
@@ -22,4 +22,5 @@ target_include_directories(
   ${LIBRARY_NAME}
   PUBLIC . ../dialect/include ${CMAKE_BINARY_DIR}/mlir/dialect/include)
 
+include_directories(../dialect/include ${CMAKE_BINARY_DIR}/mlir/dialect/include)
 #target_link_libraries(${LIBRARY_NAME} PUBLIC ${LIBS})

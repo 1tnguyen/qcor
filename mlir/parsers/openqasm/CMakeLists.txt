@@ -3,7 +3,7 @@ set(LIBRARY_NAME openqasm-mlir-generator)
 
 file(GLOB SRC *.cpp generated/*.cpp)
 
-add_library(${LIBRARY_NAME} SHARED ${SRC})
+add_library(${LIBRARY_NAME} STATIC ${SRC})
 target_compile_features(${LIBRARY_NAME} 
                         PUBLIC
                         cxx_std_17)

@@ -1,5 +1,7 @@
 #include "openqasm_mlir_generator.hpp"
 #include "mlir/Dialect/StandardOps/IR/Ops.h"
+#include "transformations/desugar.hpp"
+#include "transformations/inline.hpp"
 
 namespace qcor {
 
