@@ -12,14 +12,15 @@ from qiskit.chemistry.applications import MolecularGroundStateEnergy
 
 
 basis_string = 'sto-3g'
-# Molecular to test
-molecule_string = 'H 0. 0.558243000 0.; H 0.483452000 -0.279121000 0.; H -0.483452000 -0.279121000 0.'
-charge = 1
-driver = PySCFDriver(atom=molecule_string, charge=charge, unit=UnitsType.ANGSTROM, basis=basis_string)
-
+# Molecules to test
+h20_mole = 'O 0 0 0; H 0 -2.757 2.587; H 0 2.757  2.587'
+n2_mol = '0.0, 0.0, 0.56499; N 0.0, 0.0, -0.56499'
+hcn_mole = 'C 0.0, 0.0, -0.511747; N 0.0, 0.0, 0.664461; H 0.0, 0.0, -1.580746'
+driver = PySCFDriver(atom=hcn_mole, basis = 'sto-3g')
 
 def cb_create_solver(num_particles, num_orbitals,
                         qubit_mapping, two_qubit_reduction, z2_symmetries):
+    print('num_particles =', num_particles, "; num_orbitals =", num_orbitals)
     initial_state = HartreeFock(num_orbitals, num_particles, qubit_mapping,
                                 two_qubit_reduction, z2_symmetries.sq_list)
     var_form = UCCSD(num_orbitals=num_orbitals,
