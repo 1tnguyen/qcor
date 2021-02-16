@@ -149,6 +149,21 @@ class pyxasm_visitor : public pyxasmBaseVisitor {
                << ");\n";
             result.first = ss.str();
           }
+          else if (inst_name == "uccsd") {
+            // std::cout << "Get UCCSD: " << context->getText() << "\n";
+            std::stringstream ss;
+            // Delegate to the QRT call directly.
+            ss << "quantum::uccsd("
+               << context->trailer()[0]->arglist()->argument(0)->getText()
+               << ", "
+               << context->trailer()[0]->arglist()->argument(1)->getText()
+               << ", "
+               << context->trailer()[0]->arglist()->argument(2)->getText()
+               << ", "
+               << context->trailer()[0]->arglist()->argument(3)->getText()
+               << ");\n";
+            result.first = ss.str();
+          }
           // Handle potential name collision: user-defined kernel having the
           // same name as an XACC circuit: e.g. common names such as qft, iqft
           // Note: these circuits (except exp_i_theta) don't have QRT

@@ -201,6 +201,18 @@ void exp(qreg q, const double theta, std::shared_ptr<xacc::Observable> H) {
   qrt_impl->exp(q, theta, H);
 }
 
+void uccsd(qreg q, int nq, int ne, const std::vector<double> &thetas) {
+  auto tmp = xacc::getService<xacc::Instruction>("uccsd");
+  auto uccsd = std::dynamic_pointer_cast<xacc::CompositeInstruction>(tmp);
+  uccsd->expand({{"ne", ne}, {"nq", nq}});
+  // std::cout << "HOWDY:\n" << uccsd->toString() << "\n";
+  auto evaled = uccsd->operator()(thetas);
+  // std::cout << "HOWDY:\n" << evaled->toString() << "\n";
+  for (auto inst : evaled->getInstructions()) {
+    qrt_impl->get_current_program()->addInstruction(inst);
+  }
+}
+
 void submit(xacc::AcceleratorBuffer *buffer) { qrt_impl->submit(buffer); }
 
 void submit(xacc::AcceleratorBuffer **buffers, const int nBuffers) {

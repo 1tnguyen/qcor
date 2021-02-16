@@ -144,6 +144,7 @@ void crz(const qubit &src_idx, const qubit &tgt_idx, const double theta);
 void exp(qreg q, const double theta, xacc::Observable &H);
 void exp(qreg q, const double theta, xacc::Observable *H);
 void exp(qreg q, const double theta, std::shared_ptr<xacc::Observable> H);
+void uccsd(qreg q, int nq, int ne, const std::vector<double> &thetas);
 
 // Submission API. Submit the constructed CompositeInstruction operating
 // on the provided AcceleratorBuffer(s) (note qreg wraps an AcceleratorBuffer)

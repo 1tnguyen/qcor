@@ -13,10 +13,10 @@ from qiskit.chemistry.applications import MolecularGroundStateEnergy
 
 basis_string = 'sto-3g'
 # Molecules to test
-h20_mole = 'O 0 0 0; H 0 -2.757 2.587; H 0 2.757  2.587'
+h2o_mole = 'O 0 0 0; H 0 -2.757 2.587; H 0 2.757  2.587'
 n2_mol = '0.0, 0.0, 0.56499; N 0.0, 0.0, -0.56499'
 hcn_mole = 'C 0.0, 0.0, -0.511747; N 0.0, 0.0, 0.664461; H 0.0, 0.0, -1.580746'
-driver = PySCFDriver(atom=hcn_mole, basis = 'sto-3g')
+driver = PySCFDriver(atom=h2o_mole, basis = 'sto-3g')
 
 def cb_create_solver(num_particles, num_orbitals,
                         qubit_mapping, two_qubit_reduction, z2_symmetries):
