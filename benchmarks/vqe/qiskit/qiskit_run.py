@@ -1,4 +1,3 @@
-from qiskit.aqua import aqua_globals
 from qiskit import Aer
 from qiskit.aqua.operators import X, Z, I
 from qiskit.aqua import QuantumInstance, aqua_globals
@@ -10,7 +9,8 @@ from qiskit.chemistry.components.variational_forms import UCCSD
 from qiskit.chemistry.drivers import PySCFDriver, UnitsType
 from qiskit.chemistry.applications import MolecularGroundStateEnergy
 import time
-
+# Use only 1 process
+aqua_globals.num_processes = 1
 basis_string = 'sto-3g'
 # Molecules to test
 h2o_mole = 'O 0 0 0; H 0 -2.757 2.587; H 0 2.757  2.587'
@@ -34,7 +34,8 @@ for test_case in test_cases:
                             initial_state=initial_state,
                             qubit_mapping=qubit_mapping,
                             two_qubit_reduction=two_qubit_reduction,
-                            z2_symmetries=z2_symmetries)
+                            z2_symmetries=z2_symmetries,
+                            shallow_circuit_concat=False)
         end = time.time()
         print("UCCSD var-form ctor time:", end - start, " [secs]")
 
