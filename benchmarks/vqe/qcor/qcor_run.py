@@ -34,6 +34,17 @@ for test_case in test_cases:
     for i in range(nParameters):
         params.append(1.0)
     start = time.time()
-    ansatz.print_kernel(q, nElectrons, params)
+    comp = ansatz.extract_composite(q, nElectrons, params)
     end = time.time()
     print("Kernel eval time:", end - start, " [secs]")
+    # Count gate.
+    n_insts = comp.nInstructions()
+    gate_counts = {}
+    for i in range(n_insts):
+        inst_name = comp.getInstruction(i).name()
+        if inst_name in gate_counts:
+            gate_counts[inst_name] = gate_counts[inst_name] + 1
+        else:
+            gate_counts[inst_name] = 1
+    for op_name in gate_counts:
+        print(op_name, ":", gate_counts[op_name])
