@@ -3,8 +3,8 @@ import time
 @qjit
 def trotter_circ(q : qreg, exp_args: List[PauliOperator], n_steps: int):
   for i in range(n_steps):
-    for i, exp_arg in enumerate(exp_args):
-      exp_i_theta(q, 1.0, exp_args[i])
+    for exp_arg in exp_args:
+      exp_i_theta(q, 1.0, exp_arg)
 
 def heisenberg_ham(n_qubits):
   Jz = 1.0
