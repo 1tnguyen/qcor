@@ -26,4 +26,4 @@ for nbQubits in n_qubits:
   start = time.time()
   comp = trotter_circ.extract_composite(q, op_terms, nbSteps)
   end = time.time()
-  print("n instructions =", comp.nInstructions(), "; Kernel eval time:", end - start, " [secs]")
+  print("n_qubits =", nbQubits, "; n instructions =", comp.nInstructions(), "; Kernel eval time:", end - start, " [secs]")

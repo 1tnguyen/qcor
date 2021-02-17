@@ -60,4 +60,4 @@ for nbQubits in n_qubits:
   start = time.time()
   comp = trotter_circ(q, ham_op.oplist, nbSteps)
   end = time.time()
-  print("n instructions =", comp.depth(), "; Kernel eval time:", end - start, " [secs]")
+  print("n_qubits =", nbQubits, "; n instructions =", comp.depth(), "; Kernel eval time:", end - start, " [secs]")
