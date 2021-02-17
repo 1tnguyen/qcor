@@ -60,4 +60,10 @@ for nbQubits in n_qubits:
   start = time.time()
   comp = trotter_circ(q, ham_op.oplist, nbSteps)
   end = time.time()
-  print("n_qubits =", nbQubits, "; n instructions =", comp.depth(), "; Kernel eval time:", end - start, " [secs]")
+  ops_count = comp.count_ops()
+  num_gates = 0
+  # Count gates except identity
+  for gate_name in ops_count:
+    if gate_name != "id":
+      num_gates += ops_count[gate_name]
+  print("n_qubits =", nbQubits, "; n instructions =", num_gates, "; Kernel eval time:", end - start, " [secs]")
