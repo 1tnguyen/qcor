@@ -16,7 +16,7 @@ def heisenberg_ham(n_qubits):
     H = H - Jz * (Z(i) * Z(i + 1))
   return H
 
-n_qubits = [10, 20, 50, 100]
+n_qubits = [5, 10, 20, 50, 100]
 nbSteps = 100
 
 for nbQubits in n_qubits:
