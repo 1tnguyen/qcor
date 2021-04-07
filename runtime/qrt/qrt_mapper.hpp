@@ -89,6 +89,7 @@ public:
   void visit(CRZ &crz) override { addTwoQubitGate("crz", crz); }
   void visit(CH &ch) override { addTwoQubitGate("ch", ch); }
   void visit(CPhase &cphase) override { addTwoQubitGate("cphase", cphase); }
+  void visit(fSim &fsim) override { addTwoQubitGate("fsim", fsim); }
 
   void visit(Measure &measure) override { addOneQubitGate("mz", measure); }
   void visit(Identity &i) override { addOneQubitGate("i", i); }

@@ -144,6 +144,11 @@ class NISQ : public ::quantum::QuantumRuntime,
     two_qubit_inst("CRZ", src_idx, tgt_idx, {theta});
   }
 
+  void fsim(const qubit &q1, const qubit &q2, const double theta,
+            const double phi) override {
+    two_qubit_inst("fSim", q1, q2, {theta, phi});
+  }
+
   void general_instruction(std::shared_ptr<xacc::Instruction> inst) override {
     std::vector<double> params;
     for (auto p : inst->getParameters()) {

@@ -95,6 +95,10 @@ class FTQC : public quantum::QuantumRuntime {
     applyGate("CRZ", {src_idx.second, tgt_idx.second}, {theta});
   }
 
+  virtual void fsim(const qubit &q1, const qubit &q2, const double theta,
+                    const double phi) override {
+    applyGate("fSim", {q1.second, q2.second}, {theta, phi});
+  }
   // exponential of i * theta * H, where H is an Observable pointer
   virtual void exp(qreg q, const double theta,
                    xacc::Observable &H) override { /* TODO */

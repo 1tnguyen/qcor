@@ -191,6 +191,11 @@ void crz(const qubit &src_idx, const qubit &tgt_idx, const double theta) {
   qrt_impl->crz(src_idx, tgt_idx, theta);
 }
 
+void fsim(const qubit &q1, const qubit &q2, const double theta,
+          const double phi) {
+  qrt_impl->fsim(q1, q2, theta, phi);
+}
+
 void exp(qreg q, const double theta, xacc::Observable &H) {
   qrt_impl->exp(q, theta, H);
 }

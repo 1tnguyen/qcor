@@ -58,6 +58,8 @@ public:
                       const double theta) = 0;
   virtual void crz(const qubit &src_idx, const qubit &tgt_idx,
                    const double theta) = 0;
+  virtual void fsim(const qubit &q1, const qubit &q2, const double theta,
+                    const double phi) = 0;
 
   // exponential of i * theta * H, where H is an Observable pointer
   virtual void exp(qreg q, const double theta, xacc::Observable &H) = 0;
@@ -147,7 +149,8 @@ void swap(const qubit &src_idx, const qubit &tgt_idx);
 // Common parameterized 2 qubit gates.
 void cphase(const qubit &src_idx, const qubit &tgt_idx, const double theta);
 void crz(const qubit &src_idx, const qubit &tgt_idx, const double theta);
-
+void fsim(const qubit &q1, const qubit &q2, const double theta,
+          const double phi);
 // exponential of i * theta * H, where H is an Observable pointer
 void exp(qreg q, const double theta, xacc::Observable &H);
 void exp(qreg q, const double theta, xacc::Observable *H);
