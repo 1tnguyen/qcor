@@ -1062,7 +1062,15 @@ def sycamore(q : qreg):
   Rz(q[52], 0.78539816339)
   # End hz_1_2
 
+ham = Z(0)
 
+for i in range(1, 53):
+  ham *= Z(i)
+
+print(ham)
 
 q = qalloc(53)
-sycamore.print_kernel(q)
+# sycamore.print_kernel(q)
+
+obs = sycamore.observe(ham, q)
+print(obs)
