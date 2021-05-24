@@ -50,6 +50,7 @@ add_qcor_compile_and_exe_test(qrt_qpu_lambdas_in_loop qpu_lambda/deuteron_lambda
 add_qcor_compile_and_exe_test(qrt_qpu_lambda_deuteron qpu_lambda/deuteron_vqe.cpp)
 add_qcor_compile_and_exe_test(qrt_qpu_lambda_objfunc qpu_lambda/deuteron_vqe_obj_func.cpp)
 add_qcor_compile_and_exe_test(qrt_qpu_lambda_hadamard_test ctrl-gates/hadamard_test.cpp)
+add_qcor_compile_and_exe_test(qrt_qpu_lambda_multiple_calls qpu_lambda/lambda_multiple_bell.cpp)
 
 # Arithmetic tests
 add_qcor_compile_and_exe_test(qrt_qpu_arith_adder arithmetic/simple.cpp)
