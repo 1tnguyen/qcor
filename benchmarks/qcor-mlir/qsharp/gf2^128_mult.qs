@@ -42,6 +42,7 @@ namespace Quantum.staq {
         u3(theta/2.0, phi, 0.0, t);
     }
 
+    @EntryPoint()
     operation Circuit() : Unit {
         using (qubits = Qubit[384]) {
             CCNOT(qubits[127], qubits[129], qubits[256]);

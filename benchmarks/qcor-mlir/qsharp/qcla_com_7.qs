@@ -41,7 +41,8 @@ namespace Quantum.staq {
         CNOT(c, t);
         u3(theta/2.0, phi, 0.0, t);
     }
-
+ 
+    @EntryPoint()
     operation Circuit() : Unit {
         using (qubits = Qubit[24]) {
             X(qubits[0]);

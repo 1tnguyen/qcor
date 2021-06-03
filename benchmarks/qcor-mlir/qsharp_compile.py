@@ -2,7 +2,7 @@
 # Q# command line tool, i.e. not building the whole .NET project.
 # We don't time the QIR generation, just using the **Release** version
 # of the QSC (Q# compiler) to compile the Q# source file.
-import os, glob, time, csv
+import os, glob, time, csv, sys
 from datetime import datetime
 
 dirPath = os.path.dirname(os.path.realpath(__file__))
@@ -17,7 +17,7 @@ listOfSrcFiles = sorted(listOfSrcFiles, key = os.path.getsize)
 headers = ["Test Case", "total time"]
 firstWrite = True
 # HARD-CODED qsc location, updated according to your system
-qsc_exe = "/root/.nuget/packages/microsoft.quantum.sdk/0.14.2011120240/tools/qsc/qsc.dll"
+qsc_exe = "/home/cades/.nuget/packages/microsoft.quantum.sdk/0.17.2105144881/tools/qsc/qsc.dll"
 # Q# build config file (has a placeholder for the qs source file)
 response_file = dirPath + "/qsharp/qsc.rsp"
 result_file_name = 'result_qsharp' + datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p") + '.csv'

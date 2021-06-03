@@ -1,1 +1,44 @@
---proj "quantum"  --input "$$FILE_NAME$$" --output "obj/qsharp/" --references "/root/.nuget/packages/microsoft.bcl.asyncinterfaces/1.1.0/ref/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll" "/root/.nuget/packages/microsoft.quantum.compiler/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.BondSchemas.dll" "/root/.nuget/packages/microsoft.quantum.compiler/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.QsCompilationManager.dll" "/root/.nuget/packages/microsoft.quantum.compiler/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.QsCompiler.dll" "/root/.nuget/packages/microsoft.quantum.compiler/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.QsCore.dll" "/root/.nuget/packages/microsoft.quantum.compiler/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.QsDataStructures.dll" "/root/.nuget/packages/microsoft.quantum.compiler/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.QsDocumentationParser.dll" "/root/.nuget/packages/microsoft.quantum.qsharp.core/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.QSharp.Core.dll" "/root/.nuget/packages/microsoft.quantum.compiler/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.QsOptimizations.dll" "/root/.nuget/packages/microsoft.quantum.compiler/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.QsSyntaxProcessor.dll" "/root/.nuget/packages/microsoft.quantum.compiler/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.QsTextProcessor.dll" "/root/.nuget/packages/microsoft.quantum.compiler/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.QsTransformations.dll" "/root/.nuget/packages/microsoft.quantum.runtime.core/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.Runtime.Core.dll" "/root/.nuget/packages/microsoft.quantum.simulators/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.Simulation.Common.dll" "/root/.nuget/packages/microsoft.quantum.simulators/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.Simulation.QCTraceSimulatorRuntime.dll" "/root/.nuget/packages/microsoft.quantum.simulators/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.Simulators.dll" "/root/.nuget/packages/microsoft.quantum.standard/0.14.2011120240/lib/netstandard2.1/Microsoft.Quantum.Standard.dll" "/root/.nuget/packages/numsharp/0.20.5/lib/netstandard2.0/NumSharp.Core.dll" --load "/root/.nuget/packages/microsoft.quantum.csharpgeneration/0.14.2011120240/build//../lib/netstandard2.1/Microsoft.Quantum.CsharpGeneration.dll" --runtime Unknown  --package-load-fallback-folders "/workspaces/qcor/qcor/benchmarks/qcor-mlir/qsharp/bin/Debug/netstandard2.1/"  --assembly-properties ProcessorArchitecture:Unspecified QsharpOutputType:QsharpLibrary ExecutionTarget:Any DocsPackageId:quantum
+--proj
+    "quantum"
+--input
+    "$$FILE_NAME$$"
+--build-exe
+--output
+    "/home/cades/dev/qcor/benchmarks/qcor-mlir/qsharp/obj/qsharp/"
+--references
+    "/home/cades/.nuget/packages/microsoft.quantum.qirgeneration/0.17.2105144881/lib/netstandard2.1/LLVMSharp.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.qirgeneration/0.17.2105144881/lib/netstandard2.1/Microsoft.Bcl.HashCode.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.compiler/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.BondSchemas.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.qirgeneration/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.LlvmBindings.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.qirgeneration/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QirGeneration.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.compiler/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QsCompilationManager.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.compiler/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QsCompiler.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.compiler/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QsCore.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.compiler/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QsDataStructures.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.compiler/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QsDocumentationParser.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.qsharp.core/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QSharp.Core.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.qsharp.foundation/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QSharp.Foundation.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.compiler/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QsOptimizations.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.compiler/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QsSyntaxProcessor.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.compiler/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QsTextProcessor.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.compiler/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.QsTransformations.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.runtime.core/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.Runtime.Core.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.simulators/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.Simulation.Common.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.simulators/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.Simulation.QCTraceSimulatorRuntime.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.simulators/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.Simulators.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.standard/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.Standard.dll"
+    "/home/cades/.nuget/packages/microsoft.quantum.targets.interfaces/0.17.2105144881/lib/netstandard2.1/Microsoft.Quantum.Targets.Interfaces.dll"
+    "/home/cades/.nuget/packages/numsharp/0.20.5/lib/netstandard2.0/NumSharp.Core.dll"
+--load
+    "/home/cades/.nuget/packages/microsoft.quantum.qirgeneration/0.17.2105144881/build//../lib/netstandard2.1/Microsoft.Quantum.QirGeneration.dll"
+--runtime
+    BasicQuantumFunctionality
+--package-load-fallback-folders
+    "/home/cades/dev/qcor/benchmarks/qcor-mlir/qsharp/bin/Debug/netcoreapp3.1/"
+--llvm-libs
+    /home/cades/.nuget/packages/libllvm.runtime.ubuntu.20.04-x64/11.0.0
+--assembly-properties
+    AssemblyName:runSayHello
+    ProcessorArchitecture:Unspecified
+    ExecutionTarget:Any
+    QirOutputPath:"obj/qsharp/qir/"
