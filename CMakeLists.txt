@@ -42,11 +42,11 @@ project(qcor LANGUAGES CXX C)
 option(QCOR_BUILD_TESTS "Build qcor tests" OFF)
 
 find_package(Git QUIET)
-if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
-    execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD WORKING_DIRECTORY "${local_dir}"
+if(GIT_FOUND)
+  execute_process(COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/scripts/get_git_version.sh
                             OUTPUT_VARIABLE QCOR_BUILD_VERSION ERROR_QUIET
                             OUTPUT_STRIP_TRAILING_WHITESPACE)
-  message( STATUS "QCOR GIT hash: ${QCOR_BUILD_VERSION}")
+  message( STATUS "QCOR Version / HEAD commit hash: ${QCOR_BUILD_VERSION}")
 endif()
 
 find_package(XACC REQUIRED)
@@ -60,7 +60,13 @@ add_subdirectory(handlers)
 add_subdirectory(runtime)
 add_subdirectory(tools)
 add_subdirectory(lib)
-add_subdirectory(mlir)
+
+if (NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  if (NOT MLIR_DIR) 
+    set(MLIR_DIR ${LLVM_ROOT}/lib/cmake/mlir)
+  endif()
+  add_subdirectory(mlir)
+endif()
 
 if (QCOR_BUILD_TESTS)
   add_subdirectory(examples)
@@ -102,9 +108,9 @@ set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/scripts/debian/posti
 
 #dependencies for this service menu
 if (${QCOR_CPACK_DEB_PLATFORM} STREQUAL "bionic")
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "xacc, clang-syntax-handler")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "xacc, aideqc-llvm")
 elseif(${QCOR_CPACK_DEB_PLATFORM} STREQUAL "focal")
- set(CPACK_DEBIAN_PACKAGE_DEPENDS "xacc, clang-syntax-handler")
+ set(CPACK_DEBIAN_PACKAGE_DEPENDS "xacc, aideqc-llvm")
 endif()
 set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 set(CPACK_DEBIAN_PACKAGE_SECTION "base")

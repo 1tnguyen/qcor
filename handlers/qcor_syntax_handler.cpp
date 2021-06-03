@@ -13,6 +13,9 @@
 using namespace clang;
 
 namespace qcor {
+namespace __internal__developer__flags__ {
+bool add_predefines = true;
+}
 
 bool qrt = false;
 std::string qpu_name = "qpp";
@@ -45,10 +48,23 @@ void QCORSyntaxHandler::GetReplacement(Preprocessor &PP, Declarator &D,
     } else if (type == "qcor::qreg") {
       bufferNames.push_back(ident->getName().str());
       type = "qreg";
+    } else if (type.find("xacc::internal_compiler::qubit") !=
+               std::string::npos) {
+      bufferNames.push_back(ident->getName().str());
+      type = "qubit";
     }
 
     program_arg_types.push_back(type);
     program_parameters.push_back(var);
+
+    // If this was a passed kernel as a KernelSignature, then 
+    // we need to add to the kernels in translation unit
+    if (auto t = dyn_cast<TypedefType>(parm_var_decl->getType())) {
+      auto d = t->desugar();
+      if (d.getAsString().find("KernelSignature") != std::string::npos) {
+        qcor::append_kernel(var, {}, {});
+      }
+    }
   }
 
   GetReplacement(PP, kernel_name, program_arg_types, program_parameters,
@@ -61,6 +77,16 @@ void QCORSyntaxHandler::GetReplacement(
     std::vector<std::string> program_parameters,
     std::vector<std::string> bufferNames, CachedTokens &Toks,
     llvm::raw_string_ostream &OS, bool add_het_map_ctor) {
+  
+  // Add any KernelSignature or qpu_lambda to the list of known kernels.
+  // Note: this GetReplacement overload is called directly from QJIT
+  // vs. the standard SyntaxHandler API.
+  for (int i = 0; i < program_arg_types.size(); ++i) {
+    if (program_arg_types[i].find("KernelSignature") != std::string::npos ||
+        program_arg_types[i].find("qcor::_qpu_lambda") != std::string::npos) {
+      qcor::append_kernel(program_parameters[i], {}, {});
+    }
+  }
   // Get the Diagnostics engine and create a few custom
   // error messgaes
   auto &diagnostics = PP.getDiagnostics();
@@ -82,19 +108,20 @@ void QCORSyntaxHandler::GetReplacement(
   // with XACC api calls
   qcor::append_kernel(kernel_name, program_arg_types, program_parameters);
 
-  auto new_src = qcor::run_token_collector(PP, Toks, bufferNames);
+  // for (int i = 0; i < program_arg_types.size(); i++) {
+  //   if (program_arg_types[i].find("CallableKernel") != std::string::npos) {
+  //     // we have a kernel we can call, need to add it to
+  //     // append_kernel call.
+  //     qcor::append_kernel(program_parameters[i], {}, {});
+  //   }
+  // }
 
-  //   auto random_string = [](size_t length) {
-  //     auto randchar = []() -> char {
-  //       const char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-  //                              "abcdefghijklmnopqrstuvwxyz";
-  //       const size_t max_index = (sizeof(charset) - 1);
-  //       return charset[rand() % max_index];
-  //     };
-  //     std::string str(length, 0);
-  //     std::generate_n(str.begin(), length, randchar);
-  //     return str;
-  //   };
+  std::string src_to_prepend;
+  auto new_src = qcor::run_token_collector(PP, Toks, src_to_prepend,
+                                           kernel_name, program_arg_types,
+                                           program_parameters, bufferNames);
+
+  if (!src_to_prepend.empty()) OS << src_to_prepend;
 
   // Rewrite the original function
   OS << "void " << kernel_name << "(" << program_arg_types[0] << " "
@@ -135,6 +162,13 @@ void QCORSyntaxHandler::GetReplacement(
   // declare the super-type as a friend
   OS << "friend class qcor::QuantumKernel<class " << kernel_name << ", "
      << program_arg_types[0];
+  for (int i = 1; i < program_arg_types.size(); i++) {
+    OS << ", " << program_arg_types[i];
+  }
+  OS << ">;\n";
+
+  // Declare KernelSignature as a friend as well
+  OS << "friend class qcor::KernelSignature<"<< program_arg_types[0];
   for (int i = 1; i < program_arg_types.size(); i++) {
     OS << ", " << program_arg_types[i];
   }
@@ -331,9 +365,10 @@ void QCORSyntaxHandler::GetReplacement(
   OS << "}\n";
 
   if (add_het_map_ctor) {
-    // Remove "&" from type string before getting the Python variables in the HetMap.
-    // Note: HetMap can't store references.
-    const auto remove_ref_arg_type = [](const std::string &org_arg_type) -> std::string {
+    // Remove "&" from type string before getting the Python variables in the
+    // HetMap. Note: HetMap can't store references.
+    const auto remove_ref_arg_type =
+        [](const std::string &org_arg_type) -> std::string {
       // We intentially only support a very limited set of pass-by-ref types
       // from the HetMap.
       // Only do: double& and int&
@@ -349,7 +384,7 @@ void QCORSyntaxHandler::GetReplacement(
 
     // Strategy: we unpack the args in the HetMap and call
     // the appropriate ctor overload.
-    
+
     // For reference ctor params (e.g. double& and int&),
     // we create a local variable to copy the arg from the HetMap
     // before passing to the ctor.
@@ -366,22 +401,45 @@ void QCORSyntaxHandler::GetReplacement(
     int var_counter = 0;
     // Only handle non-qreg args
     for (int i = 1; i < program_parameters.size(); i++) {
-      // If this is a *supported* ref types: double&, int&, etc. 
+      // If this is a *supported* ref types: double&, int&, etc.
       if (remove_ref_arg_type(program_arg_types[i]) != program_arg_types[i]) {
         // Generate a temp var
-        const std::string new_var_name = "__temp_var__" + std::to_string(var_counter++);
+        const std::string new_var_name =
+            "__temp_var__" + std::to_string(var_counter++);
         // Copy the var from HetMap to the temp var
-        ref_type_copy_decl_ss << remove_ref_arg_type(program_arg_types[i]) << " "<< new_var_name << " = " << "args.get<" << remove_ref_arg_type(program_arg_types[i]) << ">(\""
-         << program_parameters[i] << "\");\n";
-        
-        // We just pass this copied var to the ctor 
+        ref_type_copy_decl_ss << remove_ref_arg_type(program_arg_types[i])
+                              << " " << new_var_name << " = "
+                              << "args.get<"
+                              << remove_ref_arg_type(program_arg_types[i])
+                              << ">(\"" << program_parameters[i] << "\");\n";
+
+        // We just pass this copied var to the ctor
         // where it expects a reference type.
-        arg_ctor_list.emplace_back(new_var_name); 
-      }
-      else {
+        arg_ctor_list.emplace_back(new_var_name);
+      } else if (program_arg_types[i].rfind("KernelSignature", 0) == 0) {
+        // This is a KernelSignature argument.
+        // The one in HetMap is the function pointer represented as a hex string.
+        const std::string new_var_name =
+            "__temp_kernel_ptr_var__" + std::to_string(var_counter++);
+        // Retrieve the function pointer from the HetMap
+        // ref_type_copy_decl_ss << "std::cout << args.getString(\""
+        //                       << program_parameters[i] << "\").c_str() << std::endl;\n";
+        ref_type_copy_decl_ss << "void* " << new_var_name << " = "
+                              << "(void *) strtoull(args.getString(\""
+                              << program_parameters[i] << "\").c_str(), nullptr, 16);\n";
+        // ref_type_copy_decl_ss << "std::cout << " << new_var_name << " << std::endl;\n";
+        // Construct the KernelSignature
+        const std::string kernel_signature_var_name =
+            "__temp_kernel_signature_var__" + std::to_string(var_counter++);
+        ref_type_copy_decl_ss << program_arg_types[i] << " "
+                              << kernel_signature_var_name << "("
+                              << new_var_name << ");\n";
+        arg_ctor_list.emplace_back(kernel_signature_var_name);
+      } else {
         // Otherwise, just unpack the arg inline in the ctor call.
         std::stringstream ss;
-        ss << "args.get<" << program_arg_types[i] << ">(\""<< program_parameters[i] << "\")";
+        ss << "args.get<" << program_arg_types[i] << ">(\""
+           << program_parameters[i] << "\")";
         arg_ctor_list.emplace_back(ss.str());
       }
     }
@@ -394,29 +452,30 @@ void QCORSyntaxHandler::GetReplacement(
     // CTor call
     OS << "class " << kernel_name << " __ker__temp__(";
     // First arg: qreg
-    OS << "args.get<" << program_arg_types[0] << ">(\""
-       << program_parameters[0] << "\")";
+    OS << "args.get<" << program_arg_types[0] << ">(\"" << program_parameters[0]
+       << "\")";
     // The rest: either inline unpacking or temp var names (ref type)
-    for (const auto &arg_str: arg_ctor_list) {
+    for (const auto &arg_str : arg_ctor_list) {
       OS << ", " << arg_str;
     }
     OS << ");\n";
     OS << "}\n";
 
     OS << "void " << kernel_name
-       << "__with_parent_and_hetmap_args(std::shared_ptr<CompositeInstruction> parent, "
+       << "__with_parent_and_hetmap_args(std::shared_ptr<CompositeInstruction> "
+          "parent, "
           "HeterogeneousMap& args) {\n";
     OS << ref_type_copy_decl_ss.str();
     // CTor call with parent kernel
     OS << "class " << kernel_name << " __ker__temp__(parent, ";
     // Second arg: qreg
-    OS << "args.get<" << program_arg_types[0] << ">(\""
-       << program_parameters[0] << "\")";
+    OS << "args.get<" << program_arg_types[0] << ">(\"" << program_parameters[0]
+       << "\")";
     // The rest: either inline unpacking or temp var names (ref type)
-    for (const auto &arg_str: arg_ctor_list) {
+    for (const auto &arg_str : arg_ctor_list) {
       OS << ", " << arg_str;
     }
-    OS << ");\n";   
+    OS << ");\n";
     // The rest: either inline unpacking or temp var names (ref type)
     OS << "}\n";
   }
@@ -425,9 +484,11 @@ void QCORSyntaxHandler::GetReplacement(
 }
 
 void QCORSyntaxHandler::AddToPredefines(llvm::raw_string_ostream &OS) {
-  OS << "#include \"qcor.hpp\"\n";
-  OS << "using namespace qcor;\n";
-  OS << "using namespace xacc::internal_compiler;\n";
+  if (__internal__developer__flags__::add_predefines) {
+    OS << "#include \"qcor.hpp\"\n";
+    OS << "using namespace qcor;\n";
+    OS << "using namespace xacc::internal_compiler;\n";
+  }
 }
 
 class DoNothingConsumer : public ASTConsumer {

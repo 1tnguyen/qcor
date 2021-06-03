@@ -10,6 +10,7 @@
 #include "qrt.hpp"
 #include "qrt_mapper.hpp"
 #include "token_collector.hpp"
+#include "token_collector_helper.hpp"
 #include "xacc.hpp"
 #include "xacc_config.hpp"
 #include "xacc_service.hpp"
@@ -18,17 +19,31 @@ namespace qcor {
 void append_kernel(const std::string name,
                    const std::vector<std::string> &program_arg_types,
                    const std::vector<std::string> &program_parameters) {
-  ::quantum::kernels_in_translation_unit.push_back(name);
-  ::quantum::kernel_signatures_in_translation_unit[name] =
-      std::make_pair(program_arg_types, program_parameters);
+  // Just ignored if we have tracked this kernel already.
+  if (!xacc::container::contains(::quantum::kernels_in_translation_unit,
+                                 name)) {
+    ::quantum::kernels_in_translation_unit.push_back(name);
+    ::quantum::kernel_signatures_in_translation_unit[name] =
+        std::make_pair(program_arg_types, program_parameters);
+  }
 }
 
 void set_verbose(bool verbose) { xacc::set_verbose(verbose); }
 void info(const std::string &s) { xacc::info(s); }
-
 std::string run_token_collector(clang::Preprocessor &PP,
                                 clang::CachedTokens &Toks,
                                 std::vector<std::string> bufferNames) {
+  std::string s;
+  std::vector<std::string> ss;
+  return run_token_collector(PP, Toks, s, s, ss, ss, bufferNames);
+}
+
+std::string run_token_collector(
+    clang::Preprocessor &PP, clang::CachedTokens &Toks,
+    std::string &src_to_prepend, const std::string kernel_name,
+    const std::vector<std::string> &program_arg_types,
+    const std::vector<std::string> &program_parameters,
+    std::vector<std::string> bufferNames) {
   if (!xacc::isInitialized()) {
     // Check if we are installed somewhere other than xacc install dir
     // if so add qcor plugins path to plugin search path
@@ -68,7 +83,7 @@ std::string run_token_collector(clang::Preprocessor &PP,
     if (PP.getSpelling(Toks[i]) == "using") {  //}.is(clang::tok::kw_using)) {
       // Flush the current CachedTokens...
       if (!tmp_cache.empty())
-        token_collector->collect(PP, tmp_cache, bufferNames, code_ss);
+        token_collector->collect(PP, tmp_cache, bufferNames, code_ss, kernel_name);
 
       i += 2;
       std::string lang_name = "";
@@ -94,7 +109,7 @@ std::string run_token_collector(clang::Preprocessor &PP,
     if (PP.getSpelling(Toks[i]) == "decompose") {
       // Flush the current CachedTokens...
       if (!tmp_cache.empty())
-        token_collector->collect(PP, tmp_cache, bufferNames, code_ss);
+        token_collector->collect(PP, tmp_cache, bufferNames, code_ss, kernel_name);
 
       auto last_tc = token_collector;
       token_collector = xacc::getService<TokenCollector>("unitary");
@@ -179,7 +194,7 @@ std::string run_token_collector(clang::Preprocessor &PP,
       }
 
       if (!tmp_cache.empty())
-        token_collector->collect(PP, tmp_cache, bufferNames, code_ss);
+        token_collector->collect(PP, tmp_cache, bufferNames, code_ss, kernel_name);
 
       code_ss << "}\n";
 
@@ -190,12 +205,122 @@ std::string run_token_collector(clang::Preprocessor &PP,
       continue;
     }
 
+    if (PP.getSpelling(Toks[i]) == "compute") {
+      // Flush the current CachedTokens...
+      if (!tmp_cache.empty())
+        token_collector->collect(PP, tmp_cache, bufferNames, code_ss, kernel_name);
+
+      // auto last_tc = token_collector;
+      // token_collector = xacc::getService<TokenCollector>("unitary");
+      tmp_cache.clear();
+
+      // skip compute
+      i++;
+
+      // must open scope
+      if (Toks[i].isNot(clang::tok::l_brace)) {
+        xacc::error(
+            "Invalid compute statement, must be of form decompose "
+            "{...} (...); with args in parenthesis being optional: " +
+            PP.getSpelling(Toks[i]));
+      }
+
+      // skip l_brace
+      i++;
+
+      // slurp up all tokens in the compute scope {...}
+      int l_brace_count = 1;
+      while (true) {
+        if (Toks[i].is(clang::tok::l_brace)) {
+          l_brace_count++;
+        }
+        if (Toks[i].is(clang::tok::r_brace)) {
+          l_brace_count--;
+        }
+        if (l_brace_count == 0) {
+          break;
+        }
+        tmp_cache.push_back(Toks[i]);
+        i++;
+      }
+
+      // advance past the r_brace
+      i++;
+
+      // HANDLE THE TOKENS in tmp_cache
+      // Take them, pass them to qcor syntax handler, to get back
+      // new class source code (like we do in jit),
+      std::stringstream dd;
+      // FIXME WHAT IF MULTIPLE IN KERNEL
+      std::string internal_kernel_function_name =
+          "__internal__compute_context_" + kernel_name;
+
+      std::stringstream tmpss;
+      if (!tmp_cache.empty())
+        token_collector->collect(PP, tmp_cache, bufferNames, tmpss, internal_kernel_function_name);
+
+      auto src_code = __internal__::qcor::construct_kernel_subtype(
+          tmpss.str(), internal_kernel_function_name, program_arg_types,
+          program_parameters, bufferNames);
+      src_to_prepend = src_code;
+
+      code_ss << "::quantum::qrt_impl->__begin_mark_segment_as_compute();\n";
+      code_ss << internal_kernel_function_name << "(parent_kernel, "
+              << program_parameters[0];
+      for (int i = 1; i < program_parameters.size(); i++) {
+        code_ss << ", " << program_parameters[i];
+      }
+      code_ss << ");\n";
+      code_ss << "::quantum::qrt_impl->__end_mark_segment_as_compute();\n";
+
+      if (PP.getSpelling(Toks[i]) != "action") {
+        xacc::error(
+            "Invalid compute-action statement, after scope close you must "
+            "provide the action scope {...}.");
+      }
+
+      i += 2;
+
+      tmp_cache.clear();
+
+      // slurp up all tokens in the action {...};
+      l_brace_count = 1;
+      while (true) {
+        if (Toks[i].is(clang::tok::l_brace)) {
+          l_brace_count++;
+        }
+        if (Toks[i].is(clang::tok::r_brace)) {
+          l_brace_count--;
+        }
+        if (l_brace_count == 0) {
+          break;
+        }
+        tmp_cache.push_back(Toks[i]);
+        i++;
+      }
+
+      // HANDLE THE TOKENS IN ACTION
+      if (!tmp_cache.empty())
+        token_collector->collect(PP, tmp_cache, bufferNames, code_ss, kernel_name);
+
+      code_ss << "::quantum::qrt_impl->__begin_mark_segment_as_compute();\n";
+      code_ss << internal_kernel_function_name << "::adjoint(parent_kernel, "
+              << program_parameters[0];
+      for (int i = 1; i < program_parameters.size(); i++) {
+        code_ss << ", " << program_parameters[i];
+      }
+      code_ss << ");\n";
+      code_ss << "::quantum::qrt_impl->__end_mark_segment_as_compute();\n";
+      tmp_cache.clear();
+      continue;
+    }
+
     tmp_cache.push_back(Toks[i]);
   }
 
   if (!tmp_cache.empty()) {
     // Flush the current CachedTokens...
-    token_collector->collect(PP, tmp_cache, bufferNames, code_ss);
+    token_collector->collect(PP, tmp_cache, bufferNames, code_ss, kernel_name);
   }
 
   return code_ss.str();

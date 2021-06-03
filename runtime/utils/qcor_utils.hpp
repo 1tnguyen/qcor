@@ -7,7 +7,6 @@
 #include <random>
 #include <tuple>
 #include <vector>
-
 #include "AllGateVisitor.hpp"
 #include "CompositeInstruction.hpp"
 #include "IRProvider.hpp"
@@ -114,6 +113,9 @@ void persist_var_to_qreq(const std::string &key, T &val, qreg &q) {
   q.results()->addExtraInfo(key, val);
 }
 
+std::shared_ptr<qcor::IRTransformation> createTransformation(
+    const std::string &transform_type);
+    
 // The TranslationFunctor maps vector<double> to a tuple of Args...
 template <typename... Args>
 using TranslationFunctor =
@@ -149,6 +151,8 @@ using GradientEvaluator =
     std::function<void(std::vector<double> x, std::vector<double> &dx)>;
 
 namespace __internal__ {
+
+std::string translate(const std::string compiler, std::shared_ptr<CompositeInstruction> program);
 
 void append_plugin_path(const std::string path);
 
@@ -377,4 +381,13 @@ class KernelToUnitaryVisitor : public xacc::quantum::AllGateVisitor {
   size_t m_nbQubit;
 };
 
-}  // namespace qcor
+#define qcor_expect(test_condition)                                            \
+  {                                                                            \
+    if (!(test_condition)) {                                                   \
+      std::stringstream ss;                                                    \
+      ss << __FILE__ << ":" << __LINE__ << ": Assertion failed: '"             \
+         << #test_condition << "'.";                                           \
+      error(ss.str());                                                         \
+    }                                                                          \
+  }
+} // namespace qcor

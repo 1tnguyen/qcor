@@ -6,6 +6,7 @@
 #include "mlir/Target/LLVMIR.h"
 #include "mlir/Transforms/DialectConversion.h"
 #include "mlir/Transforms/Passes.h"
+#include "Quantum/QuantumOps.h"
 
 using namespace mlir;
 
@@ -21,4 +22,6 @@ struct QuantumToLLVMLoweringPass
   QuantumToLLVMLoweringPass(std::vector<std::string>& f_names) :function_names(f_names) {}
 };
 
-}  // namespace qcor
+// Helper func.
+mlir::Type get_quantum_type(std::string type, mlir::MLIRContext *context);
+} // namespace qcor

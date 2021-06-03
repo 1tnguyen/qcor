@@ -1,10 +1,9 @@
 #pragma once
 
-#include "qcor_utils.hpp"
-
+#include "FermionOperator.hpp"
 #include "Observable.hpp"
 #include "PauliOperator.hpp"
-#include "FermionOperator.hpp"
+#include "qcor_utils.hpp"
 
 namespace qcor {
 
@@ -30,7 +29,6 @@ PauliOperator operator+(PauliOperator &op, double coeff);
 PauliOperator operator-(double coeff, PauliOperator &op);
 PauliOperator operator-(PauliOperator &op, double coeff);
 
-
 Eigen::MatrixXcd get_dense_matrix(PauliOperator &op);
 Eigen::MatrixXcd get_dense_matrix(std::shared_ptr<Observable> op);
 
@@ -48,8 +46,9 @@ auto observe(void (*quantum_kernel_functor)(
   // all quantum instructions to the parent kernel
   quantum_kernel_functor(program, args...);
   return [program, obs](Args... args) {
-    // Get the first argument, which should be a qreg
-    auto q = std::get<0>(std::forward_as_tuple(args...));
+    // Get qreg arg, will fail if more than one
+    std::tuple<Args...> tmp(std::forward_as_tuple(args...));
+    auto q = std::get<qreg>(tmp);
 
     // Observe the program
     auto programs = obs->observe(program);
@@ -76,8 +75,9 @@ auto observe(void (*quantum_kernel_functor)(
   // all quantum instructions to the parent kernel
   quantum_kernel_functor(program, args...);
   return [program, &obs](Args... args) {
-    // Get the first argument, which should be a qreg
-    auto q = std::get<0>(std::forward_as_tuple(args...));
+    // Get the qreg argument. will fail if more than 1 passed
+    std::tuple<Args...> tmp(std::forward_as_tuple(args...));
+    auto q = std::get<qreg>(tmp);
 
     // Observe the program
     auto programs = obs.observe(program);
@@ -100,23 +100,35 @@ double observe(std::shared_ptr<CompositeInstruction> program,
                xacc::internal_compiler::qreg &q);
 namespace __internal__ {
 // Observe the kernel and return the measured kernels
-std::vector<std::shared_ptr<CompositeInstruction>>
-observe(std::shared_ptr<Observable> obs,
-        std::shared_ptr<CompositeInstruction> program);
-} // namespace __internal__
+std::vector<std::shared_ptr<CompositeInstruction>> observe(
+    std::shared_ptr<Observable> obs,
+    std::shared_ptr<CompositeInstruction> program);
 
+}  // namespace __internal__
+
+std::shared_ptr<Observable> _internal_python_createObservable(
+    const std::string &name, const std::string &repr);
+    
 // Create an observable from a string representation
 std::shared_ptr<Observable> createObservable(const std::string &repr);
-std::shared_ptr<Observable> createObservable(const std::string& name, const std::string &repr);
-std::shared_ptr<Observable> createObservable(const std::string &name, HeterogeneousMap&& options);
-std::shared_ptr<Observable> createObservable(const std::string &name, HeterogeneousMap& options);
+std::shared_ptr<Observable> createObservable(const std::string &name,
+                                             const std::string &repr);
+std::shared_ptr<Observable> createObservable(const std::string &name,
+                                             HeterogeneousMap &&options);
+std::shared_ptr<Observable> createObservable(const std::string &name,
+                                             HeterogeneousMap &options);
 
 std::shared_ptr<Observable> createOperator(const std::string &repr);
-std::shared_ptr<Observable> createOperator(const std::string& name, const std::string &repr);
-std::shared_ptr<Observable> createOperator(const std::string &name, HeterogeneousMap&& options);
-std::shared_ptr<Observable> createOperator(const std::string &name, HeterogeneousMap& options);
+std::shared_ptr<Observable> createOperator(const std::string &name,
+                                           const std::string &repr);
+std::shared_ptr<Observable> createOperator(const std::string &name,
+                                           HeterogeneousMap &&options);
+std::shared_ptr<Observable> createOperator(const std::string &name,
+                                           HeterogeneousMap &options);
 
-std::shared_ptr<Observable> operatorTransform(const std::string& type, qcor::Observable& op);
-std::shared_ptr<Observable> operatorTransform(const std::string& type, std::shared_ptr<Observable> op);
+std::shared_ptr<Observable> operatorTransform(const std::string &type,
+                                              qcor::Observable &op);
+std::shared_ptr<Observable> operatorTransform(const std::string &type,
+                                              std::shared_ptr<Observable> op);
 
-} // namespace qcor
+}  // namespace qcor

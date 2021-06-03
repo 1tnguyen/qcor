@@ -49,16 +49,17 @@ namespace qcor {
 
 static const std::map<std::string, std::string> gates{
     // "u3", "u2",   "u1", "ccx", cu1, cu3
-    {"cx", "CX"},   {"id", "I"},    {"x", "X"},     {"y", "Y"},
-    {"z", "Z"},     {"h", "H"},     {"s", "S"},     {"sdg", "Sdg"},
-    {"t", "T"},     {"tdg", "Tdg"}, {"rx", "Rx"},   {"ry", "Ry"},
-    {"rz", "Rz"},   {"cz", "CZ"},   {"cy", "CY"},   {"swap", "Swap"},
-    {"ccx", "CCX"}, {"ch", "CH"},   {"crz", "CRZ"}, {"measure", "Measure"}};
+    {"cx", "CX"},      {"id", "I"},    {"x", "X"},     {"y", "Y"},
+    {"z", "Z"},        {"h", "H"},     {"s", "S"},     {"sdg", "Sdg"},
+    {"t", "T"},        {"tdg", "Tdg"}, {"rx", "Rx"},   {"ry", "Ry"},
+    {"rz", "Rz"},      {"cz", "CZ"},   {"cy", "CY"},   {"swap", "Swap"},
+    {"ccx", "CCX"},    {"ch", "CH"},   {"crz", "CRZ"}, {"measure", "Measure"},
+    {"reset", "Reset"}};
 
 void StaqTokenCollector::collect(clang::Preprocessor &PP,
                                  clang::CachedTokens &Toks,
                                  std::vector<std::string> bufferNames,
-                                 std::stringstream &ss) {
+                                 std::stringstream &ss, const std::string &kernel_name) {
 
   // I need to know of any allocated buffers.
   std::stringstream sss, xx, put_this_after;
@@ -67,7 +68,7 @@ void StaqTokenCollector::collect(clang::Preprocessor &PP,
     // Note - we don't know the size of the buffer
     // at this point, so just create one with max size
     // and we can provide an IR Pass later that updates it
-    auto q = qalloc(std::numeric_limits<int>::max());
+    auto q = qalloc(1000);
     q.setNameAndStore(b.c_str());
 
     xx << "qreg " << b << "[" << q.size() << "];\n";
@@ -219,7 +220,7 @@ void StaqTokenCollector::collect(clang::Preprocessor &PP,
     next->accept(visitor);
   }
   if (hasOracle) {
-    ss << "auto anc = qalloc(" << std::numeric_limits<int>::max() << ");\n";
+    ss << "auto anc = qalloc(" << 1000 << ");\n";
   }
 
   if (!qreg_calls.empty() && bufferNames.size() == qreg_calls.size()) {

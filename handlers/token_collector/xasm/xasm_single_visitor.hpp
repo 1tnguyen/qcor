@@ -1,9 +1,10 @@
 #pragma once
+#include <regex>
+
 #include "IRProvider.hpp"
 #include "qrt.hpp"
 #include "xacc.hpp"
 #include "xasm_singleVisitor.h"
-#include <regex>
 
 using namespace xasm;
 
@@ -13,14 +14,14 @@ using xasm_single_result_type =
     std::pair<std::string, std::shared_ptr<xacc::Instruction>>;
 
 class xasm_single_visitor : public xasm::xasm_singleVisitor {
-protected:
+ protected:
   int n_cached_execs = 0;
 
-public:
+ public:
   xasm_single_result_type result;
 
-  antlrcpp::Any
-  visitStatement(xasm_singleParser::StatementContext *context) override {
+  antlrcpp::Any visitStatement(
+      xasm_singleParser::StatementContext *context) override {
     // should only have 1 child, if it is qinst
     // we expect a xacc Instruction return type
     // if cinst we expect a Cinst
@@ -41,7 +42,6 @@ public:
     }
 
     if (xacc::container::contains(provider->getInstructions(), inst_name)) {
-
       // We don't really care about Instruction::bits(), qrt_mapper
       // will look for bit expressions and use those, so just set
       // everything as a string...
@@ -68,6 +68,7 @@ public:
 
         // Get the qubit expresssions
         std::vector<std::string> buffer_names;
+        int count = 1;
         for (int i = 0; i < required_bits; i++) {
           auto bit_expr = context->explist()->exp(i);
           auto bit_expr_str = bit_expr->getText();
@@ -81,9 +82,13 @@ public:
             buffer_names.push_back(buffer_name);
             inst->setBitExpression(i, bit_idx_expr);
           } else {
-            xacc::error("Must provide qreg[IDX] and not just qreg.");
+            // Indicate this is a qubit(-1) or a qreg(-2)
+            inst->setBitExpression(-1*count, bit_expr_str);
+            buffer_names.push_back(bit_expr_str);
           }
+          count++;
         }
+
         inst->setBufferNames(buffer_names);
 
         // Get the parameter expressions
@@ -93,7 +98,6 @@ public:
           counter++;
         }
       } else {
-
         // I don't want to use xasm circuit gen any more...
         // So use it as a fallback, but first look for previous
         if (xacc::container::contains(quantum::kernels_in_translation_unit,
@@ -125,7 +129,6 @@ public:
 
       result.second = inst;
     } else {
-
       std::stringstream ss;
 
       if (xacc::container::contains(quantum::kernels_in_translation_unit,
@@ -155,7 +158,6 @@ public:
   }
 
   antlrcpp::Any visitCinst(xasm_singleParser::CinstContext *context) override {
-
     // Strategy here is simple, we just want to
     // preserve all classical code statements in
     // the original quantum kernel
@@ -170,7 +172,8 @@ public:
           ss << c->getText() << " ";
         }
       }
-    } else if (context->getText().find("::ctrl") != std::string::npos) {
+    } else if (context->getText().find("::ctrl") != std::string::npos ||
+               context->getText().find(".ctrl") != std::string::npos) {
       for (auto c : context->children) {
         if (c->getText() == "(") {
           ss << c->getText() << "parent_kernel, ";
@@ -222,22 +225,22 @@ public:
     return 0;
   }
 
-  antlrcpp::Any
-  visitComment(xasm_singleParser::CommentContext *context) override {
+  antlrcpp::Any visitComment(
+      xasm_singleParser::CommentContext *context) override {
     return 0;
   }
-  antlrcpp::Any
-  visitCompare(xasm_singleParser::CompareContext *context) override {
-    return 0;
-  }
-
-  antlrcpp::Any
-  visitCpp_type(xasm_singleParser::Cpp_typeContext *context) override {
+  antlrcpp::Any visitCompare(
+      xasm_singleParser::CompareContext *context) override {
     return 0;
   }
 
-  antlrcpp::Any
-  visitExplist(xasm_singleParser::ExplistContext *context) override {
+  antlrcpp::Any visitCpp_type(
+      xasm_singleParser::Cpp_typeContext *context) override {
+    return 0;
+  }
+
+  antlrcpp::Any visitExplist(
+      xasm_singleParser::ExplistContext *context) override {
     return 0;
   }
 
@@ -245,8 +248,8 @@ public:
     return 0;
   }
 
-  antlrcpp::Any
-  visitUnaryop(xasm_singleParser::UnaryopContext *context) override {
+  antlrcpp::Any visitUnaryop(
+      xasm_singleParser::UnaryopContext *context) override {
     return 0;
   }
 
@@ -258,8 +261,8 @@ public:
     return 0;
   }
 
-  antlrcpp::Any
-  visitString(xasm_singleParser::StringContext *context) override {
+  antlrcpp::Any visitString(
+      xasm_singleParser::StringContext *context) override {
     return 0;
   }
 };

@@ -1,9 +1,9 @@
-import sys
+import sys, uuid, atexit, hashlib
 
 if '@QCOR_APPEND_PLUGIN_PATH@':
     sys.argv += ['__internal__add__plugin__path', '@QCOR_APPEND_PLUGIN_PATH@']
 
-import xacc
+import xacc 
 
 from _pyqcor import *
 import inspect, ast
@@ -16,11 +16,40 @@ from collections import defaultdict
 List = typing.List
 Tuple = typing.Tuple
 MethodType = types.MethodType
+Callable = typing.Callable
+
+# KernelSignature type annotation:
+# Usage: annotate an function argument as a KernelSignature by:
+# varName: KernelSignature(qreg, ...)
+# Kernel always returns void (None)
+def KernelSignature(*args):
+    return Callable[list(args), None]
+
+# Static cache of all Python QJIT objects that have been created.
+# There seems to be a bug when a Python interpreter tried to create a new QJIT
+# *after* a previous QJIT is destroyed.
+# Note: this could only occur when QJIT kernels were declared in local scopes.
+# i.e. multiple kernels all declared in global scope don't have this issue.
+# Hence, to be safe, we cache all the QJIT objects ever created until QCOR module is unloaded.
+QJIT_OBJ_CACHE = []
+@atexit.register
+def clear_qjit_cache():
+    QJIT_OBJ_CACHE = []
 
 PauliOperator = xacc.quantum.PauliOperator
 FermionOperator = xacc.quantum.FermionOperator 
 FLOAT_REF = typing.NewType('value', float)
 INT_REF = typing.NewType('value', int)
+
+typing_to_simple_map = {'<class \'_pyqcor.qreg\'>': 'qreg',
+                            '<class \'_pyqcor.qubit\'>': 'qubit',
+                            '<class \'float\'>': 'float', 'typing.List[float]': 'List[float]',
+                            '<class \'int\'>': 'int', 'typing.List[int]': 'List[int]',
+                            '<class \'_pyxacc.quantum.PauliOperator\'>': 'PauliOperator',
+                            '<class \'_pyxacc.quantum.FermionOperator\'>': 'FermionOperator',
+                            'typing.List[typing.Tuple[int, int]]': 'List[Tuple[int,int]]',
+                            'typing.List[_pyxacc.quantum.PauliOperator]': 'List[PauliOperator]',
+                            'typing.List[_pyxacc.quantum.FermionOperator]': 'List[FermionOperator]'}
 
 # Need to add a few extra header paths 
 # for the clang code-gen mechanism. Mac OS X will 
@@ -74,13 +103,17 @@ class KernelGraph(object):
         self.kernel_idx_dep_map = {}
         self.kernel_name_list = []
 
-    def addKernelDependency(self, kernelName, depList):
+    def createKernelDependency(self, kernelName, depList):
         self.kernel_name_list.append(kernelName)
         self.kernel_idx_dep_map[self.V] = []
         for dep_ker_name in depList:
             self.kernel_idx_dep_map[self.V].append(
                 self.kernel_name_list.index(dep_ker_name))
         self.V += 1
+
+    def addKernelDependency(self, kernelName, newDep):
+        self.kernel_idx_dep_map[self.kernel_name_list.index(kernelName)].append(
+                self.kernel_name_list.index(newDep))
 
     def addEdge(self, u, v):
         self.graph[u].append(v)
@@ -172,6 +205,7 @@ class qjit(object):
         self.kwargs = kwargs
         self.function = function
         self.allowed_type_cpp_map = {'<class \'_pyqcor.qreg\'>': 'qreg',
+                                     '<class \'_pyqcor.qubit\'>': 'qubit',
                                      '<class \'float\'>': 'double', 'typing.List[float]': 'std::vector<double>',
                                      '<class \'int\'>': 'int', 'typing.List[int]': 'std::vector<int>',
                                      '<class \'_pyxacc.quantum.PauliOperator\'>': 'qcor::PauliOperator',
@@ -186,7 +220,10 @@ class qjit(object):
         self.extra_cpp_code = ''
 
         # Get the kernel function body as a string
-        fbody_src = '\n'.join(inspect.getsource(self.function).split('\n')[2:])
+        if '__internal_fbody_src_provided__' in kwargs:
+            fbody_src = kwargs['__internal_fbody_src_provided__']
+        else:
+            fbody_src = '\n'.join(inspect.getsource(self.function).split('\n')[2:])
 
         # Get the arg variable names and their types
         self.arg_names, _, _, _, _, _, self.type_annotations = inspect.getfullargspec(
@@ -309,6 +346,48 @@ class qjit(object):
                     fbody_src = fbody_src.replace(
                         total_decompose_code, new_src)
 
+        if 'with compute' in fbody_src:
+            # All we really should need to do is 
+            # convert with compute to compute { 
+            # and with action to } action {
+            # then close with a } when we 
+            # hit a new col location
+            
+            assert(fbody_src.count('with compute') == fbody_src.count('with action'))
+
+            # split the function into lines
+            lines = fbody_src.split('\n')
+            new_src = ''
+            in_action_block = False
+            in_compute_block = False
+            action_col, compute_col = (0, 0)
+            for line in lines:
+                current_col = sum(1 for _ in itertools.takewhile(str.isspace, line)) 
+                if in_action_block and current_col <= action_col:
+                    new_src += '}\n'
+
+                if in_compute_block and current_col <= compute_col:
+                    # here we have just dropped out of compute col
+                    if 'with action' not in line:
+                        print('After compute block, you must provide the action block.')
+                        exit(1)
+
+                if 'with compute' in line:
+                    in_action_block = False
+                    in_compute_block = True
+                    compute_col = sum(1 for _ in itertools.takewhile(str.isspace, line))+1
+                    new_src += 'compute {\n'
+                elif 'with action' in line:
+                    in_action_block = True
+                    in_compute_block = False
+                    action_col = sum(1 for _ in itertools.takewhile(str.isspace, line)) 
+                    new_src += '} action {\n'
+                else:
+                    new_src += line + '\n'
+                
+            # update the source code
+            fbody_src = new_src
+
         # Users must provide arg types, if not we throw an error
         if not self.type_annotations or len(self.arg_names) != len(self.type_annotations):
             print('Error, you must provide type annotations for qcor quantum kernels.')
@@ -329,6 +408,23 @@ class qjit(object):
                 cpp_arg_str += ',' + \
                     'int& ' + arg
                 continue
+            if str(_type).startswith('typing.Callable'):
+                cpp_type_str = 'KernelSignature<'
+                for i in range(len(_type.__args__) - 1):
+                    # print("input type:", _type.__args__[i])
+                    arg_type = _type.__args__[i]
+                    if str(arg_type) not in self.allowed_type_cpp_map:
+                        print('Error, this quantum kernel arg type is not allowed: ', str(_type))
+                        exit(1)
+                    cpp_type_str += self.allowed_type_cpp_map[str(arg_type)]
+                    cpp_type_str += ','
+                
+                cpp_type_str = cpp_type_str[:-1]
+                cpp_type_str += '>'
+                # print("cpp type", cpp_type_str)
+                cpp_arg_str += ',' + cpp_type_str + ' ' + arg
+                continue
+
             if str(_type) not in self.allowed_type_cpp_map:
                 print('Error, this quantum kernel arg type is not allowed: ', str(_type))
                 exit(1)
@@ -393,16 +489,18 @@ class qjit(object):
             if re.search(r"\b" + re.escape(kernelCall) + '|' + re.escape(kernelAdjCall) + '|' + re.escape(kernelCtrlCall), self.src):
                 dependency.append(kernelName)
 
-        self.__kernels__graph.addKernelDependency(
+        self.__kernels__graph.createKernelDependency(
             self.function.__name__, dependency)
         self.sorted_kernel_dep = self.__kernels__graph.getSortedDependency(
             self.function.__name__)
 
+        # print(self.src)
         # Run the QJIT compile step to store function pointers internally
         self._qjit.internal_python_jit_compile(
             self.src, self.sorted_kernel_dep, self.extra_cpp_code, extra_headers)
         self._qjit.write_cache()
         self.__compiled__kernels.append(self.function.__name__)
+        QJIT_OBJ_CACHE.append(self)
         return
 
     # Static list of all kernels compiled
@@ -475,18 +573,28 @@ class qjit(object):
                     'Error, could not translate vector parameters x into arguments for quantum kernel.')
                 exit(1)
             return ret_dict
+        elif [str(x) for x in self.type_annotations.values()] == ['<class \'_pyqcor.qreg\'>']:
+            if len(x):
+                print('invalid translate args, there is no x float list for this kernel.')
+                exit(1)
+
+            ret_dict = {}
+            for arg_name, _type in self.type_annotations.items():
+                if str(_type) == '<class \'_pyqcor.qreg\'>':
+                    ret_dict[arg_name] = q
+            return ret_dict
+
         else:
-            print('currently cannot translate other arg structures')
+            print('currently cannot translate other arg structures: ', x)
             exit(1)
 
     def extract_composite(self, *args):
         """
         Convert the quantum kernel into an XACC CompositeInstruction
         """
+        assert len(args) == len(self.arg_names), "Cannot create CompositeInstruction, you did not provided the correct kernel arguments."
         # Create a dictionary for the function arguments
-        args_dict = {}
-        for i, arg_name in enumerate(self.arg_names):
-            args_dict[arg_name] = list(args)[i]
+        args_dict = self.construct_arg_dict(*args)
         return self._qjit.extract_composite(self.function.__name__, args_dict)
 
     def observe(self, observable, *args):
@@ -520,29 +628,90 @@ class qjit(object):
         return self.extract_composite(*args).nInstructions()
     
     def as_unitary_matrix(self, *args):
-        args_dict = {}
-        for i, arg_name in enumerate(self.arg_names):
-            args_dict[arg_name] = list(args)[i]
+        args_dict = self.construct_arg_dict(*args)
         return self._qjit.internal_as_unitary(self.function.__name__, args_dict)
     
     def ctrl(self, *args):
-        print('This is an internal API call and will be translated to C++ via the QJIT.\nIt can only be called from within another quantum kernel.')
-        exit(1)
+        assert False, 'This is an internal API call and will be translated to C++ via the QJIT.\nIt can only be called from within another quantum kernel.'
 
     def adjoint(self, *args):
-        print('This is an internal API call and will be translated to C++ via the QJIT.\nIt can only be called from within another quantum kernel.')
-        exit(1)
+        assert False, 'This is an internal API call and will be translated to C++ via the QJIT.\nIt can only be called from within another quantum kernel.'
+
+    def mlir(self, *args, **kwargs):
+        assert len(args) == len(self.arg_names), "Cannot generate MLIR, you did not provided the correct concrete kernel arguments."
+        open_qasm_str = self.openqasm(*args)
+        return openqasm_to_mlir(open_qasm_str, self.kernel_name(), 
+                        kwargs['add_entry_point'] if 'add_entry_point' in kwargs else True)
+    
+    def llvm_mlir(self, *args, **kwargs):
+        assert len(args) == len(self.arg_names), "Cannot generate LLVM MLIR, you did not provided the correct concrete kernel arguments."
+        open_qasm_str = self.openqasm(*args)
+        return openqasm_to_llvm_mlir(open_qasm_str, self.kernel_name(), 
+                        kwargs['add_entry_point'] if 'add_entry_point' in kwargs else True)
+
+    def llvm_ir(self, *args, **kwargs):
+        assert len(args) == len(self.arg_names), "Cannot generate LLVM IR, you did not provided the correct concrete kernel arguments."
+        open_qasm_str = self.openqasm(*args)
+        return openqasm_to_llvm_ir(open_qasm_str, self.kernel_name(), 
+                        kwargs['add_entry_point'] if 'add_entry_point' in kwargs else True)
+
+    def qir(self, *args, **kwargs):
+        return llvm_ir(*args, **kwargs)
+
+    # Helper to construct the arg_dict (HetMap)
+    # e.g. perform any additional type conversion if required.
+    def construct_arg_dict(self, *args):
+        # Create a dictionary for the function arguments
+        args_dict = {}
+        for i, arg_name in enumerate(self.arg_names):
+            args_dict[arg_name] = list(args)[i]
+            arg_type_str = str(self.type_annotations[arg_name])
+            if arg_type_str.startswith('typing.Callable'):
+                # print("callable:", arg_name)
+                # print("arg:", type(args_dict[arg_name]))
+                # the arg must be a qjit
+                if not isinstance(args_dict[arg_name], qjit):
+                    print('Invalid argument type for {}. A quantum kernel (qjit) is expected.'.format(arg_name))
+                    exit(1)
+                
+                callable_qjit = args_dict[arg_name]
+                
+                # Handle runtime dependency:
+                # The QJIT arg. was not *known* until invocation,
+                # hence, we recompile the this jit kernel taking into account 
+                # the KernelSignature argument.
+                # TODO: perhaps an optimization that we can make is to
+                # skip *eager* compilation for those kernels that have 
+                # KernelSignature arguments.
+                if callable_qjit.kernel_name() not in self.sorted_kernel_dep:
+                    # print('New kernel:', callable_qjit.kernel_name())
+                    # IMPORTANT: we cannot release a QJIT object till shut-down.
+                    QJIT_OBJ_CACHE.append(self._qjit) 
+                    # Create a new QJIT
+                    self._qjit = QJIT()
+                    # Add a kernel dependency
+                    self.__kernels__graph.addKernelDependency(self.function.__name__, callable_qjit.kernel_name())
+                    self.sorted_kernel_dep = self.__kernels__graph.getSortedDependency(self.function.__name__)
+                    # Recompile:
+                    self._qjit.internal_python_jit_compile(self.src, self.sorted_kernel_dep, self.extra_cpp_code, extra_headers)
+                
+                # This should always be successful.
+                fn_ptr = self._qjit.get_kernel_function_ptr(callable_qjit.kernel_name())
+                if fn_ptr == 0:
+                    print('Failed to retrieve JIT-compiled function pointer for qjit kernel {}.'.format(callable_qjit.kernel_name()))
+                    exit(1)
+                # Replace the argument (in the dict) with the function pointer
+                # qjit is a pure-Python object, hence cannot be used by native QCOR.
+                args_dict[arg_name] = hex(fn_ptr)
+            
+        return args_dict
 
     def __call__(self, *args):
         """
         Execute the decorated quantum kernel. This will directly 
         invoke the corresponding LLVM JITed function pointer. 
         """
-        # Create a dictionary for the function arguments
-        args_dict = {}
-        for i, arg_name in enumerate(self.arg_names):
-            args_dict[arg_name] = list(args)[i]
-
+        args_dict = self.construct_arg_dict(*args)
         # Invoke the JITed function
         self._qjit.invoke(self.function.__name__, args_dict)
 
@@ -582,6 +751,194 @@ class qjit(object):
 
         return
 
+class KernelBuilder(object):
+    """
+    The QCOR KernelBuilder is a high-level data structure that enables the 
+    development of qcor quantum kernels programmatically in Python. Example usage:
+
+    from qcor import * 
+
+    nq = 10
+    builder = KernelBuilder() 
+
+    builder.h(0)
+    for i in range(nq-1):
+        builder.cnot(i, i+1)
+    builder.measure_all()
+    ghz = builder.create()
+
+    q = qalloc(nq)
+    ghz(q)
+    print(q.counts())
+
+    If you do not provide a qreg argument to the constructor (py_args_dict) 
+    we will assume a single qreg named q.
+    """
+    def __init__(self,**kwargs):
+        self.kernel_args = kwargs['kernel_args'] if 'kernel_args' in kwargs else {}
+        # Returns list of tuples, (name, nRequiredBits, isParameterized)
+        all_instructions = internal_get_all_instructions()
+        all_instructions = [element for element in all_instructions if element[0] != 'Measure']
+        self.qjit_str = ''
+        self.qreg_name = 'q'
+        self.TAB = '    '
+
+        for instruction in all_instructions:
+            isParameterized = instruction[2]
+            n_bits = instruction[1]
+            name = instruction[0]
+
+            qbits_str = ','.join(['q{}'.format(i) for i in range(n_bits)])
+            qbits_indexed = ','.join(["{}[{{}}]".format(self.qreg_name) for i in range(n_bits)])
+            new_func_str = '''def {}(self, {}, *args):
+    params_str = ''
+    params = []
+    if len(args):
+        for arg in args:
+            if isinstance(arg, str):
+                params.append(str(arg))
+                if str(arg) not in self.kernel_args:
+                    self.kernel_args[str(arg)] = float
+            elif isinstance(arg, tuple):
+                params.append(arg[0]+'['+str(arg[1])+']')
+                if arg[0] not in self.kernel_args:
+                    self.kernel_args[arg[0]] = List[float]
+            else:
+                print('[KernelBuilder Error] Invalid parameter type.')
+                exit(1)
+        params_str = ','.join(params)
+    if {} and len(args) == 0:
+        print("[KernelBuilder Error] You are calling a parameterized instruction ({}) but have not provided any parameters")
+        exit(1)
+    if not params_str:
+        self.qjit_str += self.TAB+'{}({})\\n'.format({})
+    else:
+        self.qjit_str += self.TAB+'{}({}, {{}})\\n'.format({}, params_str)
+'''.format(name.lower(), qbits_str, isParameterized, name.lower(), name, qbits_indexed, qbits_str, name, qbits_indexed, qbits_str)
+            # print(new_func_str)
+            result = globals()
+            exec (new_func_str.strip(), result)
+            setattr(KernelBuilder, instruction[0].lower(), result[instruction[0].lower()])
+
+    def measure_all(self):
+        self.qjit_str += '\n'
+        self.qjit_str += self.TAB + 'for i in range({}.size()):\n'.format(self.qreg_name)
+        self.qjit_str += self.TAB+self.TAB+'Measure({}[i])\n'.format(self.qreg_name)
+
+    def measure(self, qbit): 
+        if isinstance(qbit, range):
+            qbit = list(qbit)
+        if isinstance(qbit, list):
+            for i in qbit:
+                self.measure(i)
+        elif isinstance(qbit, int):
+            self.qjit_str += self.TAB+'Measure({}[{}])\n'.format(self.qreg_name, qbit)
+        else:
+            print('[KernelBuilder] invalid input to measure {}'.format(qbit))
+            exit(1)
+
+    def exp(self, variable, op : xacc.Observable):
+        params_str = ''
+        if isinstance(variable, str):
+            params_str = variable
+            if str(variable) not in self.kernel_args:
+                self.kernel_args[str(variable)] = float
+        elif isinstance(variable, tuple):
+            params_str = variable[0]+'['+str(variable[1])+']'
+            if variable[0] not in self.kernel_args:
+                self.kernel_args[variable[0]] = List[float]
+        else:
+            print('[KernelBuilder Error] Invalid exp() parameter type.')
+            exit(1)
+
+        op_str = op.toString()
+        op_type = 'fermion' if '^' in op_str else 'pauli'
+        hash_object = hashlib.md5(op_str.encode('utf-8'))
+        op_var_name = '__internal_op_var_'+str(hash_object.hexdigest())
+        self.qjit_str += self.TAB+"{} = _internal_python_createObservable(\"{}\", \"{}\")\n".format(op_var_name, op_type, op_str)
+        self.qjit_str += self.TAB+'exp_i_theta({}, {}, {})\n'.format(self.qreg_name, params_str, op_var_name)
+
+    def invoke(self, kernel_function : qjit):
+        arg_names, _, _, _, _, _, type_annotations = inspect.getfullargspec(
+            kernel_function)
+        args_dict = {k:v for k,v in kernel_function.type_annotations.items() if str(typing_to_simple_map[str(v)]) != 'qreg'}
+        self.kernel_args = {**args_dict, **self.kernel_args}
+        self.qjit_str+= self.TAB+'{}({}, {})\n'.format(kernel_function.kernel_name(), self.qreg_name, ','.join(list(self.kernel_args.keys())))
+
+    def from_qasm(self, qasm_str):
+        xacc_ir = xacc.getCompiler('staq').compile(qasm_str).getComposites()[0]
+        pyxasm = xacc.getCompiler('pyxasm').translate(xacc_ir)
+        pyxasm = pyxasm.replace('__translate_qrg__', self.qreg_name)
+        pyxasm = '\n'.join(self.TAB+line for line in pyxasm.split('\n'))
+        processed_str = pyxasm        
+        self.qjit_str += processed_str
+
+    def from_qiskit(self, qk_circ):
+        return self.from_qasm(qk_circ.qasm())
+    
+    # Synthesis from matrix, or from matrix generator
+    # can provide method = [qsearch,qfast,kak, etc.]
+    def synthesize(self, **kwargs):
+        method = ''
+        if 'method' in kwargs:
+            method = kwargs['method']
+
+        if 'unitary' not in kwargs:
+            print('[KernelBuilder Error] Please pass unitary=matrix_var kwarg.')
+        
+        unitary = kwargs['unitary']
+
+        if hasattr(unitary, '__call__'):
+            fbody_src = '\n'.join(inspect.getsource(unitary).split('\n')[1:])
+            hash_object = hashlib.md5(fbody_src.encode('utf-8'))
+            arg_names, _, _, _, _, _, type_annotations = inspect.getfullargspec(unitary)
+
+            # add arguments if not in self.kernel_args
+            for arg, t in type_annotations.items():
+                if arg not in self.kernel_args:
+                    # print('[KernelBuilder] Found argument in unitary generator that is unknown ({}). Adding it to the kernel args.'.format(arg))
+                    self.kernel_args[arg] = t
+
+
+            mat_var_name = '__internal_matrix_data_'+str(hash_object.hexdigest())
+            self.qjit_str += self.TAB + 'with decompose(q{}) as {}:\n'.format(','+method if method!='' else method, mat_var_name)
+            for line in fbody_src.split('\n'):
+                line = ' '.join(line.split())
+                if 'return' in line:
+                    line = line.replace('return', mat_var_name+' =')
+                self.qjit_str += self.TAB + self.TAB + line + '\n'
+
+        elif hasattr(unitary, '__iter__'):
+            unitary_str = ' ; '.join([str(row).replace('[','').replace(']','').replace(' ', ', ') for row in unitary])
+            hash_object = hashlib.md5(unitary_str.encode('utf-8'))
+            mat_var_name = '__internal_matrix_data_'+str(hash_object.hexdigest())
+            self.qjit_str += self.TAB + 'with decompose(q) as {}:\n'.format(mat_var_name)
+            self.qjit_str += self.TAB+self.TAB+'{} = np.matrix("{}")\n'.format(mat_var_name, unitary_str)
+        else:
+            print('[KernelBuilder Error] Cannot parse this type of unitary matrix')
+            exit(1)
+
+    def create(self):
+        # print(self.qjit_str)
+
+        kernel_name = '__internal_qjit_kernelbuilder_kernel_'+str(uuid.uuid4()).replace('-','_')
+        for element in inspect.stack():
+            if len(element.code_context) and element.code_context[0] != None:
+                if '.create()' in element.code_context[0]:
+                    kernel_name = element.code_context[0].strip().split(' = ')[0]
+                    break
+
+        # FIXME optionally add , if we have kernel_args
+        args_str = 'q : qreg'+ (', ' if len(self.kernel_args) else '') + ', '.join(k+' : '+typing_to_simple_map[str(v)] for k,v in self.kernel_args.items())
+        func = 'def {}({}):\n'.format(kernel_name, args_str)+self.qjit_str
+        # print(func)
+        result = globals()
+        exec(func, result)
+        # print(result)
+        function = result[kernel_name]
+        _qjit = qjit(function, __internal_fbody_src_provided__ = self.qjit_str)
+        return _qjit
+        
 
 # Must have qpu in the init kwargs
 # defaults to qpp, but will search for -qpu flag

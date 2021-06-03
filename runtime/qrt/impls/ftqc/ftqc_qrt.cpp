@@ -1,25 +1,28 @@
 
+#include <Eigen/Dense>
+#include <Utils.hpp>
+
 #include "PauliOperator.hpp"
+#include "cppmicroservices/BundleActivator.h"
+#include "cppmicroservices/BundleContext.h"
+#include "cppmicroservices/ServiceProperties.h"
 #include "qrt.hpp"
 #include "xacc.hpp"
 #include "xacc_internal_compiler.hpp"
 #include "xacc_service.hpp"
-#include <Eigen/Dense>
-#include <Utils.hpp>
-
-#include "cppmicroservices/BundleActivator.h"
-#include "cppmicroservices/BundleContext.h"
-#include "cppmicroservices/ServiceProperties.h"
 using namespace cppmicroservices;
 
 namespace qcor {
 class FTQC : public quantum::QuantumRuntime {
-public:
+ public:
   virtual void initialize(const std::string kernel_name) override {
     provider = xacc::getIRProvider("quantum");
     qpu = xacc::internal_compiler::qpu;
   }
 
+  void __begin_mark_segment_as_compute() override { mark_as_compute = true; }
+  void __end_mark_segment_as_compute() override { mark_as_compute = false; }
+  bool isComputeSection() override { return mark_as_compute; }
   const std::string name() const override { return "ftqc"; }
   const std::string description() const override { return ""; }
 
@@ -53,6 +56,10 @@ public:
   virtual void u3(const qubit &qidx, const double theta, const double phi,
                   const double lambda) override {
     applyGate("U", {qidx.second}, {theta, phi, lambda});
+  }
+
+  virtual void reset(const qubit &qidx) override {
+    applyGate("Reset", {qidx.second});
   }
 
   // Measure-Z
@@ -110,13 +117,21 @@ public:
     throw std::runtime_error("FTQC runtime doesn't support submit API.");
   }
 
+  void general_instruction(std::shared_ptr<xacc::Instruction> inst) override {
+    std::vector<double> params;
+    for (auto p : inst->getParameters()) {
+      params.push_back(p.as<double>());
+    }
+    applyGate(inst->name(), inst->bits(), params);
+  }
+
   // Some getters for the qcor runtime library.
-  virtual void
-  set_current_program(std::shared_ptr<xacc::CompositeInstruction> p) override {
+  virtual void set_current_program(
+      std::shared_ptr<xacc::CompositeInstruction> p) override {
     // Nothing to do
   }
-  virtual std::shared_ptr<xacc::CompositeInstruction>
-  get_current_program() override {
+  virtual std::shared_ptr<xacc::CompositeInstruction> get_current_program()
+      override {
     return nullptr;
   }
 
@@ -124,7 +139,7 @@ public:
     qReg = xacc::as_shared_ptr(buffer);
   }
 
-private:
+ private:
   // Notes: all gate parameters must be resolved (to double) for FT-QRT
   // execution.
   void applyGate(const std::string &gateName, const std::vector<size_t> &bits,
@@ -134,21 +149,25 @@ private:
       instParams.emplace_back(val);
     }
     auto gateInst = provider->createInstruction(gateName, bits, instParams);
+    if (mark_as_compute) {
+      gateInst->attachMetadata({{"__qcor__compute__segment__", true}});
+    }
     qpu->apply(qReg, gateInst);
   }
 
-private:
+ private:
+  bool mark_as_compute = false;
   std::shared_ptr<xacc::IRProvider> provider;
   std::shared_ptr<xacc::Accelerator> qpu;
   // TODO: eventually, we may want to support an arbitrary number of qubit
   // registers when the FTQC backend can support it.
   std::shared_ptr<xacc::AcceleratorBuffer> qReg;
 };
-} // namespace qcor
+}  // namespace qcor
 
 namespace {
 class US_ABI_LOCAL FtqcQRTActivator : public BundleActivator {
-public:
+ public:
   FtqcQRTActivator() {}
   void Start(BundleContext context) {
     auto xt = std::make_shared<qcor::FTQC>();
@@ -156,6 +175,6 @@ public:
   }
   void Stop(BundleContext /*context*/) {}
 };
-} // namespace
+}  // namespace
 
 CPPMICROSERVICES_EXPORT_BUNDLE_ACTIVATOR(FtqcQRTActivator)

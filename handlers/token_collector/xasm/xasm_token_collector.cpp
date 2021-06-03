@@ -47,7 +47,7 @@ namespace qcor {
 void XasmTokenCollector::collect(clang::Preprocessor &PP,
                                  clang::CachedTokens &Toks,
                                  std::vector<std::string> bufferNames,
-                                 std::stringstream &ss) {
+                                 std::stringstream &ss, const std::string &kernel_name) {
 
   // NEW STRATEGY
   // Implement to split Toks into lines / stmts
@@ -153,6 +153,8 @@ void XasmTokenCollector::collect(clang::Preprocessor &PP,
 
         ss << PP.getSpelling(current_token) << space;
         i++;
+        if (i >= Toks.size()) break;
+
         current_token = Toks[i];
         if (current_token.is(clang::tok::semi)) {
           ss << ";";

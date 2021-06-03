@@ -4,15 +4,24 @@ import argparse, sys, os, glob, subprocess, mimetypes, re, pathlib
 def main(argv=None):
     compiler = '@CLANG_EXECUTABLE@'
     verbose=False
-    baseLibs = ['-rdynamic', '-Wl,-rpath,@XACC_ROOT@/lib:@CMAKE_INSTALL_PREFIX@/lib:@LLVM_INSTALL_PREFIX@/lib',
-                            '@CMAKE_INSTALL_PREFIX@/lib/objects/qir-qrt/qir-qrt.cpp.o',
-                            '-L', '@CMAKE_INSTALL_PREFIX@/lib','-lqcor', '-lqrt', '-lqcor-hybrid', '-lqcor-qsim', '-lqcor-jit', 
-                             '-L', '@XACC_ROOT@/lib', '-lxacc', '-lCppMicroServices',
-                            '-lxacc-quantum-gate',
+    keep_bit_code_files=False
+    baseLibs = ['-rdynamic', '-Wl,-rpath,@XACC_ROOT@/lib:@CMAKE_INSTALL_PREFIX@/lib:@LLVM_INSTALL_PREFIX@/lib:@CMAKE_INSTALL_PREFIX@/clang-plugins',
+                            '-L', '@CMAKE_INSTALL_PREFIX@/lib','-lqcor', '-lqrt', '-lqcor-hybrid', '-lqcor-quasimo', '-lqcor-jit',
+                             '-L', '@XACC_ROOT@/lib', '-lxacc', '-lCppMicroServices', '-lxacc-quantum-gate',
                             '-lxacc-pauli', '-lxacc-fermion', '-lpthread']
-
+    if '@CMAKE_SYSTEM_NAME@' != 'Darwin':
+        baseLibs += ['-lqir-qrt']
+        
     baseIncludes = ['-I', '@XACC_ROOT@/include/xacc', '-I', '@CMAKE_INSTALL_PREFIX@/include/qcor', '-I', '@XACC_ROOT@/include/quantum/gate', '-I', '@XACC_ROOT@/include/eigen']
-    defaultFlags = ['-std=c++17', '-fplugin=@CMAKE_INSTALL_PREFIX@/clang-plugins/libqcor-syntax-handler.so']
+    defaultFlags = ['-std=c++17', '-fplugin=@CMAKE_INSTALL_PREFIX@/clang-plugins/libqcor-syntax-handler@CMAKE_SHARED_LIBRARY_SUFFIX@']
+
+    extra_headers = '@QCOR_EXTRA_HEADERS@'.replace('"','')
+    qs_qir_gen_dll = '@QIR_GEN_DLL@'
+
+    for path in extra_headers.split(';'):
+        # non-empty path only
+        if path:
+            baseIncludes += ['-I', path]
 
     # This flag is primarily for our testers to point to the 
     # qcor syntax handler before make install is called
@@ -21,7 +30,7 @@ def main(argv=None):
         pth = sys.argv[idx+1]
         sys.argv.remove(pth)
         sys.argv.remove('-internal-syntax-handler-plugin-path')
-        defaultFlags = ['-std=c++17', '-fplugin='+pth+'/libqcor-syntax-handler.so']
+        defaultFlags = ['-std=c++17', '-fplugin='+pth+'/libqcor-syntax-handler@CMAKE_SHARED_LIBRARY_SUFFIX@']
 
     # Need to know if this is compile-only
     compileOnly = '-c' in sys.argv[1:]
@@ -34,6 +43,7 @@ def main(argv=None):
         parser.add_argument('-v', metavar='',
                         help='turn on qcor verbose mode - prints actual clang calls plus extra info while compiling.')
         parser.add_argument('-qpu', metavar=('name[:backend]'), help='specify quantum backend name. this corresponds to the name of an xacc accelerator (plus optional backend name).\nExamples include qcs:Aspen-4-2Q-H, ibm:ibmq_valencia, tnqvm, etc.')
+        parser.add_argument('-qpu-config',help='specify file name containing backend qpu configuration.')
         parser.add_argument('-shots', metavar=('n_shots'), nargs=1,help='provide the number of shots to execute on shot-enabled backend.')
         parser.add_argument('-c', metavar=('file.cpp'), help='specify compile-only, no library linking.\n$ qcor -c src.cpp [outputs src.o for future linking]\n')
         parser.add_argument('-o', metavar=('object.o'), help='provide the name of the object file (if compile only) or executable (if compile and link or just link).\n$ qcor -o out.o -c src.cpp\n$ qcor -o out.exe src.cpp\n')
@@ -41,17 +51,24 @@ def main(argv=None):
         parser.add_argument('-I',action='append',nargs=1, metavar=('header_file.hpp'),help='specify additional headers to add to the include search path.')
         parser.add_argument('-L',action='append',nargs=1,metavar=('/path/to/libs'),help='specifiy additional linker search paths.')
         parser.add_argument('-l',action='append',nargs=1,metavar=('lib_name'),help='specifiy additional libraries to link.')
-        parser.add_argument('-opt', nargs=1, help='specify optimization level for quantum circuit optimization.')
-        parser.add_argument('-print-opt-stats', help='print circuit optimization pass statistics.')
+        parser.add_argument('-opt', nargs=1, help='specify level of quantum circuit optimization (1 or 2).')
+        parser.add_argument('-print-opt-stats', metavar='', help='print circuit optimization pass statistics.')
         parser.add_argument('-set-credentials', nargs=1, help='set api key and other credential information for remote qpu.\nMust provide at least -key KEY arguments. For IBM also specify -hub HUB -group GROUP -project PROJECT.')
         parser.add_argument('-print-credentials', nargs=1, help='print remote api credentials for given qpu name.')
         parser.add_argument('-update-credentials', nargs=1, help='set a specific credential for remote qpu access. Example\nqcor -update-credentials ibm -project MYOTHERPROJECT.')
-        parser.add_argument('-xacc-install', nargs=1, help='returns the install directory for xacc.')
-        parser.add_argument('-qcor-install', nargs=1, help='returns the install directory for qcor.')
-        parser.add_argument('-clear-jit-cache', help='delete existing QJIT cache.')
-        parser.add_argument('-xacc-version', nargs=1, help='returns the current build version for underlying xacc install.')
-        parser.add_argument('-version', nargs=1, help='returns the current qcor build version.')
-        parser.add_argument('-pythonpath', help='print the correct PYTHONPATH to leverage qcor and xacc python API.')
+        parser.add_argument('-xacc-install', metavar='', help='returns the install directory for xacc.')
+        parser.add_argument('-qcor-install', metavar='', help='returns the install directory for qcor.')
+        parser.add_argument('-clear-jit-cache', metavar='', help='delete existing QJIT cache.')
+        parser.add_argument('-xacc-version', metavar='', help='returns the current build version for underlying xacc install.')
+        parser.add_argument('-version', metavar='', help='returns the current qcor build version.')
+        parser.add_argument('-pythonpath', metavar='', help='print the correct PYTHONPATH to leverage qcor and xacc python API.')
+        parser.add_argument('-keep-llvm-file', metavar='', help='keep intermediate LLVM files.')
+        parser.add_argument('-print-final-submission', metavar='', help='print the final quantum circuit for backend submission (ignored in FTQC).')
+        
+        # Q# options to be passed to the Q# QIR generator:
+        parser.add_argument('-qs-build-exe', metavar='', help='Q# QIR generator to emit alias functions for entry points.')
+        parser.add_argument('-qs-runtime', metavar='', help='Specifies the classical capabilites of the QIR runtime. Valid options: BasicQuantumFunctionality, BasicMeasurementFeedback, FullComputation')
+
         args = parser.parse_args(sys.argv)
 
     if '-pythonpath' in sys.argv[1:]:
@@ -177,22 +194,43 @@ def main(argv=None):
         print(''.join([l for l in lines]))
         exit(0)
 
-
+    if '-keep-llvm-file' in sys.argv[1:]:
+        keep_bit_code_files=True
+        sys.argv.remove('-keep-llvm-file')
+    
     sHandlerArgs = []
     # Get the QPU Backend
     accName = ''
     if '-qpu' in sys.argv[1:]:
+        config_file = ''
+        if '-qpu-config' in sys.argv[1:]:
+            idx = sys.argv.index('-qpu-config')
+            config_file = sys.argv[idx+1]
+            if not os.path.exists(config_file):
+                print('Invalid qpu config file path:', config_file)
+                exit(1)
+
         accidx = sys.argv.index('-qpu')
         accName = sys.argv[accidx+1]
         sys.argv.remove(accName)
         sys.argv.remove('-qpu')
+
+        if config_file:
+            if ']' in accName:
+                idx = accName.index(']')
+                accName = accName[:idx] + ',qcor_qpu_config:'+os.path.abspath(config_file)+accName[idx:]
+            else:
+                accName += '[qcor_qpu_config:'+config_file+']'
+            sys.argv.remove(config_file)
+            sys.argv.remove('-qpu-config')
+
         sys.argv += ['-D__internal__qcor__compile__backend=\"'+accName+'\"']
         sHandlerArgs = ['-Xclang', '-plugin-arg-qcor-args', '-Xclang', '-qpu', '-Xclang', '-plugin-arg-qcor-args', '-Xclang', accName]
     else:
         accName = 'qpp'
         sys.argv += ['-D__internal__qcor__compile__backend=\"'+accName+'\"']
         sHandlerArgs = ['-Xclang', '-plugin-arg-qcor-args', '-Xclang', '-qpu', '-Xclang', '-plugin-arg-qcor-args', '-Xclang', accName]
-        
+
     # Get the shots if necessary
     shots = 0
     if '-shots' in sys.argv[1:]:
@@ -205,10 +243,6 @@ def main(argv=None):
 
     if verbose:
         sHandlerArgs += ['-Xclang', '-plugin-arg-qcor-args', '-Xclang', '-qcor-verbose']
-
-    if '-print-qir' in sys.argv[1:]:
-        sys.argv.remove('-print-qir')
-        sHandlerArgs += ['-Xclang', '-load', '-Xclang', '@CMAKE_INSTALL_PREFIX@/qopt-plugins/libprint_llvm_qir.so']
 
     # Optimization level for flattened (runtime) kernel
     # Default: 0 (no optimization)
@@ -278,6 +312,10 @@ def main(argv=None):
     if '@QCOR_APPEND_PLUGIN_PATH@':
         sys.argv += ['-D__internal__qcor__compile__plugin__path=\"@QCOR_APPEND_PLUGIN_PATH@\"']
     
+    if '-print-final-submission' in sys.argv[1:]:
+        sys.argv.remove('-print-final-submission')
+        sys.argv += ['-D__internal__qcor__print__final__submission']
+
     # Get the filename we are compiling or the object file
     filename = ''
     fileType = ''
@@ -291,6 +329,11 @@ def main(argv=None):
             fileType = 'openqasm'
             filename = arg
         
+        if os.path.isfile(arg) and os.path.splitext(arg)[1] == '.qs':
+            fileType = 'qsharp'
+            filename = arg
+            break
+
     if fileType == 'openqasm':
         # Convert to MLIR and then to LLVM QIR
         base_name = os.path.splitext(filename)[0]
@@ -312,11 +355,75 @@ def main(argv=None):
         sys.argv.append(base_name+'.o')
         fileType = None
         filename = None
+        if not keep_bit_code_files:
+            # remove these temp files
+            os.remove(ll_file_name)
+            os.remove(bc_file_name)
 
+    if fileType == 'qsharp':
+        # Assume that `qsc` is a valid exe command
+        # i.e. need to set the PATH env appropriately.
+        base_name = os.path.splitext(filename)[0]
+        # QSharp compiler now generates a bitcode file,
+        # i.e. no need to do llvm-as
+        bc_file_name = base_name + '.bc'
+        object_file_name = base_name+'.o'
+        # Q# generated bson file
+        bson_file_name = base_name+'.bson'
+        extra_args = []
+        # Parse Q# runtimr option if any:
+        # - BasicQuantumFunctionality: Measurement results cannot be compared for equality.
+        # - BasicMeasurementFeedback: Measurement results can be compared for equality only in if-statement conditional expressions in operations.
+        # The block of an if-statement that depends on a result cannot contain set statements for mutable variables
+        # declared outside the block, or return statements.
+        # FullComputation: No runtime restrictions. Any Q# program can be executed.
+        # Default: FullComputation
+        qs_rt_name = 'FullComputation'
+        if '-qs-runtime' in sys.argv[1:]:
+            sidx = sys.argv.index('-qs-runtime')
+            qs_rt_name = sys.argv[sidx+1]
+            sys.argv.remove(qs_rt_name)
+            sys.argv.remove('-qs-runtime')
+        
+        qs_build_exe = ''
+        if '-qs-build-exe' in sys.argv[1:]:
+            sys.argv.remove('-qs-build-exe')
+            qs_build_exe = '--build-exe'
 
-    # exit(0)           
+        result = subprocess.run(['qsc', 'build', '--load', qs_qir_gen_dll, qs_build_exe, "--runtime", qs_rt_name, '--input', filename, '@CMAKE_INSTALL_PREFIX@/include/qsharp/QirCore.qs', '@CMAKE_INSTALL_PREFIX@/include/qsharp/QirTarget.qs', '--proj', base_name], check=True)
+        llvm_bin_path = str(pathlib.Path(compiler).parent)
+        result = subprocess.run([llvm_bin_path+'/llc', '-filetype=obj', bc_file_name ], check=True)
+        sys.argv.remove(filename)
+        fileType = None
+        filename = None
+        sys.argv.append(base_name+ '.o')     
+        for arg in sys.argv[1:]:
+            if os.path.isfile(arg) and mimetypes.guess_type(arg)[0] == 'text/x-c++src':
+                # There is a driver C++ file as well.
+                driver_file_name = arg
+                sys.argv.remove(driver_file_name)
+                cpp_compile_commands = [compiler] + defaultFlags + sHandlerArgs + baseIncludes + ['-c'] +[driver_file_name]
+                cpp_compile_commands += sys.argv[1:]
+                if verbose:
+                    print('[qcor-exec]: ', ' '.join([c for c in cpp_compile_commands]))
+                try:
+                    result = subprocess.run(cpp_compile_commands, check=True)
+                except subprocess.CalledProcessError as e:
+                    print(e.output)
+                    print(e.returncode)
+                base_cpp_name = os.path.splitext(driver_file_name)[0]
+                sys.argv.append(base_cpp_name + '.o')     
+        
+        if not keep_bit_code_files:
+            # remove these temp files
+            try:
+                os.remove(bc_file_name)
+                os.remove(bson_file_name)
+            except OSError:
+                pass
+
     # If it is a C++ file
-    if fileType == 'text/x-c++src':
+    if fileType != None and 'text/x-c' in fileType:
         fileIdx = sys.argv[1:].index(filename)
         tmpFileName = os.path.basename(filename)
 
@@ -350,7 +457,6 @@ def main(argv=None):
             else:
                 commands += baseLibs + sys.argv[1:]
 
-
             if verbose:
                 print('[qcor-exec]: ', ' '.join([c for c in commands]))
 
@@ -361,13 +467,15 @@ def main(argv=None):
                 print(e.returncode)
                 return e.returncode
         else:
-            print('invalid command line arguments for qcor')
+            print('invalid command line arguments for qcor:')
+            print('source file name and type:', (None if filename == '' else filename), ',', (None if fileType == '' else fileType))
+            if verbose: print('current args: ', sys.argv)
             exit(1)
     else:
         # This is a .o file, so execute the link phase
         commands = [compiler] + baseLibs + sys.argv[1:]
-        # if verbose:
-        print('[qcor-exec]: ', ' '.join([c for c in commands]))
+        if verbose:
+            print('[qcor-exec]: ', ' '.join([c for c in commands]))
         try:
             result = subprocess.run(commands, check=True)
         except subprocess.CalledProcessError as e:
