@@ -11,7 +11,7 @@ headers = ["Test Case", "qir-gen time", "llc time", "total time"]
 firstWrite = True
 
 # LL compiler
-llc_exe = "~/.mlir/bin/llc"
+llc_exe = "/usr/local/aideqc/llvm/bin/llc"
 result_file_name = 'result_mlir' + datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p") + '.csv'
 # Compile with MLIR
 for file in listOfSrcFiles:
