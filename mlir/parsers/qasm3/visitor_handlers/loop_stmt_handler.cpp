@@ -621,13 +621,8 @@ void qasm3_visitor::createWhileLoop(
   // 'After' block must end with a yield op.
   {
     mlir::OpBuilder::InsertionGuard g(builder);
-    if (auto b = symbol_table.get_last_created_block()) {
-      builder.setInsertionPointToEnd(b);
-      symbol_table.set_last_created_block(nullptr);
-    } else {
-      mlir::Operation &lastOp = whileOp.after().front().getOperations().back();
-      builder.setInsertionPointAfter(&lastOp);
-    }
+    mlir::Operation &lastOp = whileOp.after().front().getOperations().back();
+    builder.setInsertionPointAfter(&lastOp);
     builder.create<mlir::scf::YieldOp>(location);
   }
 
