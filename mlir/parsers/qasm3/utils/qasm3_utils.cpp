@@ -102,6 +102,35 @@ mlir::Value get_or_extract_qubit(const std::string &qreg_name,
   }
 }
 
+mlir::Value get_or_extract_qubit(const std::string &qubit_name,
+                                 mlir::Location location,
+                                 ScopedSymbolTable &symbol_table,
+                                 mlir::OpBuilder &builder) {
+  const std::string qreg_name =
+      "__qcor__mlir__single_qubit_register_" + qubit_name;
+  if (symbol_table.has_symbol(qubit_name)) {
+    mlir::Value qubit_value = symbol_table.get_symbol(qubit_name);
+    if (!symbol_table.verify_qubit_ssa_dominance_property(
+            qubit_value, builder.getInsertionBlock())) {
+      // The cache SSA value is not valid:
+      symbol_table.erase_symbol(qubit_name);
+      symbol_table.invalidate_qubit_extracts(qreg_name);
+      mlir::Value reextracted_qubit =
+          get_or_extract_qubit(qreg_name, 0, location, symbol_table, builder);
+      symbol_table.add_symbol(qubit_name, reextracted_qubit);
+      return reextracted_qubit;
+    } else {
+      return qubit_value;
+    }
+  } else {
+    symbol_table.invalidate_qubit_extracts(qreg_name);
+    mlir::Value reextracted_qubit =
+        get_or_extract_qubit(qreg_name, 0, location, symbol_table, builder);
+    symbol_table.add_symbol(qubit_name, reextracted_qubit);
+    return reextracted_qubit;
+  }
+}
+
 mlir::Value get_or_create_constant_integer_value(
     const std::size_t idx, mlir::Location location, mlir::Type type,
     ScopedSymbolTable &symbol_table, mlir::OpBuilder &builder) {

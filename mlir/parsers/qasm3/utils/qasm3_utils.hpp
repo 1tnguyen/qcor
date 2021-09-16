@@ -50,6 +50,12 @@ mlir::Value get_or_extract_qubit(const std::string &qreg_name,
                                  const std::size_t idx, mlir::Location location,
                                  ScopedSymbolTable &symbol_table,
                                  mlir::OpBuilder &builder);
+// Get the qubit (possibly re-extract from the internally tracked size-1
+// register)
+mlir::Value get_or_extract_qubit(const std::string &qubit_name,
+                                 mlir::Location location,
+                                 ScopedSymbolTable &symbol_table,
+                                 mlir::OpBuilder &builder);
 
 mlir::Value get_or_create_constant_integer_value(
     const std::size_t idx, mlir::Location location, mlir::Type int_like_type,

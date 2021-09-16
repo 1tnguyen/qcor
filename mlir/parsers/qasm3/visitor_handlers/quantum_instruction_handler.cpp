@@ -300,6 +300,11 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
       auto idx_str = idx_identifier->expressionList()->expression(0)->getText();
       const auto qubit_symbol_name =
           symbol_table.array_qubit_symbol_name(qbit_var_name, idx_str);
+      if (!modifiers.empty()) {
+        // This is a *modified* instruction, i.e., wrapped gate op
+        // must invalidate the qubit SSA use-def chain -> required re-extract:
+        symbol_table.erase_symbol(qubit_symbol_name);
+      }
       mlir::Value value;
       try {
         // try catch is on this std::stoi(), if idx_str is not an integer,
@@ -361,7 +366,11 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
 
     } else {
       // this is a qubit
-      auto qbit = symbol_table.get_symbol(qbit_var_name);
+      if (!modifiers.empty()) {
+        symbol_table.erase_symbol(qbit_var_name);
+      }
+      auto qbit =
+          get_or_extract_qubit(qbit_var_name, location, symbol_table, builder);
       qbit_values.push_back(qbit);
       qubit_symbol_table_keys.push_back(qbit_var_name);
     }
@@ -402,6 +411,10 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
     }
   }
 
+  // Cache these symbol keys before erasing.
+  // All qubits involved in modified gate ops (target and controls) need to be
+  // re-extracted afterwards.
+  const auto cached_qubit_symbol_table_keys = qubit_symbol_table_keys;
   // Potentially get the ctrl qubit
   mlir::Value ctrl_bit;
   if (has_ctrl) {
@@ -512,6 +525,13 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
     action_and_extrainfo.pop();
   }
 
+  // Simularly, disconnect the SSA use-def afterward if this is a modified
+  // block.
+  if (!modifiers.empty()) {
+    for (const auto &key : cached_qubit_symbol_table_keys) {
+      symbol_table.erase_symbol(key);
+    }
+  }
   return 0;
 }
 
