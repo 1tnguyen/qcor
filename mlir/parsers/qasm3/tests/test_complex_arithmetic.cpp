@@ -96,6 +96,9 @@ measure counting -> c;
 // Backend is QPP which is lsb, 
 // so return should be 100
 print(c);
+QCOR_EXPECT_TRUE(c[0] == 1);
+QCOR_EXPECT_TRUE(c[1] == 0);
+QCOR_EXPECT_TRUE(c[2] == 0);
 )#";
   auto mlir = qcor::mlir_compile(qpe_test, "qpe_test",
                                  qcor::OutputType::MLIR, false);
