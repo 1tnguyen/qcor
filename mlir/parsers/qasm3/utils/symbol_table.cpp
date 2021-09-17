@@ -227,7 +227,24 @@ void ScopedSymbolTable::invalidate_qubit_extracts(
     }
   }
 }
+
 void ScopedSymbolTable::erase_symbol(const std::string &var_name) {
+  if (var_name.find("%") == std::string::npos && has_symbol(var_name)) {
+    mlir::Value var = get_symbol(var_name);
+    if (var.getType().isa<mlir::OpaqueType>() &&
+        var.getType().cast<mlir::OpaqueType>().getTypeData() == "Qubit") {
+      const std::string qreg_name =
+          "__qcor__mlir__single_qubit_register_" + var_name;
+      if (!has_symbol(qreg_name)) {
+        // Bail out if we cannot track the (internal) originating qreg.
+        // e.g., function/subroutine arguments.
+        // TODO: we need a mechanism to restart SSA use-def chain in this case
+        // whereby re-extract is not possible.
+        return;
+      }
+    }
+  }
+
   for (auto &table : scoped_symbol_tables) {
     table.erase_symbol(var_name);
   }

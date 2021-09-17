@@ -598,6 +598,58 @@ z target;
     // __quantum__rt__start/__quantum__rt__end)
     EXPECT_EQ(countSubstring(llvm, "@__quantum__qis__z"), 3);
   }
+
+  {
+    // Check control bit isolation
+    // (all qubits involved in modified regions are isolated before and after)
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+
+qubit control;
+qubit target;
+
+x control;
+ctrl @ h control, target;
+x control;
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "test_kernel", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+
+    // Get the main kernel section only (there is the oracle LLVM section as
+    // well)
+    llvm = llvm.substr(llvm.find("@__internal_mlir_test_kernel"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    EXPECT_EQ(countSubstring(llvm, "@__quantum__qis__x"), 2);
+    EXPECT_EQ(countSubstring(llvm, "@__quantum__qis__h"), 1);
+  }
+
+  {
+    // Check qubits in arrays
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[2];
+x q[0];
+x q[1];
+ctrl @ h q[0], q[1];
+x q[0];
+x q[1];
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "test_kernel", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+
+    // Get the main kernel section only (there is the oracle LLVM section as
+    // well)
+    llvm = llvm.substr(llvm.find("@__internal_mlir_test_kernel"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    EXPECT_EQ(countSubstring(llvm, "@__quantum__qis__x"), 4);
+    EXPECT_EQ(countSubstring(llvm, "@__quantum__qis__h"), 1);
+  }
 }
 
 int main(int argc, char **argv) {
