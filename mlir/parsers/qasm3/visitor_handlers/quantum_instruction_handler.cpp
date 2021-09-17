@@ -290,6 +290,43 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
     }
   }
 
+  // Handle modifier first so that qubit extraction (if any)
+  // is within the scope of the modifier.
+  bool has_ctrl = false;
+  enum EndAction { EndCtrlU, EndAdjU, EndPowU };
+  std::stack<std::pair<EndAction, mlir::Value>> action_and_extrainfo;
+  for (auto m : modifiers) {
+    if (m->getText().find("pow") != std::string::npos) {
+      builder.create<mlir::quantum::StartPowURegion>(location);
+      mlir::Value power;
+      if (symbol_table.has_symbol(m->expression()->getText())) {
+        power = symbol_table.get_symbol(m->expression()->getText());
+        if (power.getType().isa<mlir::MemRefType>()) {
+          power = builder.create<mlir::LoadOp>(location, power);
+          if (power.getType().getIntOrFloatBitWidth() < 64) {
+            power = builder.create<mlir::ZeroExtendIOp>(location, power,
+                                                        builder.getI64Type());
+          }
+        }
+      } else {
+        auto p = symbol_table.evaluate_constant_integer_expression(
+            m->expression()->getText());
+        auto pow_attr = mlir::IntegerAttr::get(builder.getI64Type(), p);
+        power = builder.create<mlir::ConstantOp>(location, pow_attr);
+      }
+      action_and_extrainfo.emplace(std::make_pair(EndAction::EndPowU, power));
+    } else if (m->getText().find("inv") != std::string::npos) {
+      builder.create<mlir::quantum::StartAdjointURegion>(location);
+      action_and_extrainfo.emplace(
+          std::make_pair(EndAction::EndAdjU, mlir::Value()));
+    } else if (m->getText().find("ctrl") != std::string::npos) {
+      has_ctrl = true;
+      builder.create<mlir::quantum::StartCtrlURegion>(location);
+      action_and_extrainfo.emplace(
+          std::make_pair(EndAction::EndCtrlU, mlir::Value()));
+    }
+  }
+
   std::vector<std::string> qreg_names, qubit_symbol_table_keys;
   for (auto idx_identifier :
        context->indexIdentifierList()->indexIdentifier()) {
@@ -365,49 +402,29 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
       qubit_symbol_table_keys.push_back(qubit_symbol_name);
 
     } else {
-      // this is a qubit
-      if (!modifiers.empty()) {
-        symbol_table.erase_symbol(qbit_var_name);
-      }
-      auto qbit =
-          get_or_extract_qubit(qbit_var_name, location, symbol_table, builder);
-      qbit_values.push_back(qbit);
-      qubit_symbol_table_keys.push_back(qbit_var_name);
-    }
-  }
-
-  bool has_ctrl = false;
-  enum EndAction { EndCtrlU, EndAdjU, EndPowU };
-  std::stack<std::pair<EndAction, mlir::Value>> action_and_extrainfo;
-  for (auto m : modifiers) {
-    if (m->getText().find("pow") != std::string::npos) {
-      builder.create<mlir::quantum::StartPowURegion>(location);
-      mlir::Value power;
-      if (symbol_table.has_symbol(m->expression()->getText())) {
-        power = symbol_table.get_symbol(m->expression()->getText());
-        if (power.getType().isa<mlir::MemRefType>()) {
-          power = builder.create<mlir::LoadOp>(location, power);
-          if (power.getType().getIntOrFloatBitWidth() < 64) {
-            power = builder.create<mlir::ZeroExtendIOp>(location, power,
-                                                        builder.getI64Type());
+      // This is a qubit or whole qubit array (broadcast)
+      mlir::Value qbit = [&]() {
+        mlir::Value v = symbol_table.get_symbol(qbit_var_name);
+        // If this instruction is modified,
+        // invalidate previous extracts (all qubits if qreg broadcast or single
+        // extract from the internal register for single qubit vars)
+        if (!modifiers.empty()) {
+          if (v.getType() == array_type) {
+            // This is a qreg
+            symbol_table.invalidate_qubit_extracts(qbit_var_name);
+            return symbol_table.get_symbol(qbit_var_name);
+          } else {
+            // This is a qubit
+            symbol_table.erase_symbol(qbit_var_name);
+            return get_or_extract_qubit(qbit_var_name, location, symbol_table,
+                                        builder);
           }
         }
-      } else {
-        auto p = symbol_table.evaluate_constant_integer_expression(
-            m->expression()->getText());
-        auto pow_attr = mlir::IntegerAttr::get(builder.getI64Type(), p);
-        power = builder.create<mlir::ConstantOp>(location, pow_attr);
-      }
-      action_and_extrainfo.emplace(std::make_pair(EndAction::EndPowU, power));
-    } else if (m->getText().find("inv") != std::string::npos) {
-      builder.create<mlir::quantum::StartAdjointURegion>(location);
-      action_and_extrainfo.emplace(
-          std::make_pair(EndAction::EndAdjU, mlir::Value()));
-    } else if (m->getText().find("ctrl") != std::string::npos) {
-      has_ctrl = true;
-      builder.create<mlir::quantum::StartCtrlURegion>(location);
-      action_and_extrainfo.emplace(
-          std::make_pair(EndAction::EndCtrlU, mlir::Value()));
+        return v;
+      }();
+
+      qbit_values.push_back(qbit);
+      qubit_symbol_table_keys.push_back(qbit_var_name);
     }
   }
 
@@ -529,7 +546,21 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
   // block.
   if (!modifiers.empty()) {
     for (const auto &key : cached_qubit_symbol_table_keys) {
-      symbol_table.erase_symbol(key);
+      mlir::Value qubit_or_qreg = symbol_table.get_symbol(key);
+      if (qubit_or_qreg.getType() == array_type) {
+        // For a broadcast inside a modified region,
+        // we disconnect **ALL** QVS use-def chain involved any of its element
+        // qubits.
+        symbol_table.invalidate_qubit_extracts(key);
+      } else {
+        symbol_table.erase_symbol(key);
+        if (key.find("%") == std::string::npos) {
+          // For single qubit reg, graciously add the reextract from the
+          // internal size-1 register back to the symbol table for later use
+          // after this modified region.
+          get_or_extract_qubit(key, location, symbol_table, builder);
+        }
+      }
     }
   }
   return 0;

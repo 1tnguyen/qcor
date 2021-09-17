@@ -570,6 +570,36 @@ QCOR_EXPECT_TRUE(c[3] == 1);
   EXPECT_EQ(countSubstring(llvm, "__quantum__qis__cphase"), 4);
 }
 
+TEST(qasm3PassManagerTester, checkModifierRegions) {
+  {
+    // The modified op must disconnect the SSA chain
+    // i.e., these 3 Z gates are completely disconnected, should not be merged.
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+
+qubit control;
+qubit target;
+
+z target;
+ctrl @ pow(5) @ z control, target;
+z target;
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "test_kernel", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+
+    // Get the main kernel section only (there is the oracle LLVM section as
+    // well)
+    llvm = llvm.substr(llvm.find("@__internal_mlir_test_kernel"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    // These should be 3 Z gates (1 inside
+    // __quantum__rt__start/__quantum__rt__end)
+    EXPECT_EQ(countSubstring(llvm, "@__quantum__qis__z"), 3);
+  }
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   auto ret = RUN_ALL_TESTS();

@@ -56,8 +56,53 @@ void SimplifyQubitExtractPass::runOnOperation() {
             // std::cout << "First use\n";
             previous_qreg_extract[index_const] = op.qbit();
           } else {
-            mlir::Value previous_extract = previous_qreg_extract[index_const];
-            op.qbit().replaceAllUsesWith(previous_extract);
+            // Check if the Start/End modified regions are balanced:
+            // Notes: currently, these pseudo regions are inside
+            // the same block as other ops.
+            // i.e., essentially just a linear sequence of Ops.
+            // We count the open/close ops to determine if 
+            // some extract ops are **within** these start/end regions.
+            // These extract ops are **NOT** mergeable since 
+            // the users of them are modified QVS ops (handled by runtime).
+            auto &ops_in_blocks = op->getBlock()->getOperations();
+            // We assume these braces are balanced, just to a simple open/close
+            // count.
+            int modifier_scope_braces_count = 0;
+            for (auto iter = ops_in_blocks.rbegin();
+                 iter != ops_in_blocks.rend(); ++iter) {
+              auto &iter_op = *iter;
+              if (mlir::dyn_cast_or_null<mlir::quantum::StartCtrlURegion>(
+                      &iter_op) ||
+                  mlir::dyn_cast_or_null<mlir::quantum::StartAdjointURegion>(
+                      &iter_op) ||
+                  mlir::dyn_cast_or_null<mlir::quantum::StartPowURegion>(
+                      &iter_op)) {
+                if (iter_op.isBeforeInBlock(op)) {
+                  modifier_scope_braces_count++;
+                }
+              }
+              if (mlir::dyn_cast_or_null<mlir::quantum::EndCtrlURegion>(
+                      &iter_op) ||
+                  mlir::dyn_cast_or_null<mlir::quantum::EndAdjointURegion>(
+                      &iter_op) ||
+                  mlir::dyn_cast_or_null<mlir::quantum::EndPowURegion>(
+                      &iter_op)) {
+                if (iter_op.isBeforeInBlock(op)) {
+                  modifier_scope_braces_count--;
+                }
+              }
+            }
+            if (modifier_scope_braces_count > 0) {
+              // This extract is inside a modified region.
+              // Don't merge but remove the tracking for these qubits in this region
+              // following extract ops will start new use-def chains:
+              previous_qreg_extract.erase(index_const);
+            } else {
+              // Not inside any modified regions
+              // Merge to the prior extract to extend the use-def chain.
+              mlir::Value previous_extract = previous_qreg_extract[index_const];
+              op.qbit().replaceAllUsesWith(previous_extract);
+            }
           }
 
           // Erase the extract cache in the parent scope as well:
