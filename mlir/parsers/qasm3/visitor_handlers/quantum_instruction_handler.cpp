@@ -372,7 +372,6 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
   std::stack<std::pair<EndAction, mlir::Value>> action_and_extrainfo;
   for (auto m : modifiers) {
     if (m->getText().find("pow") != std::string::npos) {
-      builder.create<mlir::quantum::StartPowURegion>(location);
       mlir::Value power;
       if (symbol_table.has_symbol(m->expression()->getText())) {
         power = symbol_table.get_symbol(m->expression()->getText());
@@ -389,7 +388,10 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
         auto pow_attr = mlir::IntegerAttr::get(builder.getI64Type(), p);
         power = builder.create<mlir::ConstantOp>(location, pow_attr);
       }
-      action_and_extrainfo.emplace(std::make_pair(EndAction::EndPowU, power));
+      auto powerUOp = builder.create<mlir::quantum::PowURegion>(location, power);
+      action_and_extrainfo.emplace(
+          std::make_pair(EndAction::EndPowU, mlir::Value()));
+      builder.setInsertionPointToStart(&powerUOp.body().front());
     } else if (m->getText().find("inv") != std::string::npos) {
       builder.create<mlir::quantum::StartAdjointURegion>(location);
       action_and_extrainfo.emplace(
@@ -440,7 +442,7 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
   while (!action_and_extrainfo.empty()) {
     auto top = action_and_extrainfo.top();
     if (top.first == EndAction::EndPowU) {
-      builder.create<mlir::quantum::EndPowURegion>(location, top.second);
+      // builder.create<mlir::quantum::EndPowURegion>(location, top.second);
     } else if (top.first == EndAction::EndAdjU) {
       builder.create<mlir::quantum::EndAdjointURegion>(location);
     } else if (top.first == EndAction::EndCtrlU) {

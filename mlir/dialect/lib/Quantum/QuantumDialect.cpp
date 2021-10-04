@@ -3,6 +3,7 @@
 #include "Quantum/QuantumOps.h"
 #include "mlir/IR/OpImplementation.h"
 #include "mlir/Transforms/InliningUtils.h"
+#include "mlir/IR/Builders.h"
 
 using namespace mlir;
 using namespace mlir::quantum;
@@ -60,3 +61,10 @@ void QuantumDialect::initialize() {
 //   printer << ")";
 
 // }
+
+void PowURegion::build(OpBuilder &builder, OperationState &result, Value pow) {
+  result.addOperands(pow);
+  OpBuilder::InsertionGuard guard(builder);
+  Region *body = result.addRegion();
+  builder.createBlock(body);
+}

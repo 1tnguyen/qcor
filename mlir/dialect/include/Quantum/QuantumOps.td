@@ -3,6 +3,8 @@
 
 include "QuantumDialect.td"
 include "mlir/Interfaces/SideEffectInterfaces.td"
+include "mlir/Interfaces/ControlFlowInterfaces.td"
+include "mlir/Interfaces/LoopLikeInterface.td"
 
 def QubitType : OpaqueType<"quantum", "Qubit", "opaque qubit type">;
 def ResultType : OpaqueType<"quantum", "Result", "opaque result type">;
@@ -122,6 +124,26 @@ def EndPowURegion : QuantumOp<"end_pow_u_region", []> {
   let printer = [{  
     auto op = *this;
     p << "} (pow = " << op.pow() << ") // END POWER";
+  }];
+}
+
+def PowURegion : QuantumOp<"pow_u_region", []> {
+  let summary = "Scoped Power-U Region";
+  let description = [{
+    `pow_u_region` operation represents a block of code whose quantum gates are
+          repeated a set number of times.}];
+  let arguments = (ins AnyI64:$pow);
+  let results = (outs);
+  let regions = (region SizedRegion<1>:$body);
+  let skipDefaultBuilders = 1;
+  let builders = [
+    OpBuilderDAG<(ins "Value":$pow)>
+  ];
+
+  let printer = [{  
+    auto op = *this;
+    p << "pow(" << op.pow() << ")";
+    p.printRegion(op.body(), /*printEntryBlockArgs=*/false);
   }];
 }
 
