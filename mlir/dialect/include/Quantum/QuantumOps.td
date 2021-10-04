@@ -142,10 +142,49 @@ def PowURegion : QuantumOp<"pow_u_region", []> {
 
   let printer = [{  
     auto op = *this;
-    p << "pow(" << op.pow() << ")";
+    p << "q.pow(" << op.pow() << ")";
     p.printRegion(op.body(), /*printEntryBlockArgs=*/false);
   }];
 }
+
+def AdjURegion : QuantumOp<"adj_u_region", []> {
+  let summary = "Scoped Adjoint-U Region";
+  let description = [{
+    `adj_u_region` operation represents a block of code whose Adjoint should be applied.}];
+  let arguments = (ins);
+  let results = (outs);
+  let regions = (region SizedRegion<1>:$body);
+  let skipDefaultBuilders = 1;
+  let builders = [
+    OpBuilderDAG<(ins)>
+  ];
+
+  let printer = [{  
+    auto op = *this;
+    p << "q.adj";
+    p.printRegion(op.body(), /*printEntryBlockArgs=*/false);
+  }];
+}
+
+def CtrlURegion : QuantumOp<"ctrl_u_region", []> {
+  let summary = "Scoped Controlled-U Region";
+  let description = [{
+    `ctrl_u_region` operation represents a block of code whose controlled version should be applied.}];
+  let arguments = (ins QubitType:$ctrl_qubit);
+  let results = (outs);
+  let regions = (region SizedRegion<1>:$body);
+  let skipDefaultBuilders = 1;
+  let builders = [
+    OpBuilderDAG<(ins "Value":$ctrl_qubit)>
+  ];
+
+  let printer = [{  
+    auto op = *this;
+    p << "q.ctrl(" << op.ctrl_qubit() << ")";
+    p.printRegion(op.body(), /*printEntryBlockArgs=*/false);
+  }];
+}
+
 
 def ComputeMarkerOp : QuantumOp<"compute_marker", []> {
   let arguments = (ins);

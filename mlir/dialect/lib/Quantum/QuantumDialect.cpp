@@ -63,7 +63,22 @@ void QuantumDialect::initialize() {
 // }
 
 void PowURegion::build(OpBuilder &builder, OperationState &result, Value pow) {
+  assert(pow.getType().isIntOrIndex());
   result.addOperands(pow);
+  OpBuilder::InsertionGuard guard(builder);
+  Region *body = result.addRegion();
+  builder.createBlock(body);
+}
+
+void AdjURegion::build(OpBuilder &builder, OperationState &result) {
+  OpBuilder::InsertionGuard guard(builder);
+  Region *body = result.addRegion();
+  builder.createBlock(body);
+}
+
+void CtrlURegion::build(OpBuilder &builder, OperationState &result, Value ctrl_bit) {
+  assert(ctrl_bit.getType().isa<mlir::OpaqueType>());
+  result.addOperands(ctrl_bit);
   OpBuilder::InsertionGuard guard(builder);
   Region *body = result.addRegion();
   builder.createBlock(body);

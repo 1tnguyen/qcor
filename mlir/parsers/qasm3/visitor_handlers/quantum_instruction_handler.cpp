@@ -367,9 +367,7 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
     }
   }
 
-  bool has_ctrl = false;
-  enum EndAction { EndCtrlU, EndAdjU, EndPowU };
-  std::stack<std::pair<EndAction, mlir::Value>> action_and_extrainfo;
+  std::stack<mlir::OpBuilder::InsertPoint> modifier_insertion_points_stack;
   for (auto m : modifiers) {
     if (m->getText().find("pow") != std::string::npos) {
       mlir::Value power;
@@ -389,27 +387,21 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
         power = builder.create<mlir::ConstantOp>(location, pow_attr);
       }
       auto powerUOp = builder.create<mlir::quantum::PowURegion>(location, power);
-      action_and_extrainfo.emplace(
-          std::make_pair(EndAction::EndPowU, mlir::Value()));
+      modifier_insertion_points_stack.push(builder.saveInsertionPoint());
       builder.setInsertionPointToStart(&powerUOp.body().front());
     } else if (m->getText().find("inv") != std::string::npos) {
-      builder.create<mlir::quantum::StartAdjointURegion>(location);
-      action_and_extrainfo.emplace(
-          std::make_pair(EndAction::EndAdjU, mlir::Value()));
+      auto adjUOp = builder.create<mlir::quantum::AdjURegion>(location);
+      modifier_insertion_points_stack.push(builder.saveInsertionPoint());
+      builder.setInsertionPointToStart(&adjUOp.body().front());
     } else if (m->getText().find("ctrl") != std::string::npos) {
-      has_ctrl = true;
-      builder.create<mlir::quantum::StartCtrlURegion>(location);
-      action_and_extrainfo.emplace(
-          std::make_pair(EndAction::EndCtrlU, mlir::Value()));
+      mlir::Value ctrl_bit = *qbit_values.begin();
+      qbit_values.erase(qbit_values.begin());
+      qubit_symbol_table_keys.erase(qubit_symbol_table_keys.begin());
+      auto ctrlUOp =
+          builder.create<mlir::quantum::CtrlURegion>(location, ctrl_bit);
+      modifier_insertion_points_stack.push(builder.saveInsertionPoint());
+      builder.setInsertionPointToStart(&ctrlUOp.body().front());
     }
-  }
-
-  // Potentially get the ctrl qubit
-  mlir::Value ctrl_bit;
-  if (has_ctrl) {
-    ctrl_bit = *qbit_values.begin();
-    qbit_values.erase(qbit_values.begin());
-    qubit_symbol_table_keys.erase(qubit_symbol_table_keys.begin());
   }
 
   if (symbol_table.has_seen_function(name)) {
@@ -439,79 +431,12 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
                                   location, context);
   }
 
-  while (!action_and_extrainfo.empty()) {
-    auto top = action_and_extrainfo.top();
-    if (top.first == EndAction::EndPowU) {
-      // builder.create<mlir::quantum::EndPowURegion>(location, top.second);
-    } else if (top.first == EndAction::EndAdjU) {
-      builder.create<mlir::quantum::EndAdjointURegion>(location);
-    } else if (top.first == EndAction::EndCtrlU) {
-      auto& ops_up_to_now = builder.getBlock()->getOperations();
-
-      // From here to line 505, we attempt to replace trivial 
-      // ctrl segments with known intrinsic quantum instructions, i.e.
-      // q.ctrl_region {
-      // %2 = qvs.x(%1)
-      // } (ctrl_bit = %0) // END CTRL
-      // with 
-      // %3:2 = qvs.cnot(%0, %1)
-      // in order to simplify downstream optimizations
-      //
-      // First reverse iterate from latest op added to the first StartCtrlURegionOp
-      // Keep track of all ops that are touched
-      mlir::Operation* start_ctrl;
-      std::vector<mlir::Operation*> ops_to_control;
-      for (auto iter = ops_up_to_now.rbegin(); iter != ops_up_to_now.rend();
-           ++iter) {
-        auto& op = *iter;
-        if (mlir::dyn_cast_or_null<mlir::quantum::StartCtrlURegion>(&op)) {
-          start_ctrl = &op;
-          break;
-        }
-        ops_to_control.push_back(&op);
-      }
-
-      // If there is one op only in that region, we can optimize it away easily
-      if (ops_to_control.size() == 1) {
-        // Trivial ctrl block, replace with ctrl instruction
-        if (auto inst_op =
-                mlir::dyn_cast_or_null<mlir::quantum::ValueSemanticsInstOp>(
-                    ops_to_control[0])) {
-          // For now, only handle ctrl-x, will add more later
-          if (inst_op.name().str() == "x") {
-            auto operands = inst_op.qubits();
-            std::vector<mlir::Value> new_qbits{ctrl_bit, operands[0]};
-
-            auto params = inst_op.params();
-            auto name = inst_op.name();
-
-            ops_to_control[0]->dropAllReferences();
-            ops_to_control[0]->dropAllUses();
-            ops_up_to_now.remove(*start_ctrl);
-            ops_up_to_now.remove(*ops_to_control[0]);
-
-            auto new_inst = builder.create<mlir::quantum::ValueSemanticsInstOp>(
-                location,
-                llvm::makeArrayRef(
-                    std::vector<mlir::Type>{qubit_type, qubit_type}),
-                builder.getStringAttr("cnot"), llvm::makeArrayRef(new_qbits),
-                params);
-
-            auto return_vals = new_inst.result();
-            int i = 0;
-            for (auto result : return_vals) {
-              symbol_table.replace_symbol(qbit_values[i], result);
-              i++;
-            }
-            action_and_extrainfo.pop();
-            continue;
-          }
-        }
-      }
-
-      builder.create<mlir::quantum::EndCtrlURegion>(location, ctrl_bit);
-    }
-    action_and_extrainfo.pop();
+  // This is really not needed since the nested modifier stack 
+  // only contains a single Op (could be a function call).
+  // i.e., we could restore the insertion point at the bottom of the stack.
+  while (!modifier_insertion_points_stack.empty()) {
+    builder.restoreInsertionPoint(modifier_insertion_points_stack.top());
+    modifier_insertion_points_stack.pop();
   }
 
   return 0;
