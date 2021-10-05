@@ -127,7 +127,19 @@ def EndPowURegion : QuantumOp<"end_pow_u_region", []> {
   }];
 }
 
-def PowURegion : QuantumOp<"pow_u_region", []> {
+// A dummy terminator to end modifier (pow, ctrl, inv) block.
+// TODO: use `NoTerminator` attribute once we updated to later version of MLIR.
+def ModifierEndOp : QuantumOp<"modifier_end", [Terminator, NoSideEffect]> {
+  let summary = "Implicit terminator of a modifier (ctrl/inv/pow) region";
+  let description = [{
+    `quantum.modifier_end` operations terminate modifier regions.}];
+  let assemblyFormat = "attr-dict";
+  let verifier = ? ;
+}
+
+def PowURegion : QuantumOp<"pow_u_region", [
+  NoRegionArguments, SingleBlockImplicitTerminator<"quantum::ModifierEndOp">
+]> {
   let summary = "Scoped Power-U Region";
   let description = [{
     `pow_u_region` operation represents a block of code whose quantum gates are

@@ -1,0 +1,19 @@
+#pragma once
+#include "Quantum/QuantumOps.h"
+#include "mlir/Pass/Pass.h"
+#include "mlir/Pass/PassManager.h"
+#include "mlir/Target/LLVMIR.h"
+#include "mlir/Transforms/DialectConversion.h"
+#include "mlir/Transforms/Passes.h"
+
+using namespace mlir;
+
+namespace qcor {
+// Compile-time inlining of modifiled-block (if possible)
+struct ModifierBlockInlinerPass
+    : public PassWrapper<ModifierBlockInlinerPass, OperationPass<ModuleOp>> {
+  void getDependentDialects(DialectRegistry &registry) const override;
+  void runOnOperation() final;
+  ModifierBlockInlinerPass() {}
+};
+} // namespace qcor

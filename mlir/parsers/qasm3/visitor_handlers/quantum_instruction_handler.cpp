@@ -435,6 +435,9 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
   // only contains a single Op (could be a function call).
   // i.e., we could restore the insertion point at the bottom of the stack.
   while (!modifier_insertion_points_stack.empty()) {
+    // TODO: this could be removed once we're updated to later MLIR version with
+    // NoTerminator attr support.
+    builder.create<mlir::quantum::ModifierEndOp>(location);
     builder.restoreInsertionPoint(modifier_insertion_points_stack.top());
     modifier_insertion_points_stack.pop();
   }
