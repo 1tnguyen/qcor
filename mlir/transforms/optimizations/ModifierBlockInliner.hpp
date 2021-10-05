@@ -15,5 +15,9 @@ struct ModifierBlockInlinerPass
   void getDependentDialects(DialectRegistry &registry) const override;
   void runOnOperation() final;
   ModifierBlockInlinerPass() {}
+private:
+  void handlePowU();
+  void handleCtrlU();
+  void handleAdjU();
 };
 } // namespace qcor
