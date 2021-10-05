@@ -19,5 +19,8 @@ private:
   void handlePowU();
   void handleCtrlU();
   void handleAdjU();
+  void applyControlledQuantumOp(mlir::quantum::ValueSemanticsInstOp &qvsOp,
+                                mlir::Value control_bit,
+                                mlir::OpBuilder &rewriter);
 };
 } // namespace qcor
