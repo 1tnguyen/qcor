@@ -78,55 +78,6 @@ def ArrayConcatOp : QuantumOp<"qarray_concat", []> {
   }];
 }
 
-def StartCtrlURegion : QuantumOp<"start_ctrl_u_region", []> {
-  let arguments = (ins);
-  let results = (outs);
-  let printer = [{  
-  p << "q.ctrl_region {";
-  }];
-}
-
-def EndCtrlURegion : QuantumOp<"end_ctrl_u_region", []> {
-  let arguments = (ins QubitType:$ctrl_qubit);
-  let results = (outs);
-  let printer = [{  auto op = *this;
-  p << "} (ctrl_bit = " << op.ctrl_qubit() << ") // END CTRL";
-  }];
-}
-
-def StartAdjointURegion : QuantumOp<"start_adj_u_region", []> {
-  let arguments = (ins);
-  let results = (outs);
-  let printer = [{
-  p << "q.adj_region {";
-  }];
-}
-
-def EndAdjointURegion : QuantumOp<"end_adj_u_region", []> {
-  let arguments = (ins);
-  let results = (outs);
-  let printer = [{
-  p << "} // END ADJOINT";
-  }];
-}
-
-def StartPowURegion : QuantumOp<"start_pow_u_region", []> {
-  let arguments = (ins);
-  let results = (outs);
-  let printer = [{  
-    p << "q.pow_u_region {";
-  }];
-}
-
-def EndPowURegion : QuantumOp<"end_pow_u_region", []> {
-  let arguments = (ins AnyI64:$pow);
-  let results = (outs);
-  let printer = [{  
-    auto op = *this;
-    p << "} (pow = " << op.pow() << ") // END POWER";
-  }];
-}
-
 // A dummy terminator to end modifier (pow, ctrl, inv) block.
 // TODO: use `NoTerminator` attribute once we updated to later version of MLIR.
 def ModifierEndOp : QuantumOp<"modifier_end", [Terminator, NoSideEffect]> {

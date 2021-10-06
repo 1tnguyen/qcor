@@ -63,12 +63,17 @@ void add_callable_gen(mlir::OpBuilder &builder, const std::string &func_name,
     builder.setInsertionPointToStart(&entryBlock);
     // Wrap the call to the body wrapperin StartAdjointURegion and
     // EndAdjointURegion
-    builder.create<mlir::quantum::StartAdjointURegion>(builder.getUnknownLoc());
-    mlir::FuncOp body_wrapper = all_wrapper_funcs[0];
-    // Forward tuple arguments to the body (will unpack there)
-    auto call_op = builder.create<mlir::CallOp>(
-        builder.getUnknownLoc(), body_wrapper, entryBlock.getArguments());
-    builder.create<mlir::quantum::EndAdjointURegion>(builder.getUnknownLoc());
+    auto adjUOp =
+        builder.create<mlir::quantum::AdjURegion>(builder.getUnknownLoc());
+    {
+      mlir::OpBuilder::InsertionGuard guard(builder);
+      builder.setInsertionPointToStart(&adjUOp.body().front());
+      mlir::FuncOp body_wrapper = all_wrapper_funcs[0];
+      // Forward tuple arguments to the body (will unpack there)
+      auto call_op = builder.create<mlir::CallOp>(
+          builder.getUnknownLoc(), body_wrapper, entryBlock.getArguments());
+      builder.create<mlir::quantum::ModifierEndOp>(builder.getUnknownLoc());
+    }
     builder.create<mlir::ReturnOp>(builder.getUnknownLoc());
     moduleOp.push_back(function_op);
     all_wrapper_funcs.emplace_back(function_op);
@@ -104,13 +109,16 @@ void add_callable_gen(mlir::OpBuilder &builder, const std::string &func_name,
           builder.getUnknownLoc(), qubit_type, control_array, qubit_idx);
 
       // Call the function wrapped in StartCtrlURegion/EndCtrlURegion
-      builder.create<mlir::quantum::StartCtrlURegion>(builder.getUnknownLoc());
+      auto ctrlUOp = builder.create<mlir::quantum::CtrlURegion>(
+          builder.getUnknownLoc(), ctrl_qubit);
+      {
+        mlir::OpBuilder::InsertionGuard guard(builder);
+        builder.setInsertionPointToStart(&ctrlUOp.body().front());
+        builder.create<mlir::CallOp>(builder.getUnknownLoc(), wrapped_func,
+                                     single_func_arg);
+        builder.create<mlir::quantum::ModifierEndOp>(builder.getUnknownLoc());
+      }
 
-      builder.create<mlir::CallOp>(builder.getUnknownLoc(), wrapped_func,
-                                   single_func_arg);
-
-      builder.create<mlir::quantum::EndCtrlURegion>(builder.getUnknownLoc(),
-                                                    ctrl_qubit);
       builder.create<mlir::ReturnOp>(builder.getUnknownLoc());
       moduleOp.push_back(function_op);
       all_wrapper_funcs.emplace_back(function_op);
@@ -134,13 +142,17 @@ void add_callable_gen(mlir::OpBuilder &builder, const std::string &func_name,
           builder.getUnknownLoc(), qubit_type, control_array, qubit_idx);
 
       // Call the body wrapped in StartCtrlURegion/EndCtrlURegion
-      builder.create<mlir::quantum::StartCtrlURegion>(builder.getUnknownLoc());
-      auto call_op = builder.create<mlir::CallOp>(
-          builder.getUnknownLoc(), body_wrapper,
-          llvm::ArrayRef<mlir::Value>(
-              {arguments[0], body_arg_tuple, arguments[2]}));
-      builder.create<mlir::quantum::EndCtrlURegion>(builder.getUnknownLoc(),
-                                                    ctrl_qubit);
+      auto ctrlUOp = builder.create<mlir::quantum::CtrlURegion>(
+          builder.getUnknownLoc(), ctrl_qubit);
+      {
+        mlir::OpBuilder::InsertionGuard guard(builder);
+        builder.setInsertionPointToStart(&ctrlUOp.body().front());
+        auto call_op = builder.create<mlir::CallOp>(
+            builder.getUnknownLoc(), body_wrapper,
+            llvm::ArrayRef<mlir::Value>(
+                {arguments[0], body_arg_tuple, arguments[2]}));
+        builder.create<mlir::quantum::ModifierEndOp>(builder.getUnknownLoc());
+      }
       builder.create<mlir::ReturnOp>(builder.getUnknownLoc());
       moduleOp.push_back(function_op);
       all_wrapper_funcs.emplace_back(function_op);
@@ -156,12 +168,18 @@ void add_callable_gen(mlir::OpBuilder &builder, const std::string &func_name,
     builder.setInsertionPointToStart(&entryBlock);
     // Wrap the call to the ctrl wrapper wrapped in StartAdjointURegion and
     // EndAdjointURegion
-    builder.create<mlir::quantum::StartAdjointURegion>(builder.getUnknownLoc());
-    mlir::FuncOp ctrl_wrapper = all_wrapper_funcs[2];
-    // Forward tuple arguments to the controlled (will unpack there)
-    auto call_op = builder.create<mlir::CallOp>(
-        builder.getUnknownLoc(), ctrl_wrapper, entryBlock.getArguments());
-    builder.create<mlir::quantum::EndAdjointURegion>(builder.getUnknownLoc());
+    auto adjUOp =
+        builder.create<mlir::quantum::AdjURegion>(builder.getUnknownLoc());
+    {
+      mlir::OpBuilder::InsertionGuard guard(builder);
+      builder.setInsertionPointToStart(&adjUOp.body().front());
+      mlir::FuncOp ctrl_wrapper = all_wrapper_funcs[2];
+      // Forward tuple arguments to the controlled (will unpack there)
+      auto call_op = builder.create<mlir::CallOp>(
+          builder.getUnknownLoc(), ctrl_wrapper, entryBlock.getArguments());
+      builder.create<mlir::quantum::ModifierEndOp>(builder.getUnknownLoc());
+    }
+
     builder.create<mlir::ReturnOp>(builder.getUnknownLoc());
     moduleOp.push_back(function_op);
     all_wrapper_funcs.emplace_back(function_op);

@@ -13,9 +13,15 @@ antlrcpp::Any qasm3_visitor::visitCompute_action_stmt(
   visit(context->action_block);
 
   builder.create<mlir::quantum::ComputeMarkerOp>(location);
-  builder.create<mlir::quantum::StartAdjointURegion>(location);
-  visit(context->compute_block);
-  builder.create<mlir::quantum::EndAdjointURegion>(location);
+
+  auto adjUOp = builder.create<mlir::quantum::AdjURegion>(location);
+  {
+    mlir::OpBuilder::InsertionGuard guard(builder);
+    builder.setInsertionPointToStart(&adjUOp.body().front());
+    visit(context->compute_block);
+    builder.create<mlir::quantum::ModifierEndOp>(location);
+  }
+
   builder.create<mlir::quantum::ComputeUnMarkerOp>(location);
 
   return 0;
