@@ -774,12 +774,12 @@ void ModifierBlockInlinerPass::handleCtrlU() {
         // Complex cases: for now, just put in the ctrl block.
         // i.e., runtime to handle.
         auto ctrlUOp =
-          rewriter.create<mlir::quantum::CtrlURegion>(op.getLoc(), op.ctrl_qubit());
+          rewriter.create<mlir::quantum::CtrlURegion>(op.getLoc(), op.ctrl_qubit(), llvm::None);
         {
           mlir::OpBuilder::InsertionGuard guard(rewriter);
           rewriter.setInsertionPointToStart(&ctrlUOp.body().front());
           rewriter.insert(subOp.clone());
-          rewriter.create<mlir::quantum::ModifierEndOp>(op.getLoc());
+          rewriter.create<mlir::quantum::ModifierEndOp>(op.getLoc(), llvm::None);
         }
       }
     }

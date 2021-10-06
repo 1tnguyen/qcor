@@ -84,8 +84,7 @@ def ModifierEndOp : QuantumOp<"modifier_end", [Terminator, NoSideEffect]> {
   let summary = "Implicit terminator of a modifier (ctrl/inv/pow) region";
   let description = [{
     `quantum.modifier_end` operations terminate modifier regions.}];
-  let assemblyFormat = "attr-dict";
-  let verifier = ? ;
+  let arguments = (ins Variadic<QubitType>:$qubits);
 }
 
 def PowURegion : QuantumOp<"pow_u_region", [
@@ -95,12 +94,14 @@ def PowURegion : QuantumOp<"pow_u_region", [
   let description = [{
     `pow_u_region` operation represents a block of code whose quantum gates are
           repeated a set number of times.}];
-  let arguments = (ins AnyI64:$pow);
-  let results = (outs);
+  // Rationale: we wrap modifier block as a proper value-semantics op.
+  // i.e., forwarding SSA vars at input and output.
+  let arguments = (ins AnyI64:$pow, Variadic<QubitType>:$qubits);
+  let results = (outs Variadic<QubitType>:$result);
   let regions = (region SizedRegion<1>:$body);
   let skipDefaultBuilders = 1;
   let builders = [
-    OpBuilderDAG<(ins "Value":$pow)>
+    OpBuilderDAG<(ins "Value":$pow, "ValueRange":$qubits)>
   ];
 
   let printer = [{  
@@ -114,12 +115,12 @@ def AdjURegion : QuantumOp<"adj_u_region", []> {
   let summary = "Scoped Adjoint-U Region";
   let description = [{
     `adj_u_region` operation represents a block of code whose Adjoint should be applied.}];
-  let arguments = (ins);
-  let results = (outs);
+  let arguments = (ins Variadic<QubitType>:$qubits);
+  let results = (outs Variadic<QubitType>:$result);
   let regions = (region SizedRegion<1>:$body);
   let skipDefaultBuilders = 1;
   let builders = [
-    OpBuilderDAG<(ins)>
+    OpBuilderDAG<(ins "ValueRange":$qubits)>
   ];
 
   let printer = [{  
@@ -133,12 +134,12 @@ def CtrlURegion : QuantumOp<"ctrl_u_region", []> {
   let summary = "Scoped Controlled-U Region";
   let description = [{
     `ctrl_u_region` operation represents a block of code whose controlled version should be applied.}];
-  let arguments = (ins QubitType:$ctrl_qubit);
-  let results = (outs);
+  let arguments = (ins QubitType:$ctrl_qubit, Variadic<QubitType>:$qubits);
+  let results = (outs Variadic<QubitType>:$result);
   let regions = (region SizedRegion<1>:$body);
   let skipDefaultBuilders = 1;
   let builders = [
-    OpBuilderDAG<(ins "Value":$ctrl_qubit)>
+    OpBuilderDAG<(ins "Value":$ctrl_qubit, "ValueRange":$qubits)>
   ];
 
   let printer = [{  

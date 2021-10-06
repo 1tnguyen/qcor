@@ -14,12 +14,13 @@ antlrcpp::Any qasm3_visitor::visitCompute_action_stmt(
 
   builder.create<mlir::quantum::ComputeMarkerOp>(location);
 
-  auto adjUOp = builder.create<mlir::quantum::AdjURegion>(location);
+  // TODO: make sure we handle SSA use-def for this case.
+  auto adjUOp = builder.create<mlir::quantum::AdjURegion>(location, llvm::None);
   {
     mlir::OpBuilder::InsertionGuard guard(builder);
     builder.setInsertionPointToStart(&adjUOp.body().front());
     visit(context->compute_block);
-    builder.create<mlir::quantum::ModifierEndOp>(location);
+    builder.create<mlir::quantum::ModifierEndOp>(location, llvm::None);
   }
 
   builder.create<mlir::quantum::ComputeUnMarkerOp>(location);
