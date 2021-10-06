@@ -803,20 +803,19 @@ void ModifierBlockInlinerPass::handleAdjU() {
     // is a linear sequence of quantum gates, nothing else.
     const bool isSimpleListOfQvsOps = [&]() {
       for (auto &subOp : adjBlock.getOperations()) {
-        if (!mlir::dyn_cast_or_null<mlir::quantum::ValueSemanticsInstOp>(
-                &subOp)) {
-          return false;
-        }
         // see the terminator
         if (mlir::dyn_cast_or_null<mlir::quantum::ModifierEndOp>(&subOp)) {
           return true;
         }
-        // something wrong here, e.g., missing terminator...
-        assert(false);
-        return false;
+        if (!mlir::dyn_cast_or_null<mlir::quantum::ValueSemanticsInstOp>(
+                &subOp)) {
+          return false;
+        }
       }
+      // something wrong here, e.g., missing terminator...
+      assert(false);
+      return false;
     }();
-
     // We can only flatten the Adjoint region in this case.
     // Otherwise, the adjoint region persists to LLVM lowering -> runtime handling.
     if (isSimpleListOfQvsOps) {
@@ -834,7 +833,170 @@ void ModifierBlockInlinerPass::handleAdjU() {
       }
       // Reverse the gate sequence
       // adjusting the SSA use-def chain accordingly.
-      // TODO: we must do track the SSA chain backward.
+      // We must do track the SSA chain backward.
+      // List of all use-def chains
+      std::vector<std::vector<mlir::Value>> use_def_chains;
+      // Map from the opaque pointer to the chain index
+      std::unordered_map<void*, size_t> ssa_to_chain_idx;
+      for (auto& op: opsToReverse) {
+        for (size_t q = 0; q < op.qubits().size(); ++q) {
+          mlir::Value qubitOperand = op.qubits()[q];
+          auto iter = ssa_to_chain_idx.find(qubitOperand.getAsOpaquePointer());
+          if (iter != ssa_to_chain_idx.end()) {
+            // This qubit line was generated internally
+            const auto chainIdx = iter->second;
+            assert(chainIdx < use_def_chains.size());
+            auto& useDefList = use_def_chains[chainIdx];
+            mlir::Value resultQubit = op.result()[q];
+            // Add the result qubit to the tracking:
+            assert(ssa_to_chain_idx.find(resultQubit.getAsOpaquePointer()) ==
+                   ssa_to_chain_idx.end());
+            ssa_to_chain_idx[resultQubit.getAsOpaquePointer()] = chainIdx;
+            useDefList.emplace_back(resultQubit);
+          } else {
+            // First time seeing this use-def chain
+            mlir::Value resultQubit = op.result()[q];
+            use_def_chains.emplace_back(
+                std::vector<mlir::Value>{qubitOperand, resultQubit});
+            const auto chainIdx = use_def_chains.size() - 1;
+            // Add both the input and result to the list
+            ssa_to_chain_idx[qubitOperand.getAsOpaquePointer()] = chainIdx;
+            ssa_to_chain_idx[resultQubit.getAsOpaquePointer()] = chainIdx;
+          }
+        }
+      }
+
+      
+      std::unordered_map<void*, mlir::Value> qubit_operand_mapping;
+      for (auto &chain : use_def_chains) {
+        assert(chain.size() >= 2);
+        qubit_operand_mapping[chain.back().getAsOpaquePointer()] =
+            chain.front();
+      }
+      // Now doing the reverse:
+      const auto createInvGate = [&](mlir::quantum::ValueSemanticsInstOp
+                                         &originalOp) {
+        const std::string inst_name = originalOp.name().str();
+        const std::unordered_map<std::string, std::string> GATE_MAPPING{
+            {"x", "x"},   {"y", "y"},           {"z", "z"},   {"h", "h"},
+            {"cx", "cx"}, {"cnot", "cnot"},     {"rx", "rx"}, {"ry", "ry"},
+            {"rz", "rz"}, {"cphase", "cphase"}, {"t", "tdg"}, {"tdg", "t"},
+            {"s", "sdg"}, {"sdg", "s"}};
+        assert(GATE_MAPPING.find(inst_name) != GATE_MAPPING.end());
+        const std::string invGateName = GATE_MAPPING.find(inst_name)->second;
+        const size_t nQubits = originalOp.qubits().size();
+        assert(nQubits == 1 || nQubits == 2);
+        const bool isParameterized = !originalOp.params().empty();
+        if (!isParameterized) {
+          if (nQubits == 1) {
+            mlir::Value inputQubit = originalOp.getOperand(0);
+            mlir::Value outputQubit = originalOp.getResult(0);
+            mlir::Type qubit_type = originalOp.getOperand(0).getType();
+            assert(
+                qubit_operand_mapping.find(outputQubit.getAsOpaquePointer()) !=
+                qubit_operand_mapping.end());
+            mlir::Value inputOperand =
+                qubit_operand_mapping[outputQubit.getAsOpaquePointer()];
+            auto new_inst =
+                rewriter.create<mlir::quantum::ValueSemanticsInstOp>(
+                    originalOp.getLoc(), llvm::makeArrayRef({qubit_type}),
+                    invGateName, llvm::makeArrayRef({inputOperand}),
+                    llvm::None);
+            mlir::Value newResultQubit = new_inst.getResult(0);
+            qubit_operand_mapping[inputQubit.getAsOpaquePointer()] =
+                newResultQubit;
+          } else {
+            mlir::Value inputQubit1 = originalOp.getOperand(0);
+            mlir::Value outputQubit1 = originalOp.getResult(0);
+            mlir::Value inputQubit2 = originalOp.getOperand(1);
+            mlir::Value outputQubit2 = originalOp.getResult(1);
+            mlir::Type qubit_type = originalOp.getOperand(0).getType();
+            assert(
+                qubit_operand_mapping.find(outputQubit1.getAsOpaquePointer()) !=
+                qubit_operand_mapping.end());
+            assert(
+                qubit_operand_mapping.find(outputQubit2.getAsOpaquePointer()) !=
+                qubit_operand_mapping.end());
+            mlir::Value inputOperand1 =
+                qubit_operand_mapping[outputQubit1.getAsOpaquePointer()];
+            mlir::Value inputOperand2 =
+                qubit_operand_mapping[outputQubit2.getAsOpaquePointer()];
+            auto new_inst =
+                rewriter.create<mlir::quantum::ValueSemanticsInstOp>(
+                    originalOp.getLoc(),
+                    llvm::makeArrayRef({qubit_type, qubit_type}), invGateName,
+                    llvm::makeArrayRef({inputOperand1, inputOperand2}),
+                    llvm::None);
+            mlir::Value newResultQubit1 = new_inst.getResult(0);
+            mlir::Value newResultQubit2 = new_inst.getResult(1);
+            qubit_operand_mapping[inputQubit1.getAsOpaquePointer()] =
+                newResultQubit1;
+            qubit_operand_mapping[inputQubit2.getAsOpaquePointer()] =
+                newResultQubit2;
+          }
+        } else {
+          // Currently, all the gates we have here have 1 single parameter:
+          assert(originalOp.params().size() == 1);
+          mlir::Value angle = originalOp.params()[0];
+          assert(angle.getType().isF64());
+          mlir::Value float_minus_one = rewriter.create<mlir::ConstantOp>(
+              op.getLoc(), mlir::FloatAttr::get(rewriter.getF64Type(), -1.0));
+          mlir::Value minus_angle = rewriter.create<mlir::MulFOp>(
+              op.getLoc(), angle, float_minus_one);
+          if (nQubits == 1) {
+            mlir::Value inputQubit = originalOp.getOperand(0);
+            mlir::Value outputQubit = originalOp.getResult(0);
+            mlir::Type qubit_type = originalOp.getOperand(0).getType();
+            assert(
+                qubit_operand_mapping.find(outputQubit.getAsOpaquePointer()) !=
+                qubit_operand_mapping.end());
+            mlir::Value inputOperand =
+                qubit_operand_mapping[outputQubit.getAsOpaquePointer()];
+            auto new_inst =
+                rewriter.create<mlir::quantum::ValueSemanticsInstOp>(
+                    originalOp.getLoc(), llvm::makeArrayRef({qubit_type}),
+                    invGateName, llvm::makeArrayRef({inputOperand}),
+                    llvm::makeArrayRef({minus_angle}));
+            mlir::Value newResultQubit = new_inst.getResult(0);
+            qubit_operand_mapping[inputQubit.getAsOpaquePointer()] =
+                newResultQubit;
+          } else {
+            mlir::Value inputQubit1 = originalOp.getOperand(0);
+            mlir::Value outputQubit1 = originalOp.getResult(0);
+            mlir::Value inputQubit2 = originalOp.getOperand(1);
+            mlir::Value outputQubit2 = originalOp.getResult(1);
+            mlir::Type qubit_type = originalOp.getOperand(0).getType();
+            assert(
+                qubit_operand_mapping.find(outputQubit1.getAsOpaquePointer()) !=
+                qubit_operand_mapping.end());
+            assert(
+                qubit_operand_mapping.find(outputQubit2.getAsOpaquePointer()) !=
+                qubit_operand_mapping.end());
+            mlir::Value inputOperand1 =
+                qubit_operand_mapping[outputQubit1.getAsOpaquePointer()];
+            mlir::Value inputOperand2 =
+                qubit_operand_mapping[outputQubit2.getAsOpaquePointer()];
+            auto new_inst =
+                rewriter.create<mlir::quantum::ValueSemanticsInstOp>(
+                    originalOp.getLoc(),
+                    llvm::makeArrayRef({qubit_type, qubit_type}), invGateName,
+                    llvm::makeArrayRef({inputOperand1, inputOperand2}),
+                    llvm::makeArrayRef({minus_angle}));
+            mlir::Value newResultQubit1 = new_inst.getResult(0);
+            mlir::Value newResultQubit2 = new_inst.getResult(1);
+            qubit_operand_mapping[inputQubit1.getAsOpaquePointer()] =
+                newResultQubit1;
+            qubit_operand_mapping[inputQubit2.getAsOpaquePointer()] =
+                newResultQubit2;
+          }
+        }
+      };
+
+      std::reverse(opsToReverse.begin(), opsToReverse.end());
+      for (auto &subOp : opsToReverse) {
+        createInvGate(subOp);
+      }
+
       op.body().getBlocks().clear();
       deadOps.emplace_back(op.getOperation());
     }
