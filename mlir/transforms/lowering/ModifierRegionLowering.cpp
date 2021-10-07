@@ -25,7 +25,16 @@
 #include "llvm/Support/raw_ostream.h"
 
 namespace qcor {
-
+// Note: the Modifier regions implement quantum dataflow analysis (value
+// semantics) by returning new mlir::Value of all qubit operands (to be
+// continued by subsequent QVS Ops) At this lowering stage, we make the
+// connection b/w the SSA values from inside the region to the outside scope:
+// For example:
+//     %33 = q.pow(%c2_i64) {
+//       %37 = qvs.x(%9) : !quantum.Qubit
+//       "quantum.modifier_end"(%37) : (!quantum.Qubit) -> ()
+//     }
+// We connect %33 and %37 (operands of the modifier block terminator).
 LogicalResult PowURegionOpLowering::matchAndRewrite(
     Operation *op, ArrayRef<Value> operands,
     ConversionPatternRewriter &rewriter) const {
@@ -66,6 +75,13 @@ LogicalResult PowURegionOpLowering::matchAndRewrite(
   mlir::Block &powBlock = casted.body().getBlocks().front();
   for (auto &subOp : powBlock.getOperations()) {
     rewriter.insert(subOp.clone());
+    if (mlir::dyn_cast_or_null<mlir::quantum::ModifierEndOp>(&subOp)) {
+      mlir::quantum::ModifierEndOp terminator = mlir::cast<mlir::quantum::ModifierEndOp>(&subOp);
+      assert(terminator.qubits().size() == casted.qubits().size());
+      for (size_t i = 0; i < terminator.qubits().size(); ++i) {
+        casted.result()[i].replaceAllUsesWith(terminator.qubits()[i]);
+      }
+    }
   }
 
   // End
@@ -90,9 +106,13 @@ LogicalResult PowURegionOpLowering::matchAndRewrite(
       }
     }();
 
+    // Only forward the first operand (pow) to __quantum__rt__end_pow_u_region
+    const std::vector<mlir::Value> qir_operands{operands[0]};
     rewriter.create<mlir::CallOp>(location, qir_get_fn_ptr,
-                                  LLVM::LLVMVoidType::get(context), operands);
+                                  LLVM::LLVMVoidType::get(context),
+                                  qir_operands);
   }
+  
   rewriter.eraseOp(op);
   return success();
 }

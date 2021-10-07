@@ -464,7 +464,7 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
     assert(returnedValues.size() == qbit_values.size());
     auto modifierYieldOp = builder.create<mlir::quantum::ModifierEndOp>(location, returnedValues);
     returnedValues.clear();
-    if (auto powOp = llvm::cast<mlir::quantum::PowURegion>(modifierOpPtr)) {
+    if (auto powOp = llvm::dyn_cast_or_null<mlir::quantum::PowURegion>(modifierOpPtr)) {
       assert(powOp.getResults().size() == qbit_values.size());
       for (int i = 0; i < qbit_values.size(); ++i) {
         symbol_table.replace_symbol(modifierYieldOp.getOperand(i),
@@ -472,7 +472,7 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
         returnedValues.emplace_back(powOp.getResult(i));
       }
     } else if (auto adjOp =
-                   llvm::cast<mlir::quantum::AdjURegion>(modifierOpPtr)) {
+                   llvm::dyn_cast_or_null<mlir::quantum::AdjURegion>(modifierOpPtr)) {
       assert(adjOp.getResults().size() == qbit_values.size());
       for (int i = 0; i < qbit_values.size(); ++i) {
         symbol_table.replace_symbol(modifierYieldOp.getOperand(i),
@@ -480,7 +480,7 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
         returnedValues.emplace_back(adjOp.getResult(i));
       }
     } else if (auto ctrlOp =
-                   llvm::cast<mlir::quantum::CtrlURegion>(modifierOpPtr)) {
+                   llvm::dyn_cast_or_null<mlir::quantum::CtrlURegion>(modifierOpPtr)) {
       assert(ctrlOp.getResults().size() == qbit_values.size() + 1);
       symbol_table.replace_symbol(ctrlOp.ctrl_qubit(), ctrlOp.getResult(0));
       for (int i = 0; i < qbit_values.size(); ++i) {
