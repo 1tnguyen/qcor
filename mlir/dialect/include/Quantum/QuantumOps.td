@@ -78,13 +78,21 @@ def ArrayConcatOp : QuantumOp<"qarray_concat", []> {
   }];
 }
 
-// A dummy terminator to end modifier (pow, ctrl, inv) block.
-// TODO: use `NoTerminator` attribute once we updated to later version of MLIR.
-def ModifierEndOp : QuantumOp<"modifier_end", [Terminator, NoSideEffect]> {
+// A SSA terminator to end modifier (pow, ctrl, inv) block.
+def ModifierEndOp : QuantumOp<"modifier_end", [
+  Terminator, NoSideEffect,
+  ParentOneOf<["PowURegion, AdjURegion, CtrlURegion"]>
+]> {
   let summary = "Implicit terminator of a modifier (ctrl/inv/pow) region";
   let description = [{
     `quantum.modifier_end` operations terminate modifier regions.}];
   let arguments = (ins Variadic<QubitType>:$qubits);
+  // Printer to denote the qubit SSA values to be returned by the modifier
+  // region.
+  let printer = [{  
+    auto op = *this;
+    p << "q.yield " << op.getOperands();
+  }];
 }
 
 def PowURegion : QuantumOp<"pow_u_region", [
