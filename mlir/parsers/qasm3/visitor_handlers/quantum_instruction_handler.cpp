@@ -12,12 +12,14 @@
 
 namespace qcor {
 
-void qasm3_visitor::createInstOps_HandleBroadcast(
+std::vector<mlir::Value> qasm3_visitor::createInstOps_HandleBroadcast(
     std::string name, std::vector<mlir::Value> qbit_values,
     std::vector<std::string> qreg_names,
     std::vector<std::string> symbol_table_qbit_keys,
     std::vector<mlir::Value> param_values, mlir::Location location,
     antlr4::ParserRuleContext* context) {
+  std::vector<mlir::Value> updated_qubit_values;
+  
   auto has_array_type = [this](auto& value_vector) {
     for (auto v : value_vector) {
       if (v.getType() == array_type) {
@@ -83,6 +85,7 @@ void qasm3_visitor::createInstOps_HandleBroadcast(
         int ii = 0;
         for (auto result : return_vals) {
           symbol_table.replace_symbol(extract_value, result);
+          updated_qubit_values.emplace_back(result);
           ii++;
         }
       }
@@ -123,6 +126,7 @@ void qasm3_visitor::createInstOps_HandleBroadcast(
           for (auto result : return_vals) {
             symbol_table.replace_symbol(
                 (ii == 0 ? extract_value_n : extract_value_m), result);
+            updated_qubit_values.emplace_back(result);
             ii++;
           }
         }
@@ -155,6 +159,7 @@ void qasm3_visitor::createInstOps_HandleBroadcast(
           int ii = 0;
           for (auto result : return_vals) {
             symbol_table.replace_symbol((ii == 0 ? extract_value : v), result);
+            updated_qubit_values.emplace_back(result);
             ii++;
           }
           v = return_vals[1];
@@ -186,6 +191,7 @@ void qasm3_visitor::createInstOps_HandleBroadcast(
           int ii = 0;
           for (auto result : return_vals) {
             symbol_table.replace_symbol((ii == 0 ? v : extract_value), result);
+            updated_qubit_values.emplace_back(result);
             ii++;
           }
           v = return_vals[0];
@@ -215,10 +221,12 @@ void qasm3_visitor::createInstOps_HandleBroadcast(
       int i = 0;
       for (auto result : return_vals) {
         symbol_table.replace_symbol(qbit_values[i], result);
+        updated_qubit_values.emplace_back(result);
         i++;
       }
     }
   }
+  return updated_qubit_values;
 }
 
 antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
@@ -443,7 +451,7 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
     }
 
   } else {
-    createInstOps_HandleBroadcast(name, qbit_values, qreg_names,
+    returnedValues = createInstOps_HandleBroadcast(name, qbit_values, qreg_names,
                                   qubit_symbol_table_keys, param_values,
                                   location, context);
   }
