@@ -40,20 +40,26 @@ void ModifierBlockInlinerPass::handlePowU() {
     mlir::Block &powBlock = op.body().getBlocks().front();
     // Convert the pow modifier to a For loop,
     // which might be unrolled if possible (constant-value loop bound)
-    rewriter.create<mlir::scf::ForOp>(
-        op.getLoc(), lbs_val, powVal, step_val, llvm::None,
+    auto forOp = rewriter.create<mlir::scf::ForOp>(
+        op.getLoc(), lbs_val, powVal, step_val, op.qubits(),
         [&](mlir::OpBuilder &nestedBuilder, mlir::Location nestedLoc,
             mlir::Value iv, mlir::ValueRange itrArgs) {
           mlir::OpBuilder::InsertionGuard guard(nestedBuilder);
           for (auto &subOp : powBlock.getOperations()) {
-            if (mlir::dyn_cast_or_null<mlir::quantum::ModifierEndOp>(&subOp)) {
+            if (auto terminator =
+                    mlir::dyn_cast_or_null<mlir::quantum::ModifierEndOp>(
+                        &subOp)) {
+              nestedBuilder.create<mlir::scf::YieldOp>(nestedLoc, op.qubits());
               break;
             }
             nestedBuilder.insert(subOp.clone());
           }
-
-          nestedBuilder.create<mlir::scf::YieldOp>(nestedLoc);
         });
+    
+    assert(forOp.results().size() == op.result().size());
+    for (size_t i = 0; i < op.result().size(); ++i) {
+      op.result()[i].replaceAllUsesWith(forOp.results()[i]);
+    }
     op.body().getBlocks().clear();
     deadOps.emplace_back(op.getOperation());
   });
