@@ -176,6 +176,107 @@ pow(3) @ cx q, qq;
   }
 }
 
+TEST(qasm3VisitorTester, checkInvOpt) {
+  {
+    // Note: we tested each gate on different qubits to validate the adjoint
+    // mapping (prevent gate merging to operate...)
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[6];
+// Self adjoint
+inv @ x q[0];
+inv @ y q[1];
+inv @ z q[2];
+inv @ h q[3];
+inv @ cx q[4], q[5];
+)#";
+    auto llvm = qcor::mlir_compile(src, "inv_test", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_inv_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__x"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__y"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__z"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__h"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__cnot"), 1);
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_adj_u_region"), 0);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_adj_u_region"), 0);
+  }
+  {
+    // Gate-Adjoint pair
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[2];
+inv @ t q[0];
+inv @ s q[1];
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "inv_test", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_inv_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__tdg"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__sdg"), 1);
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_adj_u_region"), 0);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_adj_u_region"), 0);
+  }
+  {
+    // Gate-Adjoint pair
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[2];
+inv @ tdg q[0];
+inv @ sdg q[1];
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "inv_test", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_inv_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__t"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__s"), 1);
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_adj_u_region"), 0);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_adj_u_region"), 0);
+  }
+  {
+    // Parametric gates
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[5];
+
+inv @ rx(1.0) q[0];
+inv @ ry(-1.0) q[1];
+inv @ rz(1.0) q[2];
+inv @ cphase(-1.0) q[3], q[4];
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "inv_test", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_inv_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    // Check the angle values change signs
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__rx(double -1.0"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__ry(double 1.0"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__rz(double -1.0"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__cphase(double 1.0"), 1);
+
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_adj_u_region"), 0);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_adj_u_region"), 0);
+  }
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   auto ret = RUN_ALL_TESTS();
