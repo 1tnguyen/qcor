@@ -10,7 +10,20 @@
  *******************************************************************************/
 #include "gtest/gtest.h"
 #include "qcor_mlir_api.hpp"
-
+namespace {
+// returns count of non-overlapping occurrences of 'sub' in 'str'
+int countSubstring(const std::string &str, const std::string &sub) {
+  if (sub.length() == 0)
+    return 0;
+  int count = 0;
+  for (size_t offset = str.find(sub); offset != std::string::npos;
+       offset = str.find(sub, offset + sub.length())) {
+    ++count;
+  }
+  return count;
+}
+} // namespace
+// Kitchen-sink *functional* testing of modifiers (pow/inv/ctrl)
 TEST(qasm3VisitorTester, checkPow) {
   const std::string check_pow = R"#(OPENQASM 3;
 include "qelib1.inc";
@@ -87,6 +100,80 @@ print(count);
 
  
   EXPECT_FALSE(qcor::execute(check_pow, "check_pow"));
+}
+
+// Test codegen and optimization for modifiers
+TEST(qasm3VisitorTester, checkPowOpt) {
+  {
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q, qq;
+
+// These are identity ops
+pow(2) @ x q;
+pow(2) @ h q;
+// SS = Z
+pow(4) @ s q;
+// TTTT = Z
+pow(8) @ t q;
+
+// Check gate-def (should be inlined)
+gate test r, s {
+  x r;
+  h s;
+}
+pow(2) @ test q, qq;
+)#";
+    auto llvm = qcor::mlir_compile(src, "pow_test", qcor::OutputType::LLVMIR, true);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    // Get the main kernel
+    llvm = llvm.substr(llvm.find("@__internal_mlir_pow_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    // All instructions are cancelled thanks to inlining/unrolling/gate merge...
+    EXPECT_TRUE(llvm.find("__quantum__qis") == std::string::npos);
+  }
+  {
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q, qq;
+pow(3) @ x q;
+pow(3) @ cx q, qq;
+)#";
+    auto llvm = qcor::mlir_compile(src, "pow_test", qcor::OutputType::LLVMIR, true);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_pow_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__x"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__cnot"), 1);
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_pow_u_region"), 0);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_pow_u_region"), 0);
+  }
+  {
+    // Test code-gen no optimization.
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q, qq;
+pow(3) @ x q;
+pow(3) @ cx q, qq;
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "pow_test", qcor::OutputType::LLVMIR, false, /* opt-level */0);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_pow_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__x"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__cnot"), 1);
+    // Runtime functions are used:
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_pow_u_region"), 2);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_pow_u_region"), 2);
+  }
 }
 
 int main(int argc, char **argv) {

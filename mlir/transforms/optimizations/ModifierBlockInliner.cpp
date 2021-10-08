@@ -56,10 +56,12 @@ void ModifierBlockInlinerPass::handlePowU() {
           }
         });
 
+    for (size_t i = 0; i < op.result().size(); ++i) {
+      op.result()[i].replaceAllUsesExcept(
+          op.qubits()[i], mlir::SmallPtrSet<Operation *, 1>{op});
+    }
     op.body().getBlocks().clear();
     deadOps.emplace_back(op.getOperation());
-    // ModuleOp parentModule = op->getParentOfType<ModuleOp>();
-    // parentModule.dump();
   });
   for (auto &op : deadOps) {
     op->dropAllUses();
