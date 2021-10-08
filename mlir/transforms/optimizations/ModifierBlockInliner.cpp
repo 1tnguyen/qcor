@@ -762,7 +762,11 @@ void ModifierBlockInlinerPass::handleCtrlU() {
     mlir::Block &ctrlBlock = op.body().getBlocks().front();
     for (auto &subOp : ctrlBlock.getOperations()) {
       // We're at the end
-      if (mlir::dyn_cast_or_null<mlir::quantum::ModifierEndOp>(&subOp)) {
+      if (auto terminator =
+              mlir::dyn_cast_or_null<mlir::quantum::ModifierEndOp>(&subOp)) {
+        for (size_t i = 0; i < terminator.qubits().size(); ++i) {
+          op.result()[i].replaceAllUsesWith(terminator.qubits()[i]);
+        }
         break;
       }
 
@@ -826,9 +830,11 @@ void ModifierBlockInlinerPass::handleAdjU() {
     // Otherwise, the adjoint region persists to LLVM lowering -> runtime handling.
     if (isSimpleListOfQvsOps) {
       std::vector<mlir::quantum::ValueSemanticsInstOp> opsToReverse;
+      mlir::Operation *modifierEndOp = nullptr;
       for (auto &subOp : adjBlock.getOperations()) {
         // We're at the end
         if (mlir::dyn_cast_or_null<mlir::quantum::ModifierEndOp>(&subOp)) {
+          modifierEndOp = &subOp;
           break;
         }
 
@@ -874,6 +880,7 @@ void ModifierBlockInlinerPass::handleAdjU() {
 
       
       std::unordered_map<void*, mlir::Value> qubit_operand_mapping;
+      std::unordered_map<void*, mlir::Value> output_qubit_operand_mapping;
       for (auto &chain : use_def_chains) {
         assert(chain.size() >= 2);
         qubit_operand_mapping[chain.back().getAsOpaquePointer()] =
@@ -911,6 +918,8 @@ void ModifierBlockInlinerPass::handleAdjU() {
             mlir::Value newResultQubit = new_inst.getResult(0);
             qubit_operand_mapping[inputQubit.getAsOpaquePointer()] =
                 newResultQubit;
+            output_qubit_operand_mapping[outputQubit.getAsOpaquePointer()] =
+                newResultQubit;
           } else {
             mlir::Value inputQubit1 = originalOp.getOperand(0);
             mlir::Value outputQubit1 = originalOp.getResult(0);
@@ -939,6 +948,10 @@ void ModifierBlockInlinerPass::handleAdjU() {
                 newResultQubit1;
             qubit_operand_mapping[inputQubit2.getAsOpaquePointer()] =
                 newResultQubit2;
+            output_qubit_operand_mapping[outputQubit1.getAsOpaquePointer()] =
+                newResultQubit1;
+            output_qubit_operand_mapping[outputQubit2.getAsOpaquePointer()] =
+                newResultQubit2;
           }
         } else {
           // Currently, all the gates we have here have 1 single parameter:
@@ -965,6 +978,8 @@ void ModifierBlockInlinerPass::handleAdjU() {
                     llvm::makeArrayRef({minus_angle}));
             mlir::Value newResultQubit = new_inst.getResult(0);
             qubit_operand_mapping[inputQubit.getAsOpaquePointer()] =
+                newResultQubit;
+            output_qubit_operand_mapping[outputQubit.getAsOpaquePointer()] =
                 newResultQubit;
           } else {
             mlir::Value inputQubit1 = originalOp.getOperand(0);
@@ -994,6 +1009,10 @@ void ModifierBlockInlinerPass::handleAdjU() {
                 newResultQubit1;
             qubit_operand_mapping[inputQubit2.getAsOpaquePointer()] =
                 newResultQubit2;
+            output_qubit_operand_mapping[outputQubit1.getAsOpaquePointer()] =
+                newResultQubit1;
+            output_qubit_operand_mapping[outputQubit2.getAsOpaquePointer()] =
+                newResultQubit2;
           }
         }
       };
@@ -1002,7 +1021,14 @@ void ModifierBlockInlinerPass::handleAdjU() {
       for (auto &subOp : opsToReverse) {
         createInvGate(subOp);
       }
-
+      assert(modifierEndOp);
+      auto terminator = mlir::cast<mlir::quantum::ModifierEndOp>(modifierEndOp);
+      for (size_t i = 0; i < terminator.qubits().size(); ++i) {
+        auto iter = output_qubit_operand_mapping.find(
+            terminator.qubits()[i].getAsOpaquePointer());
+        assert(iter != output_qubit_operand_mapping.end());
+        op.result()[i].replaceAllUsesWith(iter->second);
+      }
       op.body().getBlocks().clear();
       deadOps.emplace_back(op.getOperation());
     }
@@ -1012,7 +1038,6 @@ void ModifierBlockInlinerPass::handleAdjU() {
     op->erase();
   }
   deadOps.clear();
-
 }
 
 void ModifierBlockInlinerPass::runOnOperation() {
