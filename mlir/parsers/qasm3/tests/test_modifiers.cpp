@@ -277,6 +277,86 @@ inv @ cphase(-1.0) q[3], q[4];
   }
 }
 
+TEST(qasm3VisitorTester, checkCtrlOpt) {
+  {
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[2];
+ctrl @ x q[0], q[1];
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "ctrl_test", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_ctrl_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__cnot"), 1);
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_ctrl_u_region"), 0);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_ctrl_u_region"), 0);
+  }
+  {
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[2];
+ctrl @ z q[0], q[1];
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "ctrl_test", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_ctrl_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    // CZ = H - CX - H
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__cnot"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__h"), 2);
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_ctrl_u_region"), 0);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_ctrl_u_region"), 0);
+  }
+  {
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[2];
+ctrl @ t q[0], q[1];
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "ctrl_test", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_ctrl_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    // Ctrl-T => CU1 => CPHASE
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__cphase"), 1);
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_ctrl_u_region"), 0);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_ctrl_u_region"), 0);
+  }
+  {
+    // No optimization, using runtime
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[2];
+ctrl @ t q[0], q[1];
+)#";
+    auto llvm = qcor::mlir_compile(src, "ctrl_test", qcor::OutputType::LLVMIR,
+                                   false, 0);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_ctrl_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    // T remain, wrapped in runtime functions
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__t"), 1);
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_ctrl_u_region"), 1);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_ctrl_u_region"), 1);
+  }
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   auto ret = RUN_ALL_TESTS();
