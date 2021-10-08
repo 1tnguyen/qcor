@@ -85,6 +85,9 @@ void ModifierBlockInlinerPass::applyControlledQuantumOp(
     mlir::Value new_ctrl_qubit_ssa = new_inst.result().front();
     control_bit.replaceAllUsesExcept(
         new_ctrl_qubit_ssa, mlir::SmallPtrSet<Operation *, 1>{new_inst});
+    // Update the target qubit SSA use-def:
+    qvsOp.result()[0].replaceAllUsesExcept(
+        new_inst.result().back(), mlir::SmallPtrSet<Operation *, 1>{new_inst});
   } else if (inst_name == "y") {
     // cy a,b { sdg b; cx a,b; s b; }
     mlir::Type qubit_type = qvsOp.getOperand(0).getType();
