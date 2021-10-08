@@ -9,6 +9,7 @@
 #include "mlir/Pass/PassManager.h"
 #include "mlir/Target/LLVMIR.h"
 #include "mlir/Transforms/DialectConversion.h"
+#include "mlir/IR/BlockAndValueMapping.h"
 #include "mlir/Transforms/Passes.h"
 #include <iostream>
 #include <unordered_map>
@@ -45,14 +46,17 @@ void ModifierBlockInlinerPass::handlePowU() {
         [&](mlir::OpBuilder &nestedBuilder, mlir::Location nestedLoc,
             mlir::Value iv, mlir::ValueRange itrArgs) {
           mlir::OpBuilder::InsertionGuard guard(nestedBuilder);
+          mlir::BlockAndValueMapping mapper;
           for (auto &subOp : powBlock.getOperations()) {
+            auto newOp = nestedBuilder.clone(subOp, mapper);
             if (auto terminator =
                     mlir::dyn_cast_or_null<mlir::quantum::ModifierEndOp>(
-                        &subOp)) {
-              nestedBuilder.create<mlir::scf::YieldOp>(nestedLoc, op.qubits());
+                        newOp)) {
+              nestedBuilder.create<mlir::scf::YieldOp>(nestedLoc,
+                                                       terminator.qubits());
+              newOp->erase();
               break;
             }
-            nestedBuilder.insert(subOp.clone());
           }
         });
     
@@ -62,6 +66,8 @@ void ModifierBlockInlinerPass::handlePowU() {
     }
     op.body().getBlocks().clear();
     deadOps.emplace_back(op.getOperation());
+    // ModuleOp parentModule = op->getParentOfType<ModuleOp>();
+    // parentModule.dump();
   });
   for (auto &op : deadOps) {
     op->dropAllUses();
