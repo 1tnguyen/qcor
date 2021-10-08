@@ -399,10 +399,15 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
                                                         builder.getI64Type());
           }
         }
+        if (!power.getType().isIndex()) {
+          power = builder.create<mlir::IndexCastOp>(
+              location, builder.getIndexType(), power);
+        }
       } else {
         auto p = symbol_table.evaluate_constant_integer_expression(
             m->expression()->getText());
-        auto pow_attr = mlir::IntegerAttr::get(builder.getI64Type(), p);
+        assert(p >= 0);
+        auto pow_attr = mlir::IntegerAttr::get(builder.getIndexType(), p);
         power = builder.create<mlir::ConstantOp>(location, pow_attr);
       }
       auto powerUOp = builder.create<mlir::quantum::PowURegion>(location, power,

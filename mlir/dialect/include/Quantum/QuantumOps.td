@@ -104,7 +104,10 @@ def PowURegion : QuantumOp<"pow_u_region", [
           repeated a set number of times.}];
   // Rationale: we wrap modifier block as a proper value-semantics op.
   // i.e., forwarding SSA vars at input and output.
-  let arguments = (ins AnyI64:$pow, Variadic<QubitType>:$qubits);
+  // Note: we use pow of Index type to be compatible with loop bound types.
+  // i.e., if optimization enabled, any constant `pow` values can be propagated
+  // to SCF/Affine loops w/o the need for casting (prevent loop unrolling)
+  let arguments = (ins Index:$pow, Variadic<QubitType>:$qubits);
   let results = (outs Variadic<QubitType>:$result);
   let regions = (region SizedRegion<1>:$body);
   let skipDefaultBuilders = 1;
