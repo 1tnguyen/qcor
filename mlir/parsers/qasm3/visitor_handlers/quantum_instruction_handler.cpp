@@ -471,6 +471,7 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
     if (auto ctrlOp =
             llvm::dyn_cast_or_null<mlir::quantum::CtrlURegion>(modifierOpPtr)) {
       returnedValues.insert(returnedValues.begin(), 1, ctrlOp.ctrl_qubit());
+      qbit_values.insert(qbit_values.begin(), 1, ctrlOp.ctrl_qubit());
     }
     auto modifierYieldOp = builder.create<mlir::quantum::ModifierEndOp>(location, returnedValues);
     returnedValues.clear();
@@ -491,9 +492,9 @@ antlrcpp::Any qasm3_visitor::visitQuantumGateCall(
       }
     } else if (auto ctrlOp =
                    llvm::dyn_cast_or_null<mlir::quantum::CtrlURegion>(modifierOpPtr)) {
-      assert(ctrlOp.getResults().size() == qbit_values.size() + 1);
+      assert(ctrlOp.getResults().size() == qbit_values.size());
       symbol_table.replace_symbol(ctrlOp.ctrl_qubit(), ctrlOp.getResult(0));
-      for (int i = 0; i < qbit_values.size() + 1; ++i) {
+      for (int i = 0; i < qbit_values.size(); ++i) {
         symbol_table.replace_symbol(modifierYieldOp.getOperand(i),
                                     ctrlOp.getResult(i));
         returnedValues.emplace_back(ctrlOp.getResult(i));

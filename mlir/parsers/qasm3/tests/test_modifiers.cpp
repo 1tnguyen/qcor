@@ -355,6 +355,78 @@ ctrl @ t q[0], q[1];
     EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_ctrl_u_region"), 1);
     EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_ctrl_u_region"), 1);
   }
+  {
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[3];
+ctrl @ cx q[0], q[1], q[2];
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "ctrl_test", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_ctrl_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    // CCX => 15 gates
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis"), 15);
+    // 6 CNOT's, 2 H, 4 T, 3 Tdg
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__cnot("), 6);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__h("), 2);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__t("), 4);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__tdg("), 3);
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_ctrl_u_region"), 0);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_ctrl_u_region"), 0);
+  }
+  // Check inv (adjoint) of controlled
+  {
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[3];
+inv @ ctrl @ cx q[0], q[1], q[2];
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "ctrl_test", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_ctrl_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    // CCX => 15 gates (same number when inverse)
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis"), 15);
+    // 6 CNOT's, 2 H, 4 T, 3 Tdg => 6 CNOT's, 2 H, 4 Tdg, 3 T
+    // Note: T is mapped to Tdg and vice verssa
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__cnot("), 6);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__h("), 2);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__t("), 3);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis__tdg("), 4);
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_ctrl_u_region"), 0);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_ctrl_u_region"), 0);
+  }
+  // Check fully expanded and gate cancellation
+  {
+    const std::string src = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[3];
+// Controlled then adjoint of controlled
+ctrl @ cx q[0], q[1], q[2];
+inv @ ctrl @ cx q[0], q[1], q[2];
+)#";
+    auto llvm =
+        qcor::mlir_compile(src, "ctrl_test", qcor::OutputType::LLVMIR, false);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    llvm = llvm.substr(llvm.find("@__internal_mlir_ctrl_test"));
+    const auto last = llvm.find_first_of("}");
+    llvm = llvm.substr(0, last + 1);
+    std::cout << "LLVM:\n" << llvm << "\n";
+    // No gate left
+    EXPECT_EQ(countSubstring(llvm, "__quantum__qis"), 0);
+    // No runtime involved
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__start_ctrl_u_region"), 0);
+    EXPECT_EQ(countSubstring(llvm, "__quantum__rt__end_ctrl_u_region"), 0);
+  }
 }
 
 int main(int argc, char **argv) {

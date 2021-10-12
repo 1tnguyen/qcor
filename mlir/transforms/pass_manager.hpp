@@ -37,7 +37,7 @@ void configureOptimizationPasses(mlir::PassManager &passManager) {
   passManager.addPass(std::make_unique<SimplifyQubitExtractPass>());
   // TODO: configure the pass pipeline to handle repeated applications of
   // passes. Add passes
-  constexpr int N_REPS = 5;
+  constexpr int N_REPS = 10;
   for (int i = 0; i < N_REPS; ++i) {
     // Simple Identity pair removals
     passManager.addPass(std::make_unique<SingleQubitIdentityPairRemovalPass>());
