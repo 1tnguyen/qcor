@@ -429,6 +429,54 @@ inv @ ctrl @ cx q[0], q[1], q[2];
   }
 }
 
+// Test CCX truth table
+TEST(qasm3VisitorTester, checkCtrlCx) {
+  // This test iterates over the all 3-bit values => check CCX
+  const std::string check_ccx = R"#(OPENQASM 3;
+include "qelib1.inc";
+qubit q[3];
+bit ans[3];
+bit expected[3];
+for val in [0:8] {
+  int[64] test = val;
+  print("val =", test);
+  for i in [0:3] {
+    if (bool(test[i])) {
+      x q[i];
+    }
+  }
+  measure q [0:2] -> expected [0:2];
+  ctrl @ cx q[0], q[1], q[2];
+  measure q [0:2]->ans [0:2];
+  print("answer =", ans[0], ans[1], ans[2]);
+  print("expected =", expected[0], expected[1], expected[2]);
+  QCOR_EXPECT_TRUE(ans[0] == expected[0]);
+  QCOR_EXPECT_TRUE(ans[1] == expected[1]);
+  if (test == 7) {
+    QCOR_EXPECT_TRUE(ans[2] == 0);
+  }
+  if (test == 3) {
+    QCOR_EXPECT_TRUE(ans[2] == 1);
+  }
+  if (ans[0]) {
+    x q[0];
+  }
+  if (ans[1]) {
+    x q[1];
+  }
+  if (ans[2]) {
+    x q[2];
+  }
+}
+)#";
+  auto llvm =
+      qcor::mlir_compile(check_ccx, "ccx", qcor::OutputType::LLVMIR, true);
+  // Runt the test 
+  // TODO: debug the JIT engine, failing to run this (okay with qcor driver)
+  // EXPECT_FALSE(qcor::execute(check_ccx, "ccx"));
+}
+
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   auto ret = RUN_ALL_TESTS();
