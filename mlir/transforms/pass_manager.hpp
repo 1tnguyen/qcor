@@ -19,6 +19,8 @@
 #include "optimizations/CphaseRotationMergingPass.hpp"
 #include "optimizations/ModifierBlockInliner.hpp"
 #include "quantum_to_llvm.hpp"
+#include "lowering/ModifierRegionLowering.hpp"
+
 // Construct QCOR MLIR pass manager:
 // Make sure we use the same set of passes and configs
 // across different use cases of MLIR compilation.

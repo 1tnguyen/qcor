@@ -476,6 +476,19 @@ for val in [0:8] {
   // EXPECT_FALSE(qcor::execute(check_ccx, "ccx"));
 }
 
+TEST(qasm3VisitorTester, checkNestedModifier) {
+  const std::string check_nested = R"#(OPENQASM 3;
+qubit q;
+qubit qq;
+inv @ pow(2) @ t q;
+pow(2) @ inv @ t q;
+ctrl @ pow(2) @ t q, qq;
+pow(2) @ ctrl @ t q, qq;
+)#";
+  auto llvm = qcor::mlir_compile(check_nested, "nested",
+                                 qcor::OutputType::LLVMIR, false, 0);
+  std::cout << "LLVM:\n" << llvm << "\n";
+}
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

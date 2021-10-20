@@ -45,4 +45,11 @@ public:
   matchAndRewrite(Operation *op, ArrayRef<Value> operands,
                   ConversionPatternRewriter &rewriter) const override;
 };
+
+struct ModifierRegionRewritePass
+    : public PassWrapper<ModifierRegionRewritePass, OperationPass<ModuleOp>> {
+  void getDependentDialects(DialectRegistry &registry) const override;
+  void runOnOperation() final;
+  ModifierRegionRewritePass() {}
+};
 } // namespace qcor

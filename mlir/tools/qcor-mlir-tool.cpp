@@ -173,6 +173,7 @@ int main(int argc, char **argv) {
   }
 
   // Lower MLIR to LLVM
+  pm.addPass(std::make_unique<qcor::ModifierRegionRewritePass>());
   pm.addPass(std::make_unique<qcor::QuantumToLLVMLoweringPass>(
       qoptimizations, unique_function_names));
 
