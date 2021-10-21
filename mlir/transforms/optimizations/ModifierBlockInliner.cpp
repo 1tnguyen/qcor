@@ -30,6 +30,9 @@ void ModifierBlockInlinerPass::handlePowU() {
     mlir::OpBuilder rewriter(op);
     assert(op.pow().getType().isIndex());
     mlir::Value powVal = op.pow();
+    if (!mlir::isValidDim(powVal)) {
+      return;
+    }
     mlir::Value lbs_val = rewriter.create<mlir::ConstantOp>(
         op.getLoc(), mlir::IntegerAttr::get(rewriter.getIndexType(), 0));
     mlir::Block &powBlock = op.body().getBlocks().front();
@@ -763,6 +766,18 @@ void ModifierBlockInlinerPass::handleCtrlU() {
     assert(op.body().getBlocks().size() == 1);
     mlir::OpBuilder rewriter(op);
     mlir::Block &ctrlBlock = op.body().getBlocks().front();
+    for (auto &subOp : ctrlBlock.getOperations()) {
+      if (mlir::dyn_cast_or_null<mlir::quantum::ModifierEndOp>(&subOp)) {
+        break;
+      }
+      // Limit the auto ctrl-gate auto gen to sequence of gates only atm.
+      // TODO: The inline MLIR tree modification procedure (wrapping ops into
+      // new regions, etc.) is not robust for all cases.
+      if (!is_quantum_op(subOp)) {
+        return;
+      }
+    }
+
     for (auto &subOp : ctrlBlock.getOperations()) {
       // We're at the end
       if (auto terminator =
