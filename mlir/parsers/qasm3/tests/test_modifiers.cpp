@@ -490,6 +490,33 @@ pow(2) @ ctrl @ t q, qq;
   std::cout << "LLVM:\n" << llvm << "\n";
 }
 
+// Modifier block in a kernel definition:
+// Note: we chase use-def for gate def:
+TEST(qasm3VisitorTester, checkModifierInKernelDef) {
+  const std::string check_nested = R"#(OPENQASM 3;
+gate test1 q, qq {
+  h q;
+  ctrl @ x q, qq;
+  x qq;
+}
+
+gate test2 q, qq {
+  h q;
+  ctrl @ pow(4) @ x q, qq;
+  x qq;
+}
+
+gate test3 q, qq {
+  h q;
+  inv @ ctrl @ pow(4) @ t q, qq;
+  x qq;
+}
+)#";
+  auto llvm = qcor::mlir_compile(check_nested, "nested",
+                                 qcor::OutputType::LLVMIR, false, 0);
+  std::cout << "LLVM:\n" << llvm << "\n";
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   auto ret = RUN_ALL_TESTS();
