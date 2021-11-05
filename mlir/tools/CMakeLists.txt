@@ -19,3 +19,4 @@ endif()
 #set_target_properties(qcor-mlir-tool
 #                        PROPERTIES INSTALL_RPATH "${MLIR_INSTALL_DIR}/lib:${CMAKE_BINARY_DIR}/mlir/parsers/openqasm:${CMAKE_BINARY_DIR}/lib")
 install(PROGRAMS ${CMAKE_BINARY_DIR}/bin/qcor-mlir-tool DESTINATION bin)
+add_subdirectory(azure)
