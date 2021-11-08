@@ -98,6 +98,15 @@ int main(int argc, char **argv) {
     auto r = cpr::Get(cpr::Url{baseUrl + path}, cprHeaders, cprParams,
                       cpr::VerifySsl(false));
     std::cout << "Response:" << r.text << "\n";
+
+    // At a high level we need to:
+    // 1. Authenticate using AAD
+    // This is required to get an access token (in the .azure_config file)
+    // TODO: Implement login authentication in the Python driver script and cache the token there.
+    // 2. Upload the QIR definition to an Azure Storage
+    // see https://docs.microsoft.com/en-us/rest/api/storageservices/put-blob-from-url
+    // 3. Create the job metadata and submit a job request to Azure.
+    // https://docs.microsoft.com/en-us/rest/api/azurequantum/dataplane/jobs
   } else {
     std::cerr << "Could not find Azure Quantum configuration file "
               << azureConfigFilename << "\n";
