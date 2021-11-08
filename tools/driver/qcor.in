@@ -422,7 +422,7 @@ def main(argv=None):
     if '-set-credentials' in sys.argv[1:]:
         idx = sys.argv.index('-set-credentials')
         accName = sys.argv[idx+1]
-        if accName not in ['ibm', 'qcs', 'rigetti', 'dwave', 'honeywell']:
+        if accName not in ['ibm', 'qcs', 'rigetti', 'dwave', 'honeywell', 'azure']:
             print('invalid remote qpu name: ', accName)
             exit(1)
 
@@ -446,6 +446,43 @@ def main(argv=None):
             f.close()
             info('Credentials saved to $HOME/.honeywell_config.')
             exit(0)
+
+        if accName == 'azure':
+            try: 
+                from azure.identity import InteractiveBrowserCredential;
+                credential = InteractiveBrowserCredential()
+            except:
+                print('[qcor-exec] Error with azure login. Please make sure you have the azure-core package installed (pip install azure-core)')
+                exit(1)
+                
+            token = credential.get_token("https://quantum.microsoft.com/.default")
+            if verbose:
+                print('Access Token:')
+                print(token)
+            access_token = token[0]
+            expires_on = token[1]
+            from os.path import exists
+            azure_config_file = os.getenv('HOME')+'/.azure_config'
+            if exists(azure_config_file):
+                # update token in the existing file
+                import fileinput
+                for line in fileinput.input(azure_config_file, inplace=True):
+                    if line.startswith('key:'):
+                        print('key:{}'.format(access_token), end='')
+                    elif line.startswith('expires:'):
+                        print('expires:{}'.format(expires_on), end='')
+                    else:
+                        print(line, end='')
+            else:
+                # create new file
+                f = open(azure_config_file, 'w')
+                f.write('key:{}\nexpires:{}\n'.format(access_token, expires_on))
+                azure_loc = input(bcolors.BOLD+bcolors.OKBLUE+'Enter Azure Location (e.g., East US): '+bcolors.ENDC)
+                resource_id = input(bcolors.BOLD+bcolors.OKBLUE+'Enter Azure Resource ID: '+bcolors.ENDC)
+                f.write('Location:{}\nResource ID:{}\n'.format(azure_loc, resource_id))
+                f.close()   
+            info('Credentials saved to ' + azure_config_file)
+            exit(0)         
 
         try:
             kidx = sys.argv.index('-key')
