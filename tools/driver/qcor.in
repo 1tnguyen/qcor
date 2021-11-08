@@ -468,9 +468,9 @@ def main(argv=None):
                 import fileinput
                 for line in fileinput.input(azure_config_file, inplace=True):
                     if line.startswith('key:'):
-                        print('key:{}'.format(access_token), end='')
+                        print('key:{}\n'.format(access_token), end='')
                     elif line.startswith('expires:'):
-                        print('expires:{}'.format(expires_on), end='')
+                        print('expires:{}\n'.format(expires_on), end='')
                     else:
                         print(line, end='')
             else:

@@ -5,7 +5,7 @@
 #include <regex>
 #include "cpr/cpr.h"
 #include <ctime>
-
+#include <random>
 namespace {
 std::vector<std::string> split(const std::string &s, char delim) {
   std::vector<std::string> elems;
@@ -85,6 +85,26 @@ getConfigInfo(const std::string &configFilePath) {
       getBaseUrl(location, subscriptionId, resourceGroup, workspaceName),
       token);
 }
+
+std::string randomIdStr() {
+  static std::random_device dev;
+  static std::mt19937 rng(dev());
+
+  std::uniform_int_distribution<int> dist(0, 15);
+
+  const char *v = "0123456789abcdef";
+  const bool dash[] = {0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0};
+
+  std::string res;
+  for (int i = 0; i < 16; ++i) {
+    if (dash[i]) {
+      res += "-";
+    }
+    res += v[dist(rng)];
+    res += v[dist(rng)];
+  }
+  return res;
+}
 } // namespace
 
 int main(int argc, char **argv) {
@@ -106,13 +126,41 @@ int main(int argc, char **argv) {
     // Testing: query provider status
     const std::string path = "/providerStatus";
     cpr::Parameters cprParams;
-    auto r = cpr::Get(cpr::Url{baseUrl + path}, cprHeaders, cprParams,
+    auto sasResponse = cpr::Get(cpr::Url{baseUrl + path}, cprHeaders, cprParams,
                       cpr::VerifySsl(false));
-    std::cout << "Response:" << r.text << "\n";
-
-    
+    std::cout << "Response:" << sasResponse.text << "\n";
     // 2. Upload the QIR definition to an Azure Storage
-    // see https://docs.microsoft.com/en-us/rest/api/storageservices/put-blob-from-url
+    // see
+    // https://docs.microsoft.com/en-us/rest/api/storageservices/put-blob-from-url
+    // Get the SAS token for the Azure Storage storage account associated with
+    // the quantum workspace. The SAS URL can be used to upload job input and/or
+    // download job output.
+    const std::string storagePath = baseUrl + "/storage/sasUri";
+    const std::string jobName = "qcor-" + randomIdStr();
+    // POST
+    nlohmann::json j;
+    j["containerName"] = jobName;
+    auto r = cpr::Post(cpr::Url{storagePath}, cprHeaders, cpr::Body{j.dump()},
+                       cpr::VerifySsl(false));
+    std::cout << "SAS Response:" << r.text << "\n";
+    nlohmann::json sasJson = nlohmann::json::parse(r.text);
+    const std::string sasUri = sasJson["sasUri"].get<std::string>();
+    // PUT the JOB data to the Azure Storage
+    // TODO: This should be a QIR file
+    const std::string body = "howdy-qcor";
+    cpr::Header blobUploadHeaders;
+    blobUploadHeaders.insert({"Accept-Encoding", "gzip, deflate"});
+    blobUploadHeaders.insert({"Connection", "keep-alive"});
+    blobUploadHeaders.insert({"x-ms-blob-type", "BlockBlob"});
+    blobUploadHeaders.insert({"Accept", "application/xml"});
+    blobUploadHeaders.insert({"Content-Length", std::to_string(body.length())});
+    blobUploadHeaders.insert({"x-ms-blob-content-encoding", "gzip"});
+    blobUploadHeaders.insert({"x-ms-blob-content-type", "application/json"});
+    blobUploadHeaders.insert({"Content-Type", "application/octet-stream"});
+    blobUploadHeaders.insert({"Authorization", "Bearer " + accessToken});
+    auto uploadResponse = cpr::Put(cpr::Url{sasUri}, blobUploadHeaders,
+                                   cpr::Body{body}, cpr::VerifySsl(false));
+    std::cout << "Upload Response:" << uploadResponse.text << "\n";
     // 3. Create the job metadata and submit a job request to Azure.
     // https://docs.microsoft.com/en-us/rest/api/azurequantum/dataplane/jobs
   } else {
