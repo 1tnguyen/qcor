@@ -4,6 +4,7 @@
 #include <json.hpp>
 #include <regex>
 #include "cpr/cpr.h"
+#include <ctime>
 
 namespace {
 std::vector<std::string> split(const std::string &s, char delim) {
@@ -53,6 +54,12 @@ getConfigInfo(const std::string &configFilePath) {
     if (line.find("Location") != std::string::npos) {
       location = trim(split(line, ':')[1]);
     }
+    if (line.find("expires") != std::string::npos) {
+      const auto expiration = std::stoll(trim(split(line, ':')[1]));
+      if (std::time(nullptr) > expiration) {
+        throw std::runtime_error("Token expired");
+      }
+    }
     if (line.find("Resource ID") != std::string::npos) {
       const auto resourcePath = trim(split(line, ':')[1]);
       const auto components = split(resourcePath, '/');
@@ -83,6 +90,10 @@ getConfigInfo(const std::string &configFilePath) {
 int main(int argc, char **argv) {
   const std::string azureConfigFilename(std::string(getenv("HOME")) +
                                         "/.azure_config");
+  // At a high level we need to:
+  // 1. Authenticate using AAD
+  // This is required to get an access token (in the .azure_config file)
+  // "qcor -set-credentials azure"
   if (std::filesystem::exists(azureConfigFilename)) {
     const auto [baseUrl, accessToken] = getConfigInfo(azureConfigFilename);
     std::cout << "baseUrl: " << baseUrl << std::endl;
@@ -99,10 +110,7 @@ int main(int argc, char **argv) {
                       cpr::VerifySsl(false));
     std::cout << "Response:" << r.text << "\n";
 
-    // At a high level we need to:
-    // 1. Authenticate using AAD
-    // This is required to get an access token (in the .azure_config file)
-    // TODO: Implement login authentication in the Python driver script and cache the token there.
+    
     // 2. Upload the QIR definition to an Azure Storage
     // see https://docs.microsoft.com/en-us/rest/api/storageservices/put-blob-from-url
     // 3. Create the job metadata and submit a job request to Azure.
