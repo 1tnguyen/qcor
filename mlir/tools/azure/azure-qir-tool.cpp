@@ -1,11 +1,12 @@
+#include "cpr/cpr.h"
+#include "azure-utils.hpp"
+#include <ctime>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <json.hpp>
-#include <regex>
-#include "cpr/cpr.h"
-#include <ctime>
 #include <random>
+#include <regex>
 namespace {
 std::vector<std::string> split(const std::string &s, char delim) {
   std::vector<std::string> elems;
@@ -105,6 +106,47 @@ std::string randomIdStr() {
   }
   return res;
 }
+
+std::pair<std::string, std::string>
+createContainerBlob(const qcor::utils::Url &url) {
+  auto request = url;
+  request.AppendQueryParameter("restype", "container");
+  cpr::Header cprHeaders;
+  cprHeaders.insert({"Content-Length", "0"});
+  cprHeaders.insert({"x-ms-version", "2020-02-10"});
+  auto response = cpr::Put(cpr::Url{request.GetAbsoluteUrl()}, cprHeaders,
+                           cpr::VerifySsl(false));
+  if (response.status_code != 201) {
+    throw std::runtime_error("Failed to create container blob");
+  }
+  return std::make_pair(response.header["ETag"],
+                        response.header["x-ms-request-id"]);
+}
+
+std::string uploadContainerBlob(const qcor::utils::Url &url,
+                                const std::string &blobName,
+                                std::stringstream &stream) {
+  auto request = url;
+  request.AppendPath(blobName);
+  cpr::Header cprHeaders;
+  const auto requestBody = stream.str();
+  cprHeaders.insert({"Content-Length", std::to_string(requestBody.size())});
+  cprHeaders.insert({"x-ms-version", "2020-02-10"});
+  cprHeaders.insert({"Accept-Encoding", "gzip, deflate"});
+  cprHeaders.insert({"Connection", "keep-alive"});
+  cprHeaders.insert({"x-ms-blob-type", "BlockBlob"});
+  cprHeaders.insert({"Accept", "application/xml"});
+  cprHeaders.insert({"x-ms-blob-content-encoding", "gzip"});
+  cprHeaders.insert({"x-ms-blob-content-type", "application/json"});
+  cprHeaders.insert({"Content-Type", "application/octet-stream"});
+  auto response = cpr::Put(cpr::Url{request.GetAbsoluteUrl()}, cprHeaders,
+                           cpr::Body{requestBody}, cpr::VerifySsl(false));
+  if (response.status_code != 201) {
+    throw std::runtime_error("Failed to upload container blob");
+  }
+
+  return request.GetUrlWithoutQuery(false);
+}
 } // namespace
 
 int main(int argc, char **argv) {
@@ -116,8 +158,8 @@ int main(int argc, char **argv) {
   // "qcor -set-credentials azure"
   if (std::filesystem::exists(azureConfigFilename)) {
     const auto [baseUrl, accessToken] = getConfigInfo(azureConfigFilename);
-    std::cout << "baseUrl: " << baseUrl << std::endl;
-    std::cout << "token: " << accessToken << std::endl;
+    // std::cout << "baseUrl: " << baseUrl << std::endl;
+    // std::cout << "token: " << accessToken << std::endl;
     cpr::Header cprHeaders;
     cprHeaders.insert({"Content-type", "application/json"});
     cprHeaders.insert({"Connection", "keep-alive"});
@@ -127,7 +169,7 @@ int main(int argc, char **argv) {
     const std::string path = "/providerStatus";
     cpr::Parameters cprParams;
     auto sasResponse = cpr::Get(cpr::Url{baseUrl + path}, cprHeaders, cprParams,
-                      cpr::VerifySsl(false));
+                                cpr::VerifySsl(false));
     std::cout << "Response:" << sasResponse.text << "\n";
     // 2. Upload the QIR definition to an Azure Storage
     // see
@@ -148,19 +190,18 @@ int main(int argc, char **argv) {
     // PUT the JOB data to the Azure Storage
     // TODO: This should be a QIR file
     const std::string body = "howdy-qcor";
-    cpr::Header blobUploadHeaders;
-    blobUploadHeaders.insert({"Accept-Encoding", "gzip, deflate"});
-    blobUploadHeaders.insert({"Connection", "keep-alive"});
-    blobUploadHeaders.insert({"x-ms-blob-type", "BlockBlob"});
-    blobUploadHeaders.insert({"Accept", "application/xml"});
-    blobUploadHeaders.insert({"Content-Length", std::to_string(body.length())});
-    blobUploadHeaders.insert({"x-ms-blob-content-encoding", "gzip"});
-    blobUploadHeaders.insert({"x-ms-blob-content-type", "application/json"});
-    blobUploadHeaders.insert({"Content-Type", "application/octet-stream"});
-    blobUploadHeaders.insert({"Authorization", "Bearer " + accessToken});
-    auto uploadResponse = cpr::Put(cpr::Url{sasUri}, blobUploadHeaders,
-                                   cpr::Body{body}, cpr::VerifySsl(false));
-    std::cout << "Upload Response:" << uploadResponse.text << "\n";
+
+    const auto [eTag, requestId] =
+        createContainerBlob(qcor::utils::Url{sasUri});
+    std::cout << "Etag:" << eTag << "\n";
+    std::stringstream stream;
+    stream << body;
+    static constexpr const char *blobName = "inputData";
+    // Blob URI to construct Azure Quantum job
+    const auto blobUri =
+        uploadContainerBlob(qcor::utils::Url{sasUri}, blobName, stream);
+    std::cout << "Blob access url:" << blobUri << std::endl;
+
     // 3. Create the job metadata and submit a job request to Azure.
     // https://docs.microsoft.com/en-us/rest/api/azurequantum/dataplane/jobs
   } else {
