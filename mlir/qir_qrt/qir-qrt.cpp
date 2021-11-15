@@ -539,12 +539,55 @@ void __quantum__rt__end_multi_ctrl_u_region(
 }
 
 void __quantum__rt__start_validated_region() {
-  // TODO: Implement this
-  std::cout << "__quantum__rt__start_validated_region() not implemented\n";
+  // Cache the current runtime into the stack if not already.
+  if (internal_runtimes.empty()) {
+    internal_runtimes.push(::quantum::qrt_impl);
+  }
+  // Create a new NISQ based runtime so that we can
+  // queue up instructions and get them as a CompositeInstruction
+  auto tmp_runtime = xacc::getService<::quantum::QuantumRuntime>("nisq");
+  tmp_runtime->initialize("empty");
+
+  // Add the new tmp runtime to the stack
+  internal_runtimes.push(tmp_runtime);
+
+  // Set the current runtime to the new tmp one
+  ::quantum::qrt_impl = tmp_runtime;
+
+  // Now all subsequent qrt calls will queue to our
+  // temp created runtime, until we hit __quantum__rt__end_validated_region
+  return;
 }
+
 void __quantum__rt__end_validated_region() {
-  // TODO: Implement this
-  std::cout << "__quantum__rt__end_validated_region() not implemented\n";
+  // Get the temp runtime created by __quantum__rt__start_validated_region.
+  auto runtime = internal_runtimes.top();
+  // Get the program we built up
+  auto program = std::dynamic_pointer_cast<xacc::CompositeInstruction>(
+      runtime->get_current_program()->get_as_opaque());
+  // Remove the tmp runtime
+  internal_runtimes.pop();
+
+  // Set the quantum runtime to the one before this
+  // temp one we just popped off
+  ::quantum::qrt_impl = internal_runtimes.top();
+  std::cout << "Collected circuit: \n" << program->toString() << "\n";
+
+  static const std::string DEFAULT_METHOD = "mirror-rb";
+  auto validator = xacc::getService<qcor::BackendValidator>(DEFAULT_METHOD);
+  auto [validated, validationData] =
+      validator->validate(get_qpu(), runtime->get_current_program());
+  if (!validated) {
+    std::cout << "Failed to validate the execution of the program on the "
+              << get_qpu()->name() << " backend.\n";
+    // NOTES: currently, we validate the whole program (all layers),
+    // we can run layer-by-layer to determine at which depth the program
+    // starts to fail.
+    std::cerr << "Failed to validate backend execution in validation mode.\n";
+  } else {
+    std::cout << "Successfully validate the execution of the program on the "
+              << get_qpu()->name() << " backend.\n";
+  }
 }
 
 int8_t *__quantum__rt__array_get_element_ptr_1d(Array *q, uint64_t idx) {
