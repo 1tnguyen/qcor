@@ -714,6 +714,10 @@ def main(argv=None):
         if '--q-optimize' in sys.argv[1:]:
             sys.argv.remove('--q-optimize')
             extra_args.append('--q-optimize')
+        # Passing -validate to qcor-mlir will enable execution validation
+        if '-D__internal__qcor__validate__execution' in sys.argv:
+            extra_args.append('--q-validate')
+
         # Parse clang -Ox optimization level:
         opt_level_options = ['-O0', '-O1', '-O2', '-O3'] 
         for opt_level_option in opt_level_options:

@@ -538,6 +538,15 @@ void __quantum__rt__end_multi_ctrl_u_region(
   return;
 }
 
+void __quantum__rt__start_validated_region() {
+  // TODO: Implement this
+  std::cout << "__quantum__rt__start_validated_region() not implemented\n";
+}
+void __quantum__rt__end_validated_region() {
+  // TODO: Implement this
+  std::cout << "__quantum__rt__end_validated_region() not implemented\n";
+}
+
 int8_t *__quantum__rt__array_get_element_ptr_1d(Array *q, uint64_t idx) {
   Array &arr = *q;
   int8_t *ptr = arr[idx];

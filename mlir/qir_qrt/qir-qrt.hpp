@@ -100,6 +100,10 @@ void __quantum__rt__end_pow_u_region(int64_t power);
 
 void __quantum__rt__mark_compute();
 void __quantum__rt__unmark_compute();
+
+// Validation API:
+void __quantum__rt__start_validated_region();
+void __quantum__rt__end_validated_region();
 // -------
 
 // Array API

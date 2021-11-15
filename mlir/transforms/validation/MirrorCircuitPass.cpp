@@ -18,6 +18,47 @@ void MirrorCircuitTransformPass::getDependentDialects(
 }
 
 void MirrorCircuitTransformPass::runOnOperation() {
-    // TODO
+  std::cout << "MirrorCircuitTransformPass:\n";
+  getOperation().dump();
+  
+  
+  getOperation().walk([&](mlir::FuncOp funcOp) {
+    if (funcOp.getName().str().rfind("__internal_mlir_", 0) == 0) {
+      mlir::OpBuilder builder(funcOp);
+
+      {
+        mlir::OpBuilder::InsertionGuard guard(builder);
+        auto parentModule = funcOp->getParentOfType<mlir::ModuleOp>();
+        builder.setInsertionPointToStart(
+            &parentModule.getRegion().getBlocks().front());
+
+        auto func_decl = builder.create<mlir::FuncOp>(
+            builder.getUnknownLoc(), "__quantum__rt__start_validated_region",
+            builder.getFunctionType(llvm::None, llvm::None));
+        func_decl.setVisibility(mlir::SymbolTable::Visibility::Private);
+
+        mlir::Block &fnBody = funcOp.getBody().getBlocks().front();
+        builder.setInsertionPointToStart(&fnBody);
+        builder.create<mlir::CallOp>(builder.getUnknownLoc(), func_decl);
+      }
+
+      {
+        mlir::OpBuilder::InsertionGuard guard(builder);
+        auto parentModule = funcOp->getParentOfType<mlir::ModuleOp>();
+        builder.setInsertionPointToStart(
+            &parentModule.getRegion().getBlocks().front());
+
+        auto func_decl = builder.create<mlir::FuncOp>(
+            builder.getUnknownLoc(), "__quantum__rt__end_validated_region",
+            builder.getFunctionType(llvm::None, llvm::None));
+        func_decl.setVisibility(mlir::SymbolTable::Visibility::Private);
+        mlir::Block &fnBody = funcOp.getBody().getBlocks().back();
+        builder.setInsertionPoint(fnBody.getTerminator());
+        builder.create<mlir::CallOp>(builder.getUnknownLoc(), func_decl);
+      }
+    }
+  });
+  std::cout << "After MirrorCircuitTransformPass:\n";
+  getOperation().dump();
 }
 } // namespace qcor
