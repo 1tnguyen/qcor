@@ -53,6 +53,9 @@ cl::opt<bool> mlir_quantum_opt(
     "q-optimize",
     cl::desc("Turn on MLIR-level quantum instruction optimizations."));
 
+cl::opt<bool> mlir_quantum_validate(
+    "q-validate", cl::desc("Turn on MLIR-level validation transformation."));
+
 cl::opt<std::string> mlir_specified_func_name(
     "internal-func-name", cl::desc("qcor provided function name"));
 
@@ -153,10 +156,9 @@ int main(int argc, char **argv) {
   std::string RED = "\033[91m";
   std::string CLEAR = "\033[0m";
 
-  if (qoptimizations) {
-    // Add optimization passes
-    qcor::configureOptimizationPasses(pm);
-  }
+  // Add optimization passes and/or validation passes
+  qcor::configureOptimizationPasses(pm,
+                                    {qoptimizations, mlir_quantum_validate});
 
   if (emitAction == Action::DumpMLIR) {
     if (qoptimizations) {

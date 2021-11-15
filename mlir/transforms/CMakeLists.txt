@@ -1,7 +1,7 @@
 
 set(LIBRARY_NAME quantum-to-llvm-lowering)
 
-file(GLOB SRC *.cpp lowering/*.cpp optimizations/*.cpp)
+file(GLOB SRC *.cpp lowering/*.cpp optimizations/*.cpp validation/*.cpp)
 
 add_subdirectory(optimizations/utils)
 
