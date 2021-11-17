@@ -237,23 +237,50 @@ std::pair<bool, xacc::HeterogeneousMap> MirrorCircuitValidator::validate(
 
     auto mc_buffer = xacc::qalloc(mirror_circuit->nPhysicalBits());
     qpu->execute(mc_buffer, mirror_circuit->as_xacc());
+    static const auto f_P_S = [](double S, size_t n) -> double {
+      const int64_t dim = std::pow(2, n);
+      const double P_S = (1.0 - 1.0 / dim) / (S - 1.0 / dim);
+      return P_S;
+    };
+    static const auto f_S_P = [](double S, size_t n) -> double {
+      const int64_t dim = std::pow(2, n);
+      const double S_P = (S - 1.0 / dim) / (1.0 - 1.0 / dim);
+      return S_P;
+    };
     {
       std::stringstream ss;
       ss << "Trial " << i << "\n";
       ss << "Circuit:\n" << mirror_circuit->toString() << "\n";
       ss << "Result:\n" << mc_buffer->toString() << "\n";
       ss << "Expected bitstring:" << expectedBitString << "\n";
+      const auto S =
+          mc_buffer->computeMeasurementProbability(expectedBitString);
+      ss << "S:" << S << "\n";
+      const auto P_prime = std::sqrt(f_S_P(S, mc_buffer->size()));
+      ss << "P':" << P_prime << "\n";
+      const auto S_prime = f_P_S(P_prime, mc_buffer->size()); 
+      ss << "S':" << S_prime << "\n";
       xacc::info(ss.str());
     }
     const auto bitStrProb =
         mc_buffer->computeMeasurementProbability(expectedBitString);
-    trial_success_probs.emplace_back(bitStrProb);
+    trial_success_probs.emplace_back(
+        std::sqrt(f_S_P(bitStrProb, mc_buffer->size())));
   }
   xacc::HeterogeneousMap data;
   data.insert("trial-success-probabilities", trial_success_probs);
   const bool pass_fail_result =
       std::all_of(trial_success_probs.begin(), trial_success_probs.end(),
                   [&eps](double val) { return val > 1.0 - eps; });
+  std::cout << "Mean(P') = "
+            << std::accumulate(trial_success_probs.begin(),
+                               trial_success_probs.end(), 0.0) /
+                   trial_success_probs.size()
+            << "\n";
+  std::cout << "Min(P') = "
+            << *std::min_element(trial_success_probs.begin(),
+                                 trial_success_probs.end())
+            << "\n";
   return std::make_pair(pass_fail_result, data);
 }
 
