@@ -221,6 +221,8 @@ std::pair<bool, xacc::HeterogeneousMap> MirrorCircuitValidator::validate(
   qpu->updateConfiguration({{"shots", n_shots}});
   std::vector<double> trial_success_probs;
   auto provider = xacc::getIRProvider("quantum");
+  std::vector<std::shared_ptr<xacc::CompositeInstruction>> mirror_circuits;
+  std::vector<std::string> expectedBitStrings;
   for (int i = 0; i < n_trials; ++i) {
     auto mirror_data = qcor::MirrorCircuitValidator::createMirrorCircuit(program);
     auto mirror_circuit = mirror_data.first;
@@ -240,9 +242,17 @@ std::pair<bool, xacc::HeterogeneousMap> MirrorCircuitValidator::validate(
       mirror_circuit->addInstruction(
           provider->createInstruction("Measure", {qId}));
     }
-
-    auto mc_buffer = xacc::qalloc(mirror_circuit->nPhysicalBits());
-    qpu->execute(mc_buffer, mirror_circuit->as_xacc());
+    mirror_circuits.emplace_back(mirror_circuit->as_xacc());
+    expectedBitStrings.emplace_back(expectedBitString);
+  }
+  auto temp_buffer = xacc::qalloc(program->nPhysicalBits());
+  assert(mirror_circuits.size() == n_trials);
+  qpu->execute(temp_buffer, mirror_circuits);
+  assert(temp_buffer->getChildren().size() == n_trials);
+  for (size_t i = 0; i < n_trials; ++i) {
+    auto mc_buffer = temp_buffer->getChildren()[i];
+    const auto &mirror_circuit = mirror_circuits[i];
+    const auto &expectedBitString = expectedBitStrings[i];
     static const auto f_P_S = [](double S, size_t n) -> double {
       const int64_t dim = std::pow(2, n);
       const double P_S = (1.0 - 1.0 / dim) / (S - 1.0 / dim);
