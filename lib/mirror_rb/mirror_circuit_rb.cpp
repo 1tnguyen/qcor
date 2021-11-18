@@ -46,8 +46,14 @@ public:
   }
 
   // Keep these 2 gates:
-  void visit(CNOT &cnot) override { m_program->addInstruction(cnot.clone()); }
-  void visit(U &u) override { m_program->addInstruction(u.clone()); }
+  void visit(CNOT &cnot) override {
+    m_program->addInstruction(
+        m_gateRegistry->createInstruction("CX", cnot.bits()));
+  }
+
+  void visit(U &u) override { 
+    m_program->addInstruction(u.clone()); 
+  }
 
   // Rotation gates:
   void visit(Ry &ry) override {
