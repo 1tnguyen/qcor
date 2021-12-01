@@ -1,0 +1,1504 @@
+[2021-11-18 11:18:03.454] [xacc-logger] [info] [1;34mqobj: {"config":{"meas_level":2,"meas_return":"avg","memory":false,"memory_slot_size":100,"memory_slots":2,"n_qubits":5,"parameter_binds":[],"shots":1024},"experiments":[{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"deuteron","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[6.283185307179586],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[9.42477796076938],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.4387056549363813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[9.42477796076938],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]}],"header":{"backend_name":"ibmq_lima","backend_version":"1.0.0"},"qobj_id":"xacc-qobj-id","schema_version":"1.1.0","type":"QASM"}[0m
+[2021-11-18 11:18:05.537] [xacc-logger] [info] [1;34mRemote Accelerator ibm caught exception while calling restClient->post() - HTTP POST Error - status code 502: : <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en-US"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en-US"> <!--<![endif]-->
+<head>
+<meta http-equiv="refresh" content="0">
+
+<title>api-qcon.quantum-computing.ibm.com | 502: Bad gateway</title>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="stylesheet" id="cf_styles-css" href="/cdn-cgi/styles/main.css" type="text/css" media="screen,projection" />
+
+
+</head>
+<body>
+<div id="cf-wrapper">
+
+    
+
+    <div id="cf-error-details" class="p-0">
+        <header class="mx-auto pt-10 lg:pt-6 lg:px-8 w-240 lg:w-full mb-8">
+            <h1 class="inline-block sm:block sm:mb-2 font-light text-60 lg:text-4xl text-black-dark leading-tight mr-2">
+              
+              <span class="cf-error-type">Error</span>
+              <span class="cf-error-code">502</span>
+            </h1>
+            <span class="inline-block sm:block font-mono text-15 lg:text-sm lg:leading-relaxed">Ray ID: 6b028333de64580f &bull;</span>
+            <span class="inline-block sm:block font-mono text-15 lg:text-sm lg:leading-relaxed">2021-11-18 16:18:05 UTC</span>
+            <h2 class="text-gray-600 leading-1.3 text-3xl font-light">Bad gateway</h2>
+        </header>
+        
+        <div class="my-8 bg-gradient-gray">
+            <div class="w-240 lg:w-full mx-auto">
+                <div class="clearfix md:px-8">
+                  
+<div id="cf-browser-status" class=" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center">
+  <div class="relative mb-10 md:m-0">
+    <span class="cf-icon-browser block md:hidden h-20 bg-center bg-no-repeat"></span>
+    <span class="cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span>
+  </div>
+  <span class="md:block w-full truncate">You</span>
+  <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3">Browser</h3>
+  <span class="leading-1.3 text-2xl text-green-success">Working</span>
+</div>
+
+<div id="cf-cloudflare-status" class=" relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center">
+  <div class="relative mb-10 md:m-0">
+    <span class="cf-icon-cloud block md:hidden h-20 bg-center bg-no-repeat"></span>
+    <span class="cf-icon-ok w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span>
+  </div>
+  <span class="md:block w-full truncate">Ashburn</span>
+  <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3">Cloudflare</h3>
+  <span class="leading-1.3 text-2xl text-green-success">Working</span>
+</div>
+
+<div id="cf-host-status" class="cf-error-source relative w-1/3 md:w-full py-15 md:p-0 md:py-8 md:text-left md:border-solid md:border-0 md:border-b md:border-gray-400 overflow-hidden float-left md:float-none text-center">
+  <div class="relative mb-10 md:m-0">
+    <span class="cf-icon-server block md:hidden h-20 bg-center bg-no-repeat"></span>
+    <span class="cf-icon-error w-12 h-12 absolute left-1/2 md:left-auto md:right-0 md:top-0 -ml-6 -bottom-4"></span>
+  </div>
+  <span class="md:block w-full truncate">api-qcon.quantum-computing.ibm.com</span>
+  <h3 class="md:inline-block mt-3 md:mt-0 text-2xl text-gray-600 font-light leading-1.3">Host</h3>
+  <span class="leading-1.3 text-2xl text-red-error">Error</span>
+</div>
+
+                </div>
+              
+            </div>
+        </div>
+
+        <div class="w-240 lg:w-full mx-auto mb-8 lg:px-8">
+            <div class="clearfix">
+                <div class="w-1/2 md:w-full float-left pr-6 md:pb-10 md:pr-0 leading-relaxed">
+                    <h2 class="text-3xl font-normal leading-1.3 mb-4">What happened?</h2>
+                    <p>The web server reported a bad gateway error.</p>
+                </div>
+              
+                <div class="w-1/2 md:w-full float-left leading-relaxed">
+                    <h2 class="text-3xl font-normal leading-1.3 mb-4">What can I do?</h2>
+                    <p class="mb-6">Please try again in a few minutes.</p>
+                </div>
+            </div>
+              
+        </div>
+
+        <div class="cf-error-footer cf-wrapper w-240 lg:w-full py-10 sm:py-4 sm:px-8 mx-auto text-center sm:text-left border-solid border-0 border-t border-gray-300">
+  <p class="text-13">
+    <span class="cf-footer-item sm:block sm:mb-1">Cloudflare Ray ID: <strong class="font-semibold">6b028333de64580f</strong></span>
+    <span class="cf-footer-separator sm:hidden">&bull;</span>
+    <span class="cf-footer-item sm:block sm:mb-1"><span>Your IP</span>: 163.116.146.113</span>
+    <span class="cf-footer-separator sm:hidden">&bull;</span>
+    <span class="cf-footer-item sm:block sm:mb-1"><span>Performance &amp; security by</span> <a rel="noopener noreferrer" href="https://www.cloudflare.com/5xx-error-landing" id="brand_link" target="_blank">Cloudflare</a></span>
+    
+  </p>
+</div><!-- /.error-footer -->
+
+
+    </div>
+</div>
+</body>
+</html>
+
+[0m
+[2021-11-18 11:18:05.538] [xacc-logger] [info] [1;34mRetrying HTTP Post.[0m
+[2021-11-18 11:18:09.675] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: VALIDATING[0m
+[2021-11-18 11:18:10.367] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: VALIDATED[0m
+[2021-11-18 11:18:11.036] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:11.499] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:11.991] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:12.666] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:13.229] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:13.708] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:14.242] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:14.833] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:15.307] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:15.807] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:16.346] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:16.869] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:17.425] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: RUNNING[0m
+[2021-11-18 11:18:17.995] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: RUNNING[0m
+[2021-11-18 11:18:18.503] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: RUNNING[0m
+[2021-11-18 11:18:19.039] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: RUNNING[0m
+[2021-11-18 11:18:20.150] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: RUNNING[0m
+[2021-11-18 11:18:20.543] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: RUNNING[0m
+[2021-11-18 11:18:21.418] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: RUNNING[0m
+[2021-11-18 11:18:22.016] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: RUNNING[0m
+[2021-11-18 11:18:22.503] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: RUNNING[0m
+[2021-11-18 11:18:23.180] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: RUNNING[0m
+[2021-11-18 11:18:23.664] [xacc-logger] [info] [1;34mIBM Job 61967cbd5746917472895776 Status: COMPLETED[0m
+[0m
+[2021-11-18 11:18:24.435] [xacc-logger] [info] [1;34mResults Json:
+{"backend_name":"ibmq_lima","backend_version":"1.0.25","date":"2021-11-18T16:18:20Z","error":null,"execution_id":"236af272-488b-11ec-94a9-b02628f7f59e","header":{"backend_name":"ibmq_lima","backend_version":"1.0.0"},"job_id":"61967cbd5746917472895776","qobj_id":"xacc-qobj-id","results":[{"data":{"counts":{"0x0":350,"0x1":170,"0x2":195,"0x3":309},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"deuteron","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true}],"status":"Successful completion","success":true,"time_taken":2.993988037109375}[0m
+[2021-11-18 11:18:24.647] [xacc-logger] [info] [1;34mqobj: {"config":{"meas_level":2,"meas_return":"avg","memory":false,"memory_slot_size":100,"memory_slots":2,"n_qubits":5,"parameter_binds":[],"shots":1024},"experiments":[{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[-0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[-0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[-0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[-0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[-0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[-0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[-0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[-0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[-0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[-0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[2.844479652243205],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]},{"config":{"memory_slots":2,"n_qubits":5},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"instructions":[{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[0]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[-1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[1.5707963267948966],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"cx","qubits":[1,0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[0.0],"qubits":[0]},{"name":"sx","qubits":[0]},{"name":"rz","params":[-1.5707963267948966],"qubits":[0]},{"name":"rz","params":[0.0],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[0.29711300134658813],"qubits":[1]},{"name":"sx","qubits":[1]},{"name":"rz","params":[3.141592653589793],"qubits":[1]},{"memory":[0],"name":"measure","qubits":[0]},{"memory":[1],"name":"measure","qubits":[1]}]}],"header":{"backend_name":"ibmq_lima","backend_version":"1.0.0"},"qobj_id":"xacc-qobj-id","schema_version":"1.1.0","type":"QASM"}[0m
+[2021-11-18 11:18:27.130] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: VALIDATING[0m
+[2021-11-18 11:18:27.522] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: VALIDATED[0m
+[2021-11-18 11:18:28.589] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:29.310] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:29.820] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:30.544] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:31.179] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:31.686] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:32.218] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:32.769] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:33.276] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:33.804] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:34.322] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:35.010] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:35.430] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:35.895] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:36.279] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:36.817] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:37.389] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:37.832] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:38.438] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:39.237] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:39.869] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:40.385] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:41.277] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:41.745] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:42.221] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:42.692] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:43.084] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:43.488] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:44.224] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:45.090] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:45.666] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:46.175] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:46.673] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:47.289] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:48.504] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:49.068] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:49.595] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:50.233] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:50.780] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:52.844] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:53.645] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:54.082] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:54.814] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:55.304] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:55.793] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:56.311] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:56.946] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:57.439] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:57.919] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:58.805] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:59.241] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:18:59.733] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:00.528] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:01.268] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:01.814] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:02.865] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:03.783] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:04.576] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:05.080] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:05.545] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:06.206] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:06.773] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:07.213] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:07.870] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:08.382] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:08.847] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:09.294] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:09.799] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:10.403] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:10.917] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:11.519] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:12.078] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:12.673] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:13.142] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:13.722] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:14.323] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:14.906] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:15.442] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:15.863] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:16.564] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:17.008] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:17.766] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:18.245] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:18.692] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:19.304] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:19.953] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:20.617] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:21.042] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:21.467] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:21.928] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:22.327] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:23.017] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:23.500] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:24.024] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:24.664] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:25.829] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:26.318] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:27.448] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:27.865] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:28.462] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:28.945] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:29.485] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:30.358] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:31.000] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:31.600] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:32.055] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:33.089] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:33.560] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:34.085] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:34.597] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:35.125] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:35.795] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:36.517] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:37.023] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:38.170] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:38.858] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:39.883] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:41.267] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:41.981] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:42.459] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:42.957] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:43.417] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:43.947] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:45.033] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:45.527] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:46.007] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:46.632] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:47.108] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:47.825] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:48.528] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:49.069] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:49.663] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:50.203] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:50.701] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:51.224] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:51.620] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:52.099] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:52.638] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:53.133] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:53.622] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:54.101] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:54.530] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:55.028] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:55.410] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:55.902] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:56.416] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:56.827] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:57.241] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:57.745] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:58.245] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:58.727] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:59.271] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:19:59.655] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:00.054] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:00.460] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:00.891] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:01.326] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:01.961] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:02.383] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:02.947] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:03.360] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:03.908] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:04.327] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:04.958] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:05.710] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:06.377] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:07.016] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:07.643] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:08.107] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:09.170] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:09.684] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:10.310] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:10.983] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:11.767] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:12.581] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:13.289] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:14.300] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:15.022] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:15.867] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:16.380] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:17.480] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:17.890] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:18.576] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:19.299] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:19.936] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:20.473] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:20.955] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:21.494] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:22.075] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:22.567] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:23.044] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:23.785] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:24.358] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:24.765] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:25.389] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:25.920] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:26.408] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: PENDING_IN_QUEUE[0m
+[2021-11-18 11:20:26.896] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:27.414] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:28.078] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:28.536] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:29.008] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:29.674] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:30.211] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:30.677] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:31.600] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:32.225] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:32.759] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:33.258] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:37.269] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:37.757] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:38.370] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:38.766] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:39.307] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:39.711] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:40.086] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:40.638] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:41.302] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:41.998] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:42.430] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:42.891] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:43.404] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: RUNNING[0m
+[2021-11-18 11:20:43.879] [xacc-logger] [info] [1;34mIBM Job 61967cd0972490d0ca93bbf7 Status: COMPLETED[0m
+[0m
+[2021-11-18 11:20:44.689] [xacc-logger] [info] [1;34mResults Json:
+{"backend_name":"ibmq_lima","backend_version":"1.0.25","date":"2021-11-18T16:20:38Z","error":null,"execution_id":"7081f57e-488b-11ec-94a9-b02628f7f59e","header":{"backend_name":"ibmq_lima","backend_version":"1.0.0"},"job_id":"61967cd0972490d0ca93bbf7","qobj_id":"xacc-qobj-id","results":[{"data":{"counts":{"0x0":4,"0x1":58,"0x2":52,"0x3":910},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":48,"0x1":2,"0x2":961,"0x3":13},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":2,"0x1":51,"0x2":41,"0x3":930},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":61,"0x1":3,"0x2":936,"0x3":24},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":46,"0x1":2,"0x2":965,"0x3":11},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":5,"0x1":52,"0x2":50,"0x3":917},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":54,"0x1":3,"0x2":957,"0x3":10},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":56,"0x1":5,"0x2":949,"0x3":14},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":1004,"0x1":8,"0x2":7,"0x3":5},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":62,"0x1":1,"0x2":950,"0x3":11},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":7,"0x1":50,"0x2":44,"0x3":923},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":43,"0x1":7,"0x2":956,"0x3":18},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":57,"0x1":952,"0x2":3,"0x3":12},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":994,"0x1":22,"0x2":5,"0x3":3},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":62,"0x1":953,"0x2":4,"0x3":5},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":50,"0x1":956,"0x2":9,"0x3":9},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":55,"0x1":962,"0x3":7},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":997,"0x1":18,"0x2":4,"0x3":5},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":51,"0x1":7,"0x2":951,"0x3":15},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":997,"0x1":11,"0x2":10,"0x3":6},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":999,"0x1":11,"0x2":13,"0x3":1},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":61,"0x1":3,"0x2":943,"0x3":17},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":61,"0x1":5,"0x2":943,"0x3":15},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":2,"0x1":48,"0x2":60,"0x3":914},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":6,"0x1":50,"0x2":46,"0x3":922},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":9,"0x1":61,"0x2":52,"0x3":902},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":61,"0x1":949,"0x2":2,"0x3":12},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":5,"0x1":52,"0x2":58,"0x3":909},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":38,"0x1":975,"0x2":3,"0x3":8},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":66,"0x1":7,"0x2":928,"0x3":23},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":997,"0x1":18,"0x2":6,"0x3":3},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true},{"data":{"counts":{"0x0":53,"0x1":962,"0x2":8,"0x3":1},"memory":null,"snapshots":null,"statevector":null,"unitary":null},"header":{"clbit_labels":[["c0",0],["c0",1]],"creg_sizes":[["c0",2]],"memory_slots":2,"n_qubits":5,"name":"temp_composite_MIRROR","qreg_sizes":[["q",5]],"qubit_labels":[["q",0],["q",1],["q",2],["q",3],["q",4]]},"meas_level":2,"meas_return":null,"seed":null,"shots":1024,"status":null,"success":true}],"status":"Successful completion","success":true,"time_taken":11.818311929702759}[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 0
+Circuit:
+U(-3.14159,-7.85398,1.5708) q0
+U(-5.98607,-6.28319,0) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,0) q0
+U(-4.71239,-6.28319,3.14159) q1
+U(-1.5708,-9.42478,0) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(-3.14159,-10.9956,-1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 4,
+            "01": 58,
+            "10": 52,
+            "11": 910
+        }
+    }
+}
+
+Expected bitstring:11
+S:0.888672
+P':0.922801
+S':1.11474
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 1
+Circuit:
+U(0,-10.9956,1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,0) q0
+U(-1.5708,-6.28319,3.14159) q1
+U(-1.5708,-9.42478,3.14159) q0
+U(-1.5708,-9.42478,3.14159) q1
+CNOT q1,q0
+U(0,-7.85398,1.5708) q0
+U(-2.84448,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 48,
+            "01": 2,
+            "10": 961,
+            "11": 13
+        }
+    }
+}
+
+Expected bitstring:10
+S:0.938477
+P':0.958107
+S':1.05916
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 2
+Circuit:
+U(-3.14159,-7.85398,-1.5708) q0
+U(-2.84448,-6.28319,0) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,3.14159) q0
+U(-4.71239,-6.28319,3.14159) q1
+U(-1.5708,-9.42478,3.14159) q0
+U(-1.5708,-9.42478,0) q1
+CNOT q1,q0
+U(0,-10.9956,-1.5708) q0
+U(-5.98607,-6.28319,-0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 2,
+            "01": 51,
+            "10": 41,
+            "11": 930
+        }
+    }
+}
+
+Expected bitstring:11
+S:0.908203
+P':0.936805
+S':1.09201
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 3
+Circuit:
+U(-3.14159,-7.85398,1.5708) q0
+U(-2.84448,-6.28319,0) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,0) q0
+U(-1.5708,-6.28319,0) q1
+U(-1.5708,-9.42478,-0) q0
+U(-1.5708,-9.42478,3.14159) q1
+CNOT q1,q0
+U(-3.14159,-7.85398,-1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 61,
+            "01": 3,
+            "10": 936,
+            "11": 24
+        }
+    }
+}
+
+Expected bitstring:10
+S:0.914062
+P':0.940966
+S':1.08544
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 4
+Circuit:
+U(0,-10.9956,-1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,0) q0
+U(-1.5708,-6.28319,3.14159) q1
+U(-4.71239,-9.42478,-0) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(0,-7.85398,1.5708) q0
+U(-3.43871,-6.28319,0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 46,
+            "01": 2,
+            "10": 965,
+            "11": 11
+        }
+    }
+}
+
+Expected bitstring:10
+S:0.942383
+P':0.960821
+S':1.05512
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 5
+Circuit:
+U(-3.14159,-7.85398,1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,3.14159) q0
+U(-4.71239,-6.28319,3.14159) q1
+U(-1.5708,-9.42478,0) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(-3.14159,-10.9956,-1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 5,
+            "01": 52,
+            "10": 50,
+            "11": 917
+        }
+    }
+}
+
+Expected bitstring:11
+S:0.895508
+P':0.927727
+S':1.10664
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 6
+Circuit:
+U(-3.14159,-7.85398,1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,3.14159) q0
+U(-1.5708,-6.28319,3.14159) q1
+U(-1.5708,-9.42478,-0) q0
+U(-4.71239,-9.42478,0) q1
+CNOT q1,q0
+U(0,-7.85398,1.5708) q0
+U(-2.84448,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 54,
+            "01": 3,
+            "10": 957,
+            "11": 10
+        }
+    }
+}
+
+Expected bitstring:10
+S:0.93457
+P':0.955385
+S':1.06325
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 7
+Circuit:
+U(0,-10.9956,1.5708) q0
+U(-2.84448,-6.28319,0) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,0) q0
+U(-1.5708,-6.28319,3.14159) q1
+U(-1.5708,-9.42478,3.14159) q0
+U(-1.5708,-9.42478,3.14159) q1
+CNOT q1,q0
+U(-3.14159,-7.85398,-1.5708) q0
+U(-5.98607,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 56,
+            "01": 5,
+            "10": 949,
+            "11": 14
+        }
+    }
+}
+
+Expected bitstring:10
+S:0.926758
+P':0.949918
+S':1.07155
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 8
+Circuit:
+U(0,-10.9956,1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,3.14159) q0
+U(-4.71239,-6.28319,3.14159) q1
+U(-4.71239,-9.42478,3.14159) q0
+U(-1.5708,-9.42478,0) q1
+CNOT q1,q0
+U(-3.14159,-7.85398,1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 1004,
+            "01": 8,
+            "10": 7,
+            "11": 5
+        }
+    }
+}
+
+Expected bitstring:00
+S:0.980469
+P':0.986893
+S':1.01779
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 9
+Circuit:
+U(-3.14159,-7.85398,-1.5708) q0
+U(-2.84448,-6.28319,0) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,3.14159) q0
+U(-4.71239,-6.28319,3.14159) q1
+U(-4.71239,-9.42478,3.14159) q0
+U(-1.5708,-9.42478,0) q1
+CNOT q1,q0
+U(-3.14159,-7.85398,1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 62,
+            "01": 1,
+            "10": 950,
+            "11": 11
+        }
+    }
+}
+
+Expected bitstring:10
+S:0.927734
+P':0.950603
+S':1.07051
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 10
+Circuit:
+U(0,-10.9956,1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,3.14159) q0
+U(-1.5708,-6.28319,0) q1
+U(-1.5708,-9.42478,0) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(-3.14159,-10.9956,1.5708) q0
+U(-2.84448,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 7,
+            "01": 50,
+            "10": 44,
+            "11": 923
+        }
+    }
+}
+
+Expected bitstring:11
+S:0.901367
+P':0.931928
+S':1.09982
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 11
+Circuit:
+U(-3.14159,-7.85398,1.5708) q0
+U(-5.98607,-6.28319,0) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,0) q0
+U(-1.5708,-6.28319,3.14159) q1
+U(-4.71239,-9.42478,3.14159) q0
+U(-1.5708,-9.42478,3.14159) q1
+CNOT q1,q0
+U(-3.14159,-7.85398,1.5708) q0
+U(-2.84448,-6.28319,0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 43,
+            "01": 7,
+            "10": 956,
+            "11": 18
+        }
+    }
+}
+
+Expected bitstring:10
+S:0.933594
+P':0.954703
+S':1.06428
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 12
+Circuit:
+U(-3.14159,-7.85398,-1.5708) q0
+U(-2.84448,-6.28319,0) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,0) q0
+U(-1.5708,-6.28319,0) q1
+U(-1.5708,-9.42478,3.14159) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(-3.14159,-10.9956,-1.5708) q0
+U(-0.297113,-6.28319,0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 57,
+            "01": 952,
+            "10": 3,
+            "11": 12
+        }
+    }
+}
+
+Expected bitstring:01
+S:0.929688
+P':0.951972
+S':1.06842
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 13
+Circuit:
+U(0,-10.9956,-1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,3.14159) q0
+U(-4.71239,-6.28319,0) q1
+U(-4.71239,-9.42478,-0) q0
+U(-4.71239,-9.42478,0) q1
+CNOT q1,q0
+U(-3.14159,-7.85398,-1.5708) q0
+U(-3.43871,-6.28319,0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 994,
+            "01": 22,
+            "10": 5,
+            "11": 3
+        }
+    }
+}
+
+Expected bitstring:00
+S:0.970703
+P':0.980274
+S':1.02701
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 14
+Circuit:
+U(-3.14159,-7.85398,-1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,3.14159) q0
+U(-4.71239,-6.28319,0) q1
+U(-1.5708,-9.42478,0) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(0,-10.9956,1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 62,
+            "01": 953,
+            "10": 4,
+            "11": 5
+        }
+    }
+}
+
+Expected bitstring:01
+S:0.930664
+P':0.952655
+S':1.06738
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 15
+Circuit:
+U(0,-10.9956,-1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,3.14159) q0
+U(-1.5708,-6.28319,0) q1
+U(-4.71239,-9.42478,3.14159) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(0,-10.9956,-1.5708) q0
+U(-0.297113,-6.28319,0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 50,
+            "01": 956,
+            "10": 9,
+            "11": 9
+        }
+    }
+}
+
+Expected bitstring:01
+S:0.933594
+P':0.954703
+S':1.06428
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 16
+Circuit:
+U(0,-10.9956,1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,0) q0
+U(-4.71239,-6.28319,3.14159) q1
+U(-1.5708,-9.42478,3.14159) q0
+U(-1.5708,-9.42478,0) q1
+CNOT q1,q0
+U(0,-10.9956,1.5708) q0
+U(-0.297113,-6.28319,0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 55,
+            "01": 962,
+            "11": 7
+        }
+    }
+}
+
+Expected bitstring:01
+S:0.939453
+P':0.958786
+S':1.05815
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 17
+Circuit:
+U(-3.14159,-7.85398,-1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,0) q0
+U(-1.5708,-6.28319,0) q1
+U(-1.5708,-9.42478,0) q0
+U(-4.71239,-9.42478,0) q1
+CNOT q1,q0
+U(-3.14159,-7.85398,1.5708) q0
+U(-5.98607,-6.28319,0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 997,
+            "01": 18,
+            "10": 4,
+            "11": 5
+        }
+    }
+}
+
+Expected bitstring:00
+S:0.973633
+P':0.982265
+S':1.02422
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 18
+Circuit:
+U(0,-10.9956,1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,0) q0
+U(-4.71239,-6.28319,0) q1
+U(-1.5708,-9.42478,3.14159) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(0,-7.85398,1.5708) q0
+U(-5.98607,-6.28319,-0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 51,
+            "01": 7,
+            "10": 951,
+            "11": 15
+        }
+    }
+}
+
+Expected bitstring:10
+S:0.928711
+P':0.951288
+S':1.06946
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 19
+Circuit:
+U(0,-10.9956,-1.5708) q0
+U(-2.84448,-6.28319,0) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,0) q0
+U(-4.71239,-6.28319,0) q1
+U(-4.71239,-9.42478,-0) q0
+U(-1.5708,-9.42478,0) q1
+CNOT q1,q0
+U(-3.14159,-7.85398,1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 997,
+            "01": 11,
+            "10": 10,
+            "11": 6
+        }
+    }
+}
+
+Expected bitstring:00
+S:0.973633
+P':0.982265
+S':1.02422
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 20
+Circuit:
+U(0,-10.9956,-1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,0) q0
+U(-4.71239,-6.28319,3.14159) q1
+U(-1.5708,-9.42478,3.14159) q0
+U(-1.5708,-9.42478,0) q1
+CNOT q1,q0
+U(-3.14159,-7.85398,-1.5708) q0
+U(-2.84448,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 999,
+            "01": 11,
+            "10": 13,
+            "11": 1
+        }
+    }
+}
+
+Expected bitstring:00
+S:0.975586
+P':0.983589
+S':1.02237
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 21
+Circuit:
+U(0,-10.9956,1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,3.14159) q0
+U(-1.5708,-6.28319,0) q1
+U(-1.5708,-9.42478,0) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(0,-7.85398,-1.5708) q0
+U(-2.84448,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 61,
+            "01": 3,
+            "10": 943,
+            "11": 17
+        }
+    }
+}
+
+Expected bitstring:10
+S:0.920898
+P':0.945797
+S':1.0779
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 22
+Circuit:
+U(-3.14159,-7.85398,-1.5708) q0
+U(-2.84448,-6.28319,0) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,3.14159) q0
+U(-1.5708,-6.28319,0) q1
+U(-4.71239,-9.42478,0) q0
+U(-4.71239,-9.42478,0) q1
+CNOT q1,q0
+U(-3.14159,-7.85398,-1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 61,
+            "01": 5,
+            "10": 943,
+            "11": 15
+        }
+    }
+}
+
+Expected bitstring:10
+S:0.920898
+P':0.945797
+S':1.0779
+[0m
+[2021-11-18 11:20:44.691] [xacc-logger] [info] [1;34mTrial 23
+Circuit:
+U(-3.14159,-7.85398,-1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,3.14159) q0
+U(-1.5708,-6.28319,0) q1
+U(-1.5708,-9.42478,3.14159) q0
+U(-1.5708,-9.42478,3.14159) q1
+CNOT q1,q0
+U(0,-10.9956,1.5708) q0
+U(-3.43871,-6.28319,0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 2,
+            "01": 48,
+            "10": 60,
+            "11": 914
+        }
+    }
+}
+
+Expected bitstring:11
+S:0.892578
+P':0.925619
+S':1.11009
+[0m
+[2021-11-18 11:20:44.692] [xacc-logger] [info] [1;34mTrial 24
+Circuit:
+U(-3.14159,-7.85398,-1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,0) q0
+U(-1.5708,-6.28319,0) q1
+U(-1.5708,-9.42478,-0) q0
+U(-4.71239,-9.42478,0) q1
+CNOT q1,q0
+U(-3.14159,-10.9956,-1.5708) q0
+U(-3.43871,-6.28319,0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 6,
+            "01": 50,
+            "10": 46,
+            "11": 922
+        }
+    }
+}
+
+Expected bitstring:11
+S:0.900391
+P':0.931229
+S':1.10095
+[0m
+[2021-11-18 11:20:44.692] [xacc-logger] [info] [1;34mTrial 25
+Circuit:
+U(0,-10.9956,1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,3.14159) q0
+U(-4.71239,-6.28319,3.14159) q1
+U(-4.71239,-9.42478,0) q0
+U(-1.5708,-9.42478,3.14159) q1
+CNOT q1,q0
+U(-3.14159,-10.9956,-1.5708) q0
+U(-5.98607,-6.28319,-0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 9,
+            "01": 61,
+            "10": 52,
+            "11": 902
+        }
+    }
+}
+
+Expected bitstring:11
+S:0.880859
+P':0.91714
+S':1.1242
+[0m
+[2021-11-18 11:20:44.692] [xacc-logger] [info] [1;34mTrial 26
+Circuit:
+U(-3.14159,-7.85398,1.5708) q0
+U(-5.98607,-6.28319,0) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,3.14159) q0
+U(-1.5708,-6.28319,3.14159) q1
+U(-1.5708,-9.42478,3.14159) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(0,-10.9956,-1.5708) q0
+U(-2.84448,-6.28319,0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 61,
+            "01": 949,
+            "10": 2,
+            "11": 12
+        }
+    }
+}
+
+Expected bitstring:01
+S:0.926758
+P':0.949918
+S':1.07155
+[0m
+[2021-11-18 11:20:44.692] [xacc-logger] [info] [1;34mTrial 27
+Circuit:
+U(-3.14159,-7.85398,-1.5708) q0
+U(-2.84448,-6.28319,0) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,0) q0
+U(-4.71239,-6.28319,0) q1
+U(-4.71239,-9.42478,3.14159) q0
+U(-4.71239,-9.42478,0) q1
+CNOT q1,q0
+U(0,-10.9956,-1.5708) q0
+U(-2.84448,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 5,
+            "01": 52,
+            "10": 58,
+            "11": 909
+        }
+    }
+}
+
+Expected bitstring:11
+S:0.887695
+P':0.922096
+S':1.11591
+[0m
+[2021-11-18 11:20:44.692] [xacc-logger] [info] [1;34mTrial 28
+Circuit:
+U(0,-10.9956,-1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,3.14159) q0
+U(-1.5708,-6.28319,0) q1
+U(-4.71239,-9.42478,3.14159) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(-3.14159,-10.9956,-1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 38,
+            "01": 975,
+            "10": 3,
+            "11": 8
+        }
+    }
+}
+
+Expected bitstring:01
+S:0.952148
+P':0.967573
+S':1.04519
+[0m
+[2021-11-18 11:20:44.692] [xacc-logger] [info] [1;34mTrial 29
+Circuit:
+U(-3.14159,-7.85398,-1.5708) q0
+U(-2.84448,-6.28319,0) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,3.14159) q0
+U(-4.71239,-6.28319,0) q1
+U(-4.71239,-9.42478,3.14159) q0
+U(-4.71239,-9.42478,3.14159) q1
+CNOT q1,q0
+U(0,-7.85398,1.5708) q0
+U(-0.297113,-6.28319,-0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 66,
+            "01": 7,
+            "10": 928,
+            "11": 23
+        }
+    }
+}
+
+Expected bitstring:10
+S:0.90625
+P':0.935414
+S':1.09423
+[0m
+[2021-11-18 11:20:44.692] [xacc-logger] [info] [1;34mTrial 30
+Circuit:
+U(-3.14159,-7.85398,1.5708) q0
+U(-0.297113,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-4.71239,-6.28319,0) q0
+U(-1.5708,-6.28319,3.14159) q1
+U(-4.71239,-9.42478,3.14159) q0
+U(-1.5708,-9.42478,0) q1
+CNOT q1,q0
+U(0,-7.85398,-1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 997,
+            "01": 18,
+            "10": 6,
+            "11": 3
+        }
+    }
+}
+
+Expected bitstring:00
+S:0.973633
+P':0.982265
+S':1.02422
+[0m
+[2021-11-18 11:20:44.692] [xacc-logger] [info] [1;34mTrial 31
+Circuit:
+U(-3.14159,-7.85398,1.5708) q0
+U(-3.43871,-6.28319,3.14159) q1
+CNOT q1,q0
+U(-1.5708,-6.28319,0) q0
+U(-4.71239,-6.28319,3.14159) q1
+U(-1.5708,-9.42478,0) q0
+U(-1.5708,-9.42478,0) q1
+CNOT q1,q0
+U(-3.14159,-10.9956,-1.5708) q0
+U(-2.84448,-6.28319,0) q1
+Measure q0
+Measure q1
+
+Result:
+{
+    "AcceleratorBuffer": {
+        "name": "temp_composite_MIRROR",
+        "size": 2,
+        "Information": {},
+        "Measurements": {
+            "00": 53,
+            "01": 962,
+            "10": 8,
+            "11": 1
+        }
+    }
+}
+
+Expected bitstring:01
+S:0.939453
+P':0.958786
+S':1.05815
+[0m
+Mean(P') = 0.951753
+Min(P') = 0.91714
+Successfully validate the execution of the program on the ibm backend.
+{
+    "AcceleratorBuffer": {
+        "name": "qrg_nWlrB",
+        "size": 2,
+        "Information": {
+            "ibm-job-id": "61967cbd5746917472895776"
+        },
+        "Measurements": {
+            "00": 350,
+            "01": 170,
+            "10": 195,
+            "11": 309
+        }
+    }
+}
+<XX> = 0.287109
