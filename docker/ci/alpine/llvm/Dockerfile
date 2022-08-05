@@ -1,4 +1,4 @@
-FROM xacc/alpine
+FROM ghcr.io/eclipse/xacc/alpine
 RUN git clone https://github.com/ornl-qci/llvm-project-csp \
    && apk add ninja \
    && cd llvm-project-csp/ && mkdir build && cd build/ \
