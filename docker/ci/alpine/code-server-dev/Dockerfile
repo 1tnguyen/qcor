@@ -1,5 +1,5 @@
 FROM qcor/llvm-alpine as llvm_install
-FROM xacc/alpine
+FROM ghcr.io/eclipse/xacc/alpine
 COPY --from=llvm_install /usr/local/aideqc/llvm /usr/local/aideqc/llvm
 ENV VERSION=3.11.0
 
@@ -36,8 +36,8 @@ RUN git clone --recursive https://github.com/eclipse/xacc && sudo chown -R coder
     && cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/aideqc/qcor && make -j8 install && cd ../.. \
     && git clone https://github.com/qir-alliance/qcor && cd qcor && mkdir build && cd build \
     && cmake .. -G Ninja -DXACC_DIR=/usr/local/aideqc/qcor -DCMAKE_INSTALL_PREFIX=/usr/local/aideqc/qcor \
-        -DLLVM_ROOT=/usr/local/aideqc/llvm -DQCOR_EXTRA_COMPILER_FLAGS="-B /usr/lib/gcc/x86_64-alpine-linux-musl/10.3.1 -L /usr/lib/gcc/x86_64-alpine-linux-musl/10.3.1" \
-        -DQCOR_EXTRA_HEADERS="/usr/include/c++/10.3.1;/usr/include/c++/10.3.1/x86_64-alpine-linux-musl" \
+        -DLLVM_ROOT=/usr/local/aideqc/llvm -DQCOR_EXTRA_COMPILER_FLAGS="-B /usr/lib/gcc/x86_64-alpine-linux-musl/$(gcc -dumpversion) -L /usr/lib/gcc/x86_64-alpine-linux-musl/$(gcc -dumpversion)" \
+        -DQCOR_EXTRA_HEADERS="/usr/include/c++/$(gcc -dumpversion);/usr/include/c++/$(gcc -dumpversion)/x86_64-alpine-linux-musl" \
    && cmake --build . --target install && cd ../../ \
    && mkdir -p /home/coder/.local/share/code-server/User \
    && printf "{\"workbench.startupEditor\": \"readme\", \"workbench.colorTheme\": \"Monokai Dimmed\", \"workbench.panel.defaultLocation\": \"right\", \"terminal.integrated.shell.linux\": \"bash\", \"files.associations\": {\"*.qasm\": \"cpp\"}}" | tee /home/coder/.local/share/code-server/User/settings.json \

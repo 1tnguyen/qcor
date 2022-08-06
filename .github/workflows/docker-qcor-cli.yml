@@ -5,7 +5,10 @@ on:
     branches: [ master ]
 
 env:
-  IMAGE_NAME: qcor/cli
+  IMAGE_NAME_CLI: qcor/cli
+  IMAGE_NAME_QCOR: qcor/qcor
+  IMAGE_NAME_QCOR_QSHARP: qcor/qsharp-qcor
+  IMAGE_NAME_QCOR_DEV: qcor/qcor-dev
 
 jobs:
   push:
@@ -22,11 +25,12 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $ --password-stdin
 
       - name: Build image
-        run: cd docker/ci/alpine/qcor && docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+        run: cd docker/ci/alpine/qcor && docker build . --file Dockerfile --tag $IMAGE_NAME_CLI --label "runnumber=${GITHUB_RUN_ID}" --build-arg CONTAINER_REGISTRY=ghcr.io/${{ github.repository_owner }} && cd ../code-server && docker build . --file Dockerfile --tag $IMAGE_NAME_QCOR --label "runnumber=${GITHUB_RUN_ID}" --build-arg CONTAINER_REGISTRY=ghcr.io/${{ github.repository_owner }} && cd ../qsharp-code-server && docker build . --file Dockerfile --tag $IMAGE_NAME_QCOR_QSHARP --label "runnumber=${GITHUB_RUN_ID}" --build-arg CONTAINER_REGISTRY=ghcr.io/${{ github.repository_owner }} && cd ../code-server-dev && docker build . --file Dockerfile --tag $IMAGE_NAME_QCOR_DEV --label "runnumber=${GITHUB_RUN_ID}" --build-arg CONTAINER_REGISTRY=ghcr.io/${{ github.repository_owner }}
       
       - name: Push image
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+          # qcor/cli
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_CLI
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           # Strip git ref prefix from version
@@ -37,5 +41,47 @@ jobs:
           [ "$VERSION" == "master" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME_CLI $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+          #qcor/qcor
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_QCOR
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME_QCOR $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+          #qcor/qsharp
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_QCOR_QSHARP
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME_QCOR_QSHARP $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+          #qcor/dev
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_QCOR_DEV
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME_QCOR_DEV $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION

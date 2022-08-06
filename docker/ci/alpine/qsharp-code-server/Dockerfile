@@ -1,4 +1,6 @@
-FROM qcor/cli
+ARG CONTAINER_REGISTRY=docker.io
+
+FROM ${CONTAINER_REGISTRY}/qcor/cli
 ENV VERSION=3.11.0
 
 RUN sudo apk add nodejs openssh-client gnupg bash && \
